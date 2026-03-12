@@ -16,6 +16,14 @@
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
         <span class="theme-toggle-icon" aria-hidden="true"></span>
       </button>
+      <button
+        id="nav-toggle"
+        class="nav-toggle"
+        aria-label="Toggle quick links"
+        aria-expanded="false"
+      >
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
       <header class="site-header">
         <div class="avatar-placeholder">
           <img
@@ -342,6 +350,8 @@
       })();
 
       (function () {
+        var body = document.body;
+        var navToggle = document.getElementById('nav-toggle');
         var title = document.getElementById('content-title');
         var triggers = Array.prototype.slice.call(
           document.querySelectorAll('.sidebar .nav-item')
@@ -360,6 +370,13 @@
         var validTabs = ['about', 'projects', 'posts', 'resume'];
 
         var contentSection = title && title.parentElement && title.parentElement.parentElement;
+
+        if (navToggle) {
+          navToggle.addEventListener('click', function () {
+            var isOpen = body.classList.toggle('nav-open');
+            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          });
+        }
 
         function showPanel(key) {
           panels.forEach(function (panel) {
@@ -388,6 +405,14 @@
             var key = btn.getAttribute('data-tab');
             if (!key) return;
             showPanel(key);
+
+            // Close mobile quick links menu after selection
+            if (body.classList.contains('nav-open')) {
+              body.classList.remove('nav-open');
+              if (navToggle) {
+                navToggle.setAttribute('aria-expanded', 'false');
+              }
+            }
           });
         });
 

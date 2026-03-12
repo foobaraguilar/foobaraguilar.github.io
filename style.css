@@ -54,6 +54,43 @@ a {
   z-index: 10;
 }
 
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle-icon {
+  position: relative;
+  width: 16px;
+  height: 2px;
+  background-color: #555; /* match light-mode theme toggle icon */
+  border-radius: 999px;
+}
+
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #555;
+  border-radius: 999px;
+}
+
+.nav-toggle-icon::before {
+  top: -5px; /* line above center */
+}
+
+.nav-toggle-icon::after {
+  top: 5px; /* line below center */
+}
+
+body.theme-dark .nav-toggle-icon,
+body.theme-dark .nav-toggle-icon::before,
+body.theme-dark .nav-toggle-icon::after {
+  background-color: #ffffff; /* match dark-mode theme toggle icon stroke */
+}
+
 .theme-toggle-icon {
   width: 18px;
   height: 18px;
@@ -914,12 +951,62 @@ body.theme-dark .journal-post {
   }
 
   .avatar-placeholder {
+    margin-top: 40px;    /* slide avatar down so it clears the top circles */
     margin-bottom: 16px;
   }
 
   .layout {
     grid-template-columns: 1fr;
     row-gap: 32px;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    position: fixed;
+    top: 20px;   /* align vertically with theme toggle */
+    left: 20px;  /* symmetric inset from left */
+    width: 40px; /* match theme toggle size */
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.96);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 11;
+  }
+
+  body.theme-dark .nav-toggle {
+    background-color: #262626;
+    border-color: #444;
+  }
+
+  /* Hide inline sidebar when using mobile hamburger */
+  .sidebar {
+    position: fixed;
+    top: 112px;
+    right: 16px;
+    width: auto;
+    min-width: 180px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 10px 14px 8px;
+    display: none;
+    z-index: 9;
+  }
+
+  body.nav-open .sidebar {
+    display: block;
+  }
+
+  .sidebar-title {
+    display: none;
+  }
+
+  body.theme-dark .sidebar {
+    background-color: #181818;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   }
 
   .intro-greeting {
