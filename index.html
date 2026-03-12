@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ruben</title>
+    <link rel="icon" id="site-favicon" href="assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="page">
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+        <span class="theme-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <header class="site-header">
+        <div class="avatar-placeholder">
+          <img
+            id="site-avatar"
+            class="avatar-img"
+            src="assets/whiteicon.png"
+            alt="Ruben"
+            width="220"
+            height="220"
+          />
+        </div>
+        <div class="intro">
+          <h1 class="intro-greeting">Hi, there!</h1>
+          <p class="intro-lead">
+            I'm <span class="highlight">Ruben</span>. 
+          </p>
+          Currently in <b>San Francisco</b>, originally from <b>Texas</b>. <br>
+          <span class="intro-line-secondary">Avid sailor, ultramarathoner, minimal backpacker, and DIY enthusiast.</span>
+          <p class="intro-subtext">
+            
+          </p>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="sidebar">
+          <h2 class="sidebar-title">QUICK LINKS</h2>
+          <nav class="sidebar-nav">
+            <button type="button" class="nav-item nav-item-active" data-tab="about">
+              <span class="nav-icon nav-icon-about" aria-hidden="true"></span>
+              <span class="nav-label">About Me</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="projects">
+              <span class="nav-icon nav-icon-projects" aria-hidden="true"></span>
+              <span class="nav-label">Projects</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="posts">
+              <span class="nav-icon nav-icon-journal" aria-hidden="true"></span>
+              <span class="nav-label">Posts</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="resume">
+              <span class="nav-icon nav-icon-resume" aria-hidden="true"></span>
+              <span class="nav-label">Resume</span>
+            </button>
+          </nav>
+        </section>
+
+        <section class="content">
+          <div class="content-header">
+            <h2 class="content-title" id="content-title">About Me</h2>
+          </div>
+
+          <section class="content-panels">
+            <!-- ABOUT ME panel -->
+            <div class="content-panel active" data-panel="about">
+              <div id="about-floating-wall" class="floating-container"></div>
+            </div>
+
+            <!-- PROJECTS panel: cards are links only when href is set; no link = no navigation -->
+            <div class="content-panel" data-panel="projects">
+              <div class="projects-grid">
+                <div class="project-card">
+                  <div class="project-thumb project-thumb-circle"></div>
+                  <div class="project-body">
+                    <h2 class="project-title">Through Trials to Triumph</h2>
+                    <p class="project-excerpt">
+                      A visual exploration of resilience, using photography and typography to tell a
+                      story.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="project-card">
+                  <div class="project-thumb project-thumb-bar"></div>
+                  <div class="project-body">
+                    <h2 class="project-title">Minimal Journal Layout</h2>
+                    <p class="project-excerpt">
+                      A clean, distraction-free writing interface designed for long-form journaling.
+                    </p>
+                  </div>
+                </div>
+
+                <div class="project-card">
+                  <div class="project-thumb project-thumb-square"></div>
+                  <div class="project-body">
+                    <h2 class="project-title">Resonance Playlist</h2>
+                    <p class="project-excerpt">
+                      A curated set of tracks that inspired recent writing and visual work.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- POSTS panel: READ MORE links go to the project HTML pages -->
+            <div class="content-panel" data-panel="posts">
+              <section class="posts">
+                <article class="post">
+                  <div class="post-image">
+                    <a href="projects/through-trials-to-triumph.html" class="post-image-link">
+                      <div class="post-image-placeholder"></div>
+                    </a>
+                  </div>
+                  <div class="post-body">
+                    <div class="post-meta">
+                      <span class="post-tag">DESIGN</span>
+                    </div>
+                    <h3 class="post-title">Through Trials to Triumph</h3>
+                    <p class="post-excerpt">
+                      A visual exploration of resilience, using photography and typography to tell a
+                      story.
+                    </p>
+                    <a href="projects/through-trials-to-triumph.html" class="post-read-more">READ MORE</a>
+                  </div>
+                </article>
+
+                <article class="post post-compact">
+                  <div class="post-image">
+                    <a href="projects/minimal-journal-layout.html" class="post-image-link">
+                      <div class="post-image-placeholder"></div>
+                    </a>
+                  </div>
+                  <div class="post-body">
+                    <div class="post-meta">
+                      <span class="post-tag">JOURNAL</span>
+                    </div>
+                    <h3 class="post-title">Minimal Journal Layout</h3>
+                    <p class="post-excerpt">
+                      A clean, distraction-free writing interface designed for long-form journaling.
+                    </p>
+                    <a href="projects/minimal-journal-layout.html" class="post-read-more">READ MORE</a>
+                  </div>
+                </article>
+
+                <article class="post post-compact">
+                  <div class="post-image">
+                    <a href="projects/resonance-playlist.html" class="post-image-link">
+                      <div class="post-image-placeholder"></div>
+                    </a>
+                  </div>
+                  <div class="post-body">
+                    <div class="post-meta">
+                      <span class="post-tag">NOTES</span>
+                    </div>
+                    <h3 class="post-title">Resonance Playlist</h3>
+                    <p class="post-excerpt">
+                      A curated set of tracks that inspired recent writing and visual work.
+                    </p>
+                    <a href="projects/resonance-playlist.html" class="post-read-more">READ MORE</a>
+                  </div>
+                </article>
+              </section>
+            </div>
+
+            <!-- RESUME panel -->
+            <div class="content-panel" data-panel="resume">
+              <article class="resume-doc">
+                <h1 class="resume-name">Ruben Aguilar</h1>
+                <p class="resume-contact"><a href="mailto:foobar.aguilar@gmail.com">foobar.aguilar@gmail.com</a> · <a href="https://linkedin.com/in/rubyaguilar" target="_blank" rel="noopener">linkedin.com/in/rubyaguilar</a> · (415) 533-3601</p>
+
+                <section class="resume-section">
+                  <h2 class="resume-section-title">EXPERIENCE</h2>
+
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">Relling Systems - YC S25</span>
+                      <span class="resume-location">San Francisco, CA</span>
+                    </div>
+                    <div class="resume-role">Ops + Data Ops (First Non-Founder Hire)</div>
+                    <div class="resume-dates">November 2025 - Present</div>
+                    <ul class="resume-bullets">
+                      <li>Joined as 4th hire, pioneering annotation pipelines and metadata schemas that scaled egocentric video data collection 5x — from 20 to 100+ hours per week — directly enabling model training lift</li>
+                      <li>Own data quality across 50+ distributed collectors, designing QA frameworks, labeling taxonomies, and feedback loops that reduced annotation error rates and improved downstream model reliability</li>
+                      <li>Built AI-assisted review systems to detect annotation inconsistencies at scale, iterating on capture protocols based on error pattern analysis to measurably improve data reliability for training pipelines</li>
+                      <li>Cross-functional bridge between collectors and product, translating qualitative friction signals into targeted UX changes that improved pipeline consistency and metadata completeness</li>
+                    </ul>
+                    <div class="resume-role">Data Collector and Annotator</div>
+                    <div class="resume-dates">September 2025 - November 2025</div>
+                  </div>
+
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">Traveling, Sailing, and Ultramarathons</span>
+                    </div>
+                    <div class="resume-dates">May 2024 - August 2025</div>
+                    <ul class="resume-bullets">
+                      <li>Backpacked Belize, Guatemala, El Salvador, Honduras, Nicaragua, Costa Rica, Panamá, and Colombia – trained for ultramarathons; certified as sailing instructor at Spinnaker SF upon returning</li>
+                    </ul>
+                  </div>
+
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">Avanade - Accenture x Microsoft</span>
+                      <span class="resume-location">San Francisco, CA</span>
+                    </div>
+                    <div class="resume-role">Senior Technology Consultant, Data & AI Center of Excellence</div>
+                    <div class="resume-dates">August 2022 - January 2024</div>
+                    <ul class="resume-bullets">
+                      <li>Designed a Purview Data Governance solution for CIBC, replacing manual data requests with self-service access and permission model – productized & presented at Accenture-wide lunch & learns</li>
+                      <li>Commercialized Purview solution into a standalone product offering, driving GTM strategy that grew client engagement 15% and project success rates 30%</li>
+                      <li>Cut reporting cycle time 20% by standardizing Python and SQL dashboards across business units</li>
+                    </ul>
+                    <div class="resume-role">Associate Consultant, Graduate Program (Promoted to Senior Consultant)</div>
+                    <div class="resume-dates">June 2021 - May 2022</div>
+                  </div>
+
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">Mutual of Omaha</span>
+                      <span class="resume-location">Omaha, NE</span>
+                    </div>
+                    <div class="resume-role">Software Engineer I - Internal Workplace Solutions</div>
+                    <div class="resume-dates">January 2021 - April 2022</div>
+                    <ul class="resume-bullets">
+                      <li>Managed and engineered a mainframe/Teradata integration system for the Workplace Solutions team, eliminating post-submission data discrepancies and reducing internal processing costs by 5%</li>
+                    </ul>
+                    <div class="resume-role">Information Technology Intern</div>
+                    <div class="resume-dates">June 2020 - December 2020</div>
+                    <ul class="resume-bullets">
+                      <li>Increased CRM process efficiency through automation and real-time alerting systems</li>
+                    </ul>
+                  </div>
+
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">Rabble Mill x The Bay</span>
+                      <span class="resume-location">Lincoln, NE</span>
+                    </div>
+                    <div class="resume-role">Product Manager I</div>
+                    <div class="resume-dates">June 2020 - September 2020</div>
+                    <ul class="resume-bullets">
+                      <li>Led requirement gathering and product lifecycle development + management for state-wide voting platform, streamlining UI/UX and real-time API integrations to enhance user experience</li>
+                    </ul>
+                  </div>
+
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">Cell Collective, UNL Department of Biochemistry</span>
+                      <span class="resume-location">Lincoln, NE</span>
+                    </div>
+                    <div class="resume-role">Software Engineer Intern</div>
+                    <div class="resume-dates">January 2019 - September 2019</div>
+                    <ul class="resume-bullets">
+                      <li>Reduced development cycle time by 20% by designing and shipping a CI pipeline for Node.js, improving deployment reliability across the team</li>
+                    </ul>
+                  </div>
+                </section>
+
+                <section class="resume-section">
+                  <h2 class="resume-section-title">EDUCATION</h2>
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">University of Notre Dame</span>
+                      <span class="resume-location">South Bend, IN</span>
+                    </div>
+                    <div class="resume-role">Master of Science (M.S.) in Technology Innovation – AI & Enterprise Systems; 3.8 GPA</div>
+                    <div class="resume-dates">June 2021 - May 2022</div>
+                  </div>
+                  <div class="resume-job">
+                    <div class="resume-job-head">
+                      <span class="resume-company">University of Nebraska - Lincoln</span>
+                      <span class="resume-location">Lincoln, NE</span>
+                    </div>
+                    <div class="resume-role">Bachelor of Science in Computer Science; 3.6 GPA</div>
+                    <div class="resume-dates">August 2017 - May 2021</div>
+                    <div class="resume-role">Bachelor of Science in Business Administration in Economics; 3.7 GPA</div>
+                    <div class="resume-dates">August 2017 - May 2021</div>
+                  </div>
+                </section>
+              </article>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        var body = document.body;
+        var toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+
+        var favicon = document.getElementById('site-favicon');
+        var avatar = document.getElementById('site-avatar');
+        var THEME_TRANSITION_MS = 180;
+
+        function setFavicon(isDark) {
+          if (!favicon) return;
+          favicon.setAttribute('href', 'assets/favicon.png');
+        }
+
+        function setAvatar(isDark) {
+          if (!avatar) return;
+          var nextSrc = isDark ? 'assets/blackicon.png' : 'assets/whiteicon.png';
+          if (avatar.getAttribute('src') === nextSrc) return;
+
+          // Crossfade swap so it stays in sync with the page theme transition.
+          avatar.style.opacity = '0';
+          window.setTimeout(function () {
+            avatar.setAttribute('src', nextSrc);
+            avatar.style.opacity = '1';
+          }, Math.floor(THEME_TRANSITION_MS / 2));
+        }
+
+        function applyTheme(theme) {
+          var isDark = theme === 'dark';
+          body.classList.toggle('theme-dark', isDark);
+          var root = document.documentElement;
+          root.classList.toggle('theme-dark', isDark);
+          setFavicon(isDark);
+          setAvatar(isDark);
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        var stored = localStorage.getItem('theme');
+        if (stored === 'dark' || stored === 'light') {
+          applyTheme(stored);
+        }
+
+        toggle.addEventListener('click', function () {
+          var next = body.classList.contains('theme-dark') ? 'light' : 'dark';
+          applyTheme(next);
+        });
+      })();
+
+      (function () {
+        var title = document.getElementById('content-title');
+        var triggers = Array.prototype.slice.call(
+          document.querySelectorAll('.sidebar .nav-item')
+        );
+        var panels = Array.prototype.slice.call(
+          document.querySelectorAll('.content-panel')
+        );
+
+        var titles = {
+          about: 'About Me',
+          projects: 'Projects',
+          posts: 'Latest Post',
+          resume: 'Resume',
+        };
+
+        var validTabs = ['about', 'projects', 'posts', 'resume'];
+
+        var contentSection = title && title.parentElement && title.parentElement.parentElement;
+
+        function showPanel(key) {
+          panels.forEach(function (panel) {
+            var match = panel.getAttribute('data-panel') === key;
+            panel.classList.toggle('active', match);
+          });
+
+          triggers.forEach(function (btn) {
+            btn.classList.toggle('nav-item-active', btn.getAttribute('data-tab') === key);
+          });
+
+          if (title) {
+            title.textContent = key === 'resume' ? '' : (titles[key] || '');
+          }
+          if (contentSection) {
+            contentSection.classList.toggle('resume-active', key === 'resume');
+          }
+
+          if (validTabs.indexOf(key) !== -1) {
+            localStorage.setItem('activeTab', key);
+          }
+        }
+
+        triggers.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var key = btn.getAttribute('data-tab');
+            if (!key) return;
+            showPanel(key);
+          });
+        });
+
+        var savedTab = localStorage.getItem('activeTab');
+        showPanel(validTabs.indexOf(savedTab) !== -1 ? savedTab : 'about');
+      })();
+
+      // About Me floating images "waterfall"
+      (function () {
+        var container = document.getElementById('about-floating-wall');
+        if (!container) return;
+
+        var FALL_SPEED = .03; // slow fall
+        var MAX_IMAGES = 8;
+        var MARGIN = 2;
+        var MAX_ATTEMPTS = 60;
+        var STEP_UP = 2;
+
+        // Replace these with your own image paths or personal photos
+        var imageSources = [
+          'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1525134479668-1bee5c7c6845?auto=format&fit=crop&w=900&q=80',
+          'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80',
+        ];
+
+        if (!imageSources.length) return;
+
+        var images = [];
+        var positions = [];
+        var requestId;
+        var hoveredLink = null;
+
+        function findFloatingLink(el) {
+          return el && el.closest && el.closest('.floating-image-link');
+        }
+
+        container.addEventListener('mouseover', function (e) {
+          var link = findFloatingLink(e.target);
+          if (link) hoveredLink = link;
+        });
+        container.addEventListener('mouseout', function (e) {
+          var stillOverLink = findFloatingLink(e.relatedTarget);
+          if (!stillOverLink) hoveredLink = null;
+        });
+
+        function isOverlapping(pos1, pos2) {
+          return !(
+            pos1.left + pos1.width + MARGIN <= pos2.left ||
+            pos1.left >= pos2.left + pos2.width + MARGIN ||
+            pos1.top + pos1.height + MARGIN <= pos2.top ||
+            pos1.top >= pos2.top + pos2.height + MARGIN
+          );
+        }
+
+        function randomLeftStrided(width) {
+          // Stratify horizontal space into 4 bands so images spread left, center, and right
+          var maxLeft = 98 - width;
+          if (maxLeft < 2) return 2;
+          var range = maxLeft - 2;
+          var band = Math.floor(Math.random() * 4) % 4;
+          var bandLow = 2 + (band / 4) * range;
+          var bandHigh = 2 + ((band + 1) / 4) * range;
+          return bandLow + Math.random() * (bandHigh - bandLow);
+        }
+
+        function getInitialPosition(existing, width, height) {
+          for (var attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+            var pos = {
+              left: randomLeftStrided(width),
+              top: Math.random() * (0 - height), // start just above the top edge
+              width: width,
+              height: height,
+            };
+            var clash = existing.some(function (p) {
+              return isOverlapping(pos, p);
+            });
+            if (!clash) return pos;
+          }
+          return {
+            left: randomLeftStrided(width),
+            top: -height,
+            width: width,
+            height: height,
+          };
+        }
+
+        function setupImages() {
+          var count = Math.min(MAX_IMAGES, imageSources.length);
+          for (var i = 0; i < count; i++) {
+            var src = imageSources[i % imageSources.length];
+            var pageNum = (i % 5) + 1; // about_me/1.html through about_me/5.html
+            var link = document.createElement('a');
+            link.href = 'about_me/' + pageNum + '.html';
+            link.className = 'floating-image-link';
+
+            var img = document.createElement('img');
+            img.src = src;
+            img.alt = '';
+            img.className = 'floating-image';
+
+            var width = 28 + Math.random() * 10; // 28–38% of container width
+            var height = 24 + Math.random() * 8; // 24–32vh
+            if (width > 42) width = 42; // cap so left + width can stay in frame
+
+            var pos = getInitialPosition(positions, width, height);
+
+            // Guarantee exactly two images are visible on initial load:
+            // first two start slightly inside the viewport, the rest begin above it.
+            if (i < 2) {
+              pos.top = 8 + Math.random() * 20; // within the visible area
+            } else {
+              pos.top = -pos.height - 40 - Math.random() * 40;
+            }
+            positions.push(pos);
+
+            link.style.width = width + '%';
+            link.style.height = height + 'vh';
+            link.style.left = pos.left + '%';
+            link.style.top = pos.top + 'vh';
+
+            link.appendChild(img);
+            container.appendChild(link);
+            images.push(link);
+          }
+        }
+
+        function animate() {
+          try {
+          for (var i = 0; i < images.length; i++) {
+            var link = images[i];
+            var pos = positions[i];
+
+            if (link === hoveredLink) {
+              continue;
+            }
+
+            var newTop = pos.top + FALL_SPEED;
+
+            if (newTop > 100) {
+              var newPos = {
+                left: randomLeftStrided(pos.width),
+                // re-enter very close to the top so gaps are minimal
+                top: -pos.height - Math.random() * 5,
+                width: pos.width,
+                height: pos.height,
+              };
+              var attempts = 0;
+              while (
+                positions.some(function (other, idx) {
+                  return idx !== i && isOverlapping(newPos, other);
+                }) &&
+                attempts < MAX_ATTEMPTS
+              ) {
+                newPos.top = Math.max(newPos.top - STEP_UP, -100);
+                attempts++;
+              }
+              pos = newPos;
+            } else {
+              pos.top = newTop;
+              var tries = 0;
+              while (
+                positions.some(function (other, idx) {
+                  return idx !== i && isOverlapping(pos, other);
+                }) &&
+                tries < MAX_ATTEMPTS
+              ) {
+                pos.top -= STEP_UP;
+                tries++;
+              }
+            }
+
+            positions[i] = pos;
+            link.style.left = pos.left + '%';
+            link.style.top = pos.top + 'vh';
+          }
+          } catch (e) {
+            console.warn('Floating images animation:', e);
+          }
+          requestId = requestAnimationFrame(animate);
+        }
+
+        setupImages();
+        requestId = requestAnimationFrame(animate);
+
+        window.addEventListener('beforeunload', function () {
+          if (requestId) cancelAnimationFrame(requestId);
+        });
+      })();
+    </script>
+  </body>
+</html>
+
