@@ -434,7 +434,7 @@
         var container = document.getElementById('about-floating-wall');
         if (!container) return;
 
-        var FALL_SPEED = .1; // gentle, steady fall
+        var FALL_SPEED = .75; // gentle, steady fall
         var MAX_IMAGES = 8;
         var MARGIN = 2;
         var MAX_ATTEMPTS = 60;
@@ -450,26 +450,25 @@
           return String(s || '').replace(/\s+/g, ' ').trim();
         }
 
-        function extractAboutMeData(htmlText, fileIndex) {
-          try {
-            var doc = new DOMParser().parseFromString(htmlText, 'text/html');
-            var img = doc.querySelector('.about-me-photo-img');
-            var cap = doc.querySelector('.about-me-photo-caption');
-            var title = doc.querySelector('.intro-greeting');
-            var src = img ? img.getAttribute('src') : '';
-            // Fix relative paths so they resolve from index.html's location
-            if (src && !src.startsWith('http') && !src.startsWith('about_me/')) {
-              src = 'about_me/' + src;
-            }
-            return {
-              src: src,
-              caption: normalizeWhitespace(cap ? cap.textContent : ''),
-              title: normalizeWhitespace(title ? title.textContent : ''),
-            };
-          } catch (e) {
-            return { src: '', caption: '', title: '' };
+        function extractAboutMeData(htmlText) {
+        try {
+          var doc = new DOMParser().parseFromString(htmlText, 'text/html');
+          var img = doc.querySelector('.about-me-photo-img');
+          var cap = doc.querySelector('.about-me-photo-caption');
+          var title = doc.querySelector('.intro-greeting');
+          var src = img ? img.getAttribute('src') : '';
+          if (src && !src.startsWith('http') && !src.startsWith('about_me/')) {
+            src = 'about_me/' + src;
           }
-}
+          return {
+            src: src,
+            caption: normalizeWhitespace(cap ? cap.textContent : ''),
+            title: normalizeWhitespace(title ? title.textContent : ''),
+          };
+        } catch (e) {
+          return { src: '', caption: '', title: '' };
+        }
+      }
 
         function loadAboutMeItems() {
           // Fetch numbered About Me files so adding `about_me/6.html` etc just works.
