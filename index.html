@@ -82,21 +82,20 @@
               <div id="about-floating-wall" class="floating-container"></div>
             </div>
 
-            <!-- PROJECTS panel: cards are links only when href is set; no link = no navigation -->
+            <!-- PROJECTS panel -->
             <div class="content-panel" data-panel="projects">
               <div class="projects-grid">
-                <div class="project-card">
+                <a class="project-card" href="projects/through-trials-to-triumph.html">
                   <div class="project-thumb project-thumb-circle"></div>
                   <div class="project-body">
-                    <h2 class="project-title">Through Trials to Triumph</h2>
+                    <h2 class="project-title">Through Trials, To Triumph</h2>
                     <p class="project-excerpt">
-                      A visual exploration of resilience, using photography and typography to tell a
-                      story.
+                      A visual exploration of resilience, using photography and typography to tell a story.
                     </p>
                   </div>
-                </div>
+                </a>
 
-                <div class="project-card">
+                <a class="project-card" href="projects/minimal-journal-layout.html">
                   <div class="project-thumb project-thumb-bar"></div>
                   <div class="project-body">
                     <h2 class="project-title">Minimal Journal Layout</h2>
@@ -104,9 +103,9 @@
                       A clean, distraction-free writing interface designed for long-form journaling.
                     </p>
                   </div>
-                </div>
+                </a>
 
-                <div class="project-card">
+                <a class="project-card" href="projects/resonance-playlist.html">
                   <div class="project-thumb project-thumb-square"></div>
                   <div class="project-body">
                     <h2 class="project-title">Resonance Playlist</h2>
@@ -114,16 +113,16 @@
                       A curated set of tracks that inspired recent writing and visual work.
                     </p>
                   </div>
-                </div>
+                </a>
               </div>
             </div>
 
-            <!-- POSTS panel: READ MORE links go to the project HTML pages -->
+            <!-- POSTS panel -->
             <div class="content-panel" data-panel="posts">
               <section class="posts">
                 <article class="post">
                   <div class="post-image">
-                    <a href="projects/through-trials-to-triumph.html" class="post-image-link">
+                    <a href="posts/through-trials-to-triumph.html" class="post-image-link">
                       <img
                         class="post-image-placeholder"
                         src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"
@@ -135,18 +134,17 @@
                     <div class="post-meta">
                       <span class="post-tag">DESIGN</span>
                     </div>
-                    <h3 class="post-title">Through Trials to Triumph</h3>
+                    <h3 class="post-title">Through Trials, To Triumph</h3>
                     <p class="post-excerpt">
-                      A visual exploration of resilience, using photography and typography to tell a
-                      story.
+                      A short, dummy article exploring resilience and how we respond when things get difficult.
                     </p>
-                    <a href="projects/through-trials-to-triumph.html" class="post-read-more">READ MORE</a>
+                    <a href="posts/through-trials-to-triumph.html" class="post-read-more">READ MORE</a>
                   </div>
                 </article>
 
                 <article class="post post-compact">
                   <div class="post-image">
-                    <a href="projects/minimal-journal-layout.html" class="post-image-link">
+                    <a href="posts/another-day-another-entry.html" class="post-image-link">
                       <img
                         class="post-image-placeholder"
                         src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"
@@ -158,17 +156,17 @@
                     <div class="post-meta">
                       <span class="post-tag">JOURNAL</span>
                     </div>
-                    <h3 class="post-title">Minimal Journal Layout</h3>
+                    <h3 class="post-title">Another Day, Another Entry</h3>
                     <p class="post-excerpt">
-                      A clean, distraction-free writing interface designed for long-form journaling.
+                      A small reflection on ordinary days, routines, and the details that quietly add up.
                     </p>
-                    <a href="projects/minimal-journal-layout.html" class="post-read-more">READ MORE</a>
+                    <a href="posts/another-day-another-entry.html" class="post-read-more">READ MORE</a>
                   </div>
                 </article>
 
                 <article class="post post-compact">
                   <div class="post-image">
-                    <a href="projects/resonance-playlist.html" class="post-image-link">
+                    <a href="posts/third-little-update.html" class="post-image-link">
                       <img
                         class="post-image-placeholder"
                         src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"
@@ -180,16 +178,15 @@
                     <div class="post-meta">
                       <span class="post-tag">NOTES</span>
                     </div>
-                    <h3 class="post-title">Resonance Playlist</h3>
+                    <h3 class="post-title">Third Little Update</h3>
                     <p class="post-excerpt">
-                      A curated set of tracks that inspired recent writing and visual work.
+                      A quick check-in, capturing a few small things that moved the week forward.
                     </p>
-                    <a href="projects/resonance-playlist.html" class="post-read-more">READ MORE</a>
+                    <a href="posts/third-little-update.html" class="post-read-more">READ MORE</a>
                   </div>
                 </article>
               </section>
             </div>
-
             <!-- RESUME panel -->
             <div class="content-panel" data-panel="resume">
               <article class="resume-doc">
@@ -437,27 +434,70 @@
         var container = document.getElementById('about-floating-wall');
         if (!container) return;
 
-        var FALL_SPEED = .03; // slow fall
+        var FALL_SPEED = .1; // gentle, steady fall
         var MAX_IMAGES = 8;
         var MARGIN = 2;
         var MAX_ATTEMPTS = 60;
         var STEP_UP = 2;
 
-        // Replace these with your own image paths or personal photos
-        var imageSources = [
-          'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=900&q=80',
-          'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
-          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80',
-          'https://images.unsplash.com/photo-1525134479668-1bee5c7c6845?auto=format&fit=crop&w=900&q=80',
-          'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80',
-        ];
-
-        if (!imageSources.length) return;
-
         var images = [];
         var positions = [];
         var requestId;
         var hoveredLink = null;
+        var captionTimeoutByEl = new WeakMap();
+
+        function normalizeWhitespace(s) {
+          return String(s || '').replace(/\s+/g, ' ').trim();
+        }
+
+        function extractAboutMeData(htmlText) {
+          try {
+            var doc = new DOMParser().parseFromString(htmlText, 'text/html');
+            var img = doc.querySelector('.about-me-photo-img');
+            var cap = doc.querySelector('.about-me-photo-caption');
+            var title = doc.querySelector('.intro-greeting');
+            return {
+              src: img ? img.getAttribute('src') : '',
+              caption: normalizeWhitespace(cap ? cap.textContent : ''),
+              title: normalizeWhitespace(title ? title.textContent : ''),
+            };
+          } catch (e) {
+            return { src: '', caption: '', title: '' };
+          }
+        }
+
+        function loadAboutMeItems() {
+          // Fetch numbered About Me files so adding `about_me/6.html` etc just works.
+          var results = [];
+          var consecutiveFails = 0;
+          var i = 1;
+          var MAX_TRIES = 50;
+
+          function next() {
+            if (i > MAX_TRIES || consecutiveFails >= 3) {
+              return Promise.resolve(results);
+            }
+            var url = 'about_me/' + i + '.html';
+            i++;
+            return fetch(url, { cache: 'no-store' })
+              .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.text();
+              })
+              .then(function (txt) {
+                consecutiveFails = 0;
+                var data = extractAboutMeData(txt);
+                if (data && data.src) results.push(data);
+                return next();
+              })
+              .catch(function () {
+                consecutiveFails++;
+                return next();
+              });
+          }
+
+          return next();
+        }
 
         function findFloatingLink(el) {
           return el && el.closest && el.closest('.floating-image-link');
@@ -471,6 +511,41 @@
           var stillOverLink = findFloatingLink(e.relatedTarget);
           if (!stillOverLink) hoveredLink = null;
         });
+
+        container.addEventListener('click', function (e) {
+          var el = findFloatingLink(e.target);
+          if (!el) return;
+          e.preventDefault();
+
+          var caption = el.getAttribute('data-caption') || '';
+          caption = normalizeWhitespace(caption);
+          if (!caption) return;
+
+          var node = el.querySelector('.floating-caption');
+          if (!node) {
+            node = document.createElement('div');
+            node.className = 'floating-caption';
+            el.appendChild(node);
+          }
+          node.textContent = caption;
+          el.classList.remove('floating-caption-show');
+          // Force reflow so the animation reliably restarts.
+          void el.offsetWidth;
+          el.classList.add('floating-caption-show');
+
+          var prev = captionTimeoutByEl.get(el);
+          if (prev) window.clearTimeout(prev);
+          captionTimeoutByEl.set(
+            el,
+            window.setTimeout(function () {
+              el.classList.remove('floating-caption-show');
+            }, 2600)
+          );
+        });
+
+        function isHoveredIndex(idx) {
+          return hoveredLink && images[idx] === hoveredLink;
+        }
 
         function isOverlapping(pos1, pos2) {
           return !(
@@ -492,35 +567,21 @@
           return bandLow + Math.random() * (bandHigh - bandLow);
         }
 
-        function getInitialPosition(existing, width, height) {
-          for (var attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-            var pos = {
-              left: randomLeftStrided(width),
-              top: Math.random() * (0 - height), // start just above the top edge
-              width: width,
-              height: height,
-            };
-            var clash = existing.some(function (p) {
-              return isOverlapping(pos, p);
-            });
-            if (!clash) return pos;
-          }
-          return {
-            left: randomLeftStrided(width),
-            top: -height,
-            width: width,
-            height: height,
-          };
-        }
-
         function setupImages() {
-          var count = Math.min(MAX_IMAGES, imageSources.length);
+          var sources = Array.prototype.slice.call(arguments[0] || []);
+          if (!sources.length) return;
+          var count = Math.min(MAX_IMAGES, sources.length);
+          var nextTop = 8; // starting band inside the viewport
           for (var i = 0; i < count; i++) {
-            var src = imageSources[i % imageSources.length];
-            var pageNum = (i % 5) + 1; // about_me/1.html through about_me/5.html
-            var link = document.createElement('a');
-            link.href = 'about_me/' + pageNum + '.html';
+            var item = sources[i % sources.length];
+            var src = item.src;
+            var caption = item.caption || item.title || '';
+
+            var link = document.createElement('button');
+            link.type = 'button';
             link.className = 'floating-image-link';
+            link.setAttribute('aria-label', caption ? caption : 'About Me image');
+            if (caption) link.setAttribute('data-caption', caption);
 
             var img = document.createElement('img');
             img.src = src;
@@ -530,15 +591,27 @@
             var width = 28 + Math.random() * 10; // 28–38% of container width
             var height = 24 + Math.random() * 8; // 24–32vh
             if (width > 42) width = 42; // cap so left + width can stay in frame
-
-            var pos = getInitialPosition(positions, width, height);
-
-            // Guarantee exactly two images are visible on initial load:
-            // first two start slightly inside the viewport, the rest begin above it.
+            var pos;
             if (i < 2) {
-              pos.top = 8 + Math.random() * 20; // within the visible area
+              // First two images: visible, vertically stacked with enough gap
+              // so they never overlap.
+              pos = {
+                left: randomLeftStrided(width),
+                top: nextTop,
+                width: width,
+                height: height,
+              };
+              nextTop = pos.top + pos.height + 6; // small gap between them
             } else {
-              pos.top = -pos.height - 40 - Math.random() * 40;
+              // Remaining images: staged well above the container, each further
+              // up so they enter one after another without overlapping.
+              var aboveTop = -50 - (pos ? pos.height : height) - i * (height + 10);
+              pos = {
+                left: randomLeftStrided(width),
+                top: aboveTop,
+                width: width,
+                height: height,
+              };
             }
             positions.push(pos);
 
@@ -546,6 +619,8 @@
             link.style.height = height + 'vh';
             link.style.left = pos.left + '%';
             link.style.top = pos.top + 'vh';
+            // Ensure stable stacking: lower images appear on top.
+            link.style.zIndex = String(2000 + Math.round(pos.top * 10));
 
             link.appendChild(img);
             container.appendChild(link);
@@ -563,44 +638,47 @@
               continue;
             }
 
-            var newTop = pos.top + FALL_SPEED;
+            var prevTop = pos.top;
+            var newTop = prevTop + FALL_SPEED;
 
             if (newTop > 100) {
               var newPos = {
                 left: randomLeftStrided(pos.width),
-                // re-enter very close to the top so gaps are minimal
-                top: -pos.height - Math.random() * 5,
+                // re-enter just above the top edge so gaps between waves stay small
+                top: -pos.height - 10 - Math.random() * 10,
                 width: pos.width,
                 height: pos.height,
               };
+              // Avoid spawning directly on top of another image.
               var attempts = 0;
               while (
                 positions.some(function (other, idx) {
-                  return idx !== i && isOverlapping(newPos, other);
+                  if (idx === i) return false;
+                  return isOverlapping(newPos, other);
                 }) &&
                 attempts < MAX_ATTEMPTS
               ) {
-                newPos.top = Math.max(newPos.top - STEP_UP, -100);
+                newPos.left = randomLeftStrided(pos.width);
+                newPos.top = -pos.height - 10 - Math.random() * 10;
                 attempts++;
               }
               pos = newPos;
             } else {
+              // Normal downward motion; non-overlap is enforced only at spawn/respawn
+              // so images fall smoothly without jitter.
               pos.top = newTop;
-              var tries = 0;
-              while (
-                positions.some(function (other, idx) {
-                  return idx !== i && isOverlapping(pos, other);
-                }) &&
-                tries < MAX_ATTEMPTS
-              ) {
-                pos.top -= STEP_UP;
-                tries++;
-              }
             }
 
             positions[i] = pos;
             link.style.left = pos.left + '%';
             link.style.top = pos.top + 'vh';
+            // Keep stacking consistent so images don't "vanish" behind a held one forever.
+            // Hovered image stays on top; others stack by vertical position.
+            if (link === hoveredLink) {
+              link.style.zIndex = '9999';
+            } else {
+              link.style.zIndex = String(2000 + Math.round(pos.top * 10));
+            }
           }
           } catch (e) {
             console.warn('Floating images animation:', e);
@@ -608,8 +686,29 @@
           requestId = requestAnimationFrame(animate);
         }
 
-        setupImages();
-        requestId = requestAnimationFrame(animate);
+        loadAboutMeItems().then(function (items) {
+          if (!items) items = [];
+
+          // Always include the local About Me images you added under about_me/images.
+          // You can add more by dropping files in that folder and appending them here.
+          var extraLocalImages = [
+            { src: 'about_me/images/IMG_0143.jpg', caption: 'Mt Tam 50mi Ultra' },
+            { src: 'about_me/images/IMG_0574.jpg', caption: 'Mariposa and I in Acatenango' },
+            { src: 'about_me/images/IMG_4808.jpg', caption: 'Day on the docks' },
+            { src: 'about_me/images/IMG_9059.jpg', caption: 'Guatemala, Tikal Rope Swing' },
+            { src: 'about_me/images/IMG_1565.jpg', caption: 'I Love Ireland!' },
+          ];
+
+          // Fallback to the local images only if we couldn't parse any from about_me/*.html.
+          if (!items.length) {
+            items = extraLocalImages.slice();
+          } else {
+            items = items.concat(extraLocalImages);
+          }
+
+          setupImages(items);
+          requestId = requestAnimationFrame(animate);
+        });
 
         window.addEventListener('beforeunload', function () {
           if (requestId) cancelAnimationFrame(requestId);
