@@ -442,7 +442,7 @@ body.theme-dark .nav-item-active {
 }
 
 .post-detail-main {
-  max-width: 720px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -491,7 +491,8 @@ body.theme-dark .nav-item-active {
 
 /* Resume panel – document style (matches PDF layout) */
 .resume-doc {
-  max-width: 720px;
+  max-width: 100%;
+  padding: 0 0.25rem;
   font-size: 15px;
   line-height: 1.45;
   color: #333;
@@ -535,25 +536,26 @@ body.theme-dark .nav-item-active {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .resume-company {
   font-weight: 600;
   color: #111;
+  text-decoration: underline;
 }
 
 .resume-location {
   font-size: 14px;
   color: #666;
+  display: block;
 }
 
 .resume-role {
   font-size: 14px;
   font-weight: 600;
   color: #333;
-  margin-top: 2px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .resume-dates {
@@ -1144,6 +1146,122 @@ body.theme-dark .journal-post {
 
   .post-image-placeholder {
     height: 140px; /* avoid overly tall images on small phones */
+  }
+
+
+  .posts-filter-bar {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+  }
+  
+  .posts-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: #777;
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .posts-filter-toggle:hover {
+    color: #333;
+    border-color: #bbb;
+  }
+  
+  body.theme-dark .posts-filter-toggle {
+    color: #aaa;
+    border-color: #444;
+  }
+  
+  body.theme-dark .posts-filter-toggle:hover {
+    color: #fff;
+    border-color: #666;
+  }
+  
+  .posts-filter-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 120px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index: 100;
+  }
+  
+  .posts-filter-dropdown.open {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateY(0);
+  }
+  
+  body.theme-dark .posts-filter-dropdown {
+    background: #1a1a1a;
+    border-color: #333;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  
+  .posts-filter-dropdown .filter-chip {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #666;
+    cursor: pointer;
+  }
+  
+  .posts-filter-dropdown .filter-chip:hover {
+    background: #f5f5f5;
+    color: #333;
+  }
+  
+  .posts-filter-dropdown .filter-chip.active {
+    color: #111;
+    font-weight: 600;
+  }
+  
+  body.theme-dark .posts-filter-dropdown .filter-chip {
+    color: #aaa;
+  }
+  
+  body.theme-dark .posts-filter-dropdown .filter-chip:hover {
+    background: #2a2a2a;
+    color: #fff;
+  }
+  
+  body.theme-dark .posts-filter-dropdown .filter-chip.active {
+    color: #fff;
+  }
+  
+  #posts-list {
+    transition: opacity 0.2s ease;
+  }
+  
+  #posts-list.fading {
+    opacity: 0;
   }
 }
 

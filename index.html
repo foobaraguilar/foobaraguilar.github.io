@@ -85,111 +85,49 @@
             <!-- PROJECTS panel -->
             <div class="content-panel" data-panel="projects">
               <div class="projects-grid">
-                <a class="project-card" href="projects/through-trials-to-triumph.html">
-                  <div class="project-thumb project-thumb-circle"></div>
-                  <div class="project-body">
-                    <h2 class="project-title">Through Trials, To Triumph</h2>
-                    <p class="project-excerpt">
-                      A visual exploration of resilience, using photography and typography to tell a story.
-                    </p>
-                  </div>
-                </a>
-
+                <!-- Rasp5 -->
                 <a class="project-card" href="projects/minimal-journal-layout.html">
                   <div class="project-thumb project-thumb-bar"></div>
                   <div class="project-body">
-                    <h2 class="project-title">Minimal Journal Layout</h2>
+                    <h2 class="project-title">Rasberry Pis, OpenClaw, Open-Source LLMs</h2>
                     <p class="project-excerpt">
-                      A clean, distraction-free writing interface designed for long-form journaling.
+                      Building an free open-source engine and benchmarking locally hosted and open-source models cause I am cheap.
                     </p>
                   </div>
                 </a>
 
+                <!-- Ego Data -->
                 <a class="project-card" href="projects/resonance-playlist.html">
                   <div class="project-thumb project-thumb-square"></div>
                   <div class="project-body">
-                    <h2 class="project-title">Resonance Playlist</h2>
+                    <h2 class="project-title">Scaling Egocentric Data</h2>
                     <p class="project-excerpt">
-                      A curated set of tracks that inspired recent writing and visual work.
+                      Egocentric data collection and annotation at scale.
                     </p>
                   </div>
                 </a>
+
+              <!-- Building Julia -->
+              <a class="project-card" href="projects/through-trials-to-triumph.html">
+                <div class="project-thumb project-thumb-circle"></div>
+                <div class="project-body">
+                  <h2 class="project-title">Building Julia</h2>
+                  <p class="project-excerpt">
+                    Why you should build your bike and give it a name. 
+                  </p>
+                </div>
+              </a>
               </div>
             </div>
 
             <!-- POSTS panel -->
             <div class="content-panel" data-panel="posts">
-              <section class="posts">
-                <article class="post">
-                  <div class="post-image">
-                    <a href="posts/through-trials-to-triumph.html" class="post-image-link">
-                      <img
-                        class="post-image-placeholder"
-                        src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"
-                        alt=""
-                      />
-                    </a>
-                  </div>
-                  <div class="post-body">
-                    <div class="post-meta">
-                      <span class="post-tag">DESIGN</span>
-                    </div>
-                    <h3 class="post-title">Through Trials, To Triumph</h3>
-                    <p class="post-excerpt">
-                      A short, dummy article exploring resilience and how we respond when things get difficult.
-                    </p>
-                    <a href="posts/through-trials-to-triumph.html" class="post-read-more">READ MORE</a>
-                  </div>
-                </article>
-
-                <article class="post post-compact">
-                  <div class="post-image">
-                    <a href="posts/another-day-another-entry.html" class="post-image-link">
-                      <img
-                        class="post-image-placeholder"
-                        src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"
-                        alt=""
-                      />
-                    </a>
-                  </div>
-                  <div class="post-body">
-                    <div class="post-meta">
-                      <span class="post-tag">JOURNAL</span>
-                    </div>
-                    <h3 class="post-title">Another Day, Another Entry</h3>
-                    <p class="post-excerpt">
-                      A small reflection on ordinary days, routines, and the details that quietly add up.
-                    </p>
-                    <a href="posts/another-day-another-entry.html" class="post-read-more">READ MORE</a>
-                  </div>
-                </article>
-
-                <article class="post post-compact">
-                  <div class="post-image">
-                    <a href="posts/third-little-update.html" class="post-image-link">
-                      <img
-                        class="post-image-placeholder"
-                        src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80"
-                        alt=""
-                      />
-                    </a>
-                  </div>
-                  <div class="post-body">
-                    <div class="post-meta">
-                      <span class="post-tag">NOTES</span>
-                    </div>
-                    <h3 class="post-title">Third Little Update</h3>
-                    <p class="post-excerpt">
-                      A quick check-in, capturing a few small things that moved the week forward.
-                    </p>
-                    <a href="posts/third-little-update.html" class="post-read-more">READ MORE</a>
-                  </div>
-                </article>
-              </section>
+              <section class="posts" id="posts-list"></section>
             </div>
 
             <!-- RESUME panel -->
             <div class="content-panel" data-panel="resume">
+              <div id="resume-content"></div>
             </div>
           </section>
         </section>
@@ -319,11 +257,10 @@
         var container = document.getElementById('about-floating-wall');
         if (!container) return;
 
-        var FALL_SPEED = .045;
+        var FALL_SPEED = .06;
         var MAX_IMAGES = 8;
         var MARGIN = 6;
         var MAX_ATTEMPTS = 60;
-        var STEP_UP = 2;
 
         var images = [];
         var positions = [];
@@ -333,58 +270,6 @@
 
         function normalizeWhitespace(s) {
           return String(s || '').replace(/\s+/g, ' ').trim();
-        }
-
-        function extractAboutMeData(htmlText) {
-          try {
-            var doc = new DOMParser().parseFromString(htmlText, 'text/html');
-            var img = doc.querySelector('.about-me-photo-img');
-            var cap = doc.querySelector('.about-me-photo-caption');
-            var title = doc.querySelector('.intro-greeting');
-            var src = img ? img.getAttribute('src') : '';
-            if (src && !src.startsWith('http') && !src.startsWith('about_me/')) {
-              src = 'about_me/' + src;
-            }
-            return {
-              src: src,
-              caption: normalizeWhitespace(cap ? cap.textContent : ''),
-              title: normalizeWhitespace(title ? title.textContent : ''),
-            };
-          } catch (e) {
-            return { src: '', caption: '', title: '' };
-          }
-        }
-
-        function loadAboutMeItems() {
-          var results = [];
-          var consecutiveFails = 0;
-          var i = 1;
-          var MAX_TRIES = 50;
-
-          function next() {
-            if (i > MAX_TRIES || consecutiveFails >= 3) {
-              return Promise.resolve(results);
-            }
-            var url = 'about_me/' + i + '.html';
-            i++;
-            return fetch(url, { cache: 'no-store' })
-              .then(function (res) {
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                return res.text();
-              })
-              .then(function (txt) {
-                consecutiveFails = 0;
-                var data = extractAboutMeData(txt);
-                if (data && data.src) results.push(data);
-                return next();
-              })
-              .catch(function () {
-                consecutiveFails++;
-                return next();
-              });
-          }
-
-          return next();
         }
 
         function findFloatingLink(el) {
@@ -451,20 +336,13 @@
 
         function setupImages(sources) {
           sources = Array.prototype.slice.call(sources || []);
-          // Deduplicate by src
-          var seen = {};
-          sources = sources.filter(function(item) {
-            if (seen[item.src]) return false;
-            seen[item.src] = true;
-            return true;
-          });
           if (!sources.length) return;
           var count = Math.min(MAX_IMAGES, sources.length);
 
           for (var i = 0; i < count; i++) {
             var item = sources[i];
             var src = item.src;
-            var caption = item.caption || item.title || '';
+            var caption = item.caption || '';
 
             var link = document.createElement('button');
             link.type = 'button';
@@ -481,11 +359,9 @@
             var height = 24 + Math.random() * 8;
             if (width > 42) width = 42;
 
-            // Find a non-overlapping position
             var pos;
             var attempts = 0;
-            // Spread images across vertical bands so they don't all start at top
-            var verticalBand = (i / count) * 80; // spread 0-80vh
+            var verticalBand = (i / count) * 80;
             do {
               pos = {
                 left: randomLeftStrided(width),
@@ -505,7 +381,8 @@
             link.style.height = height + 'vh';
             link.style.left = pos.left + '%';
             link.style.top = pos.top + 'vh';
-            link.style.zIndex = String(2000 + Math.round(pos.top * 10));
+            // Fixed permanent depth lane — never changes, so z-index can never flicker
+            link.style.zIndex = String(100 + i);
 
             link.appendChild(img);
             container.appendChild(link);
@@ -554,11 +431,7 @@
               positions[i] = pos;
               link.style.left = pos.left + '%';
               link.style.top = pos.top + 'vh';
-              if (link === hoveredLink) {
-                link.style.zIndex = '9999';
-              } else {
-                link.style.zIndex = String(2000 + Math.round(pos.top * 10));
-              }
+              // z-index is intentionally not updated here — depth lanes are fixed at creation
             }
           } catch (e) {
             console.warn('Floating images animation:', e);
@@ -566,48 +439,100 @@
           requestId = requestAnimationFrame(animate);
         }
 
-        loadAboutMeItems().then(function (items) {
-          if (!items) items = [];
-
-          var extraLocalImages = [
-            { src: 'about_me/images/1.jpg', caption: 'Mt Tam 50mi Ultra' },
-            { src: 'about_me/images/2.jpg', caption: 'Mariposa and I in Acatenango' },
-            { src: 'about_me/images/4.jpg', caption: 'Day on the docks' },
-            { src: 'about_me/images/5.jpg', caption: 'Guatemala, Tikal Rope Swing' },
-            { src: 'about_me/images/3.jpg', caption: 'I Love Ireland!' },
-          ];
-
-          if (!items.length) {
-            items = extraLocalImages.slice();
-          } else {
-            items = items.concat(extraLocalImages);
-          }
-
-          setupImages(items);
-          requestId = requestAnimationFrame(animate);
-        });
+        var items = [
+          { src: 'about_me/images/1.jpg', caption: 'Mt Tam 50mi Ultra' },
+          { src: 'about_me/images/2.jpg', caption: 'Mariposa and I in Acatenango' },
+          { src: 'about_me/images/4.jpg', caption: 'Day on the docks' },
+          { src: 'about_me/images/5.jpg', caption: 'Guatemala, Tikal Rope Swing' },
+          { src: 'about_me/images/3.jpg', caption: 'I Love Ireland!' },
+        ];
+        setupImages(items);
+        requestId = requestAnimationFrame(animate);
 
         window.addEventListener('beforeunload', function () {
           if (requestId) cancelAnimationFrame(requestId);
         });
       })();
 
-      // Load resume from resume/resume.html
+      // Load and filter posts
       (function () {
-        var resumePanel = document.querySelector('[data-panel="resume"]');
-        if (!resumePanel) return;
+        var postFiles = [
+          'posts/through-trials-to-triumph.html',
+          'posts/another-day-another-entry.html',
+          'posts/third-little-update.html',
+        ];
 
+        var allPosts = [];
+
+        function renderPosts() {
+          var list = document.getElementById('posts-list');
+          if (!list) return;
+          list.innerHTML = allPosts.map(function(p, idx) {
+            return '<article class="post' + (idx > 0 ? ' post-compact' : '') + '">' +
+              '<div class="post-image">' +
+                '<a href="' + p.url + '" class="post-image-link">' +
+                  '<img class="post-image-placeholder" src="' + p.image + '" alt="" />' +
+                '</a>' +
+              '</div>' +
+              '<div class="post-body">' +
+                '<div class="post-meta"><span class="post-tag">' + p.label + '</span></div>' +
+                '<h3 class="post-title">' + p.title + '</h3>' +
+                '<p class="post-excerpt">' + p.excerpt + '</p>' +
+                '<a href="' + p.url + '" class="post-read-more">READ MORE</a>' +
+              '</div>' +
+            '</article>';
+          }).join('');
+        }
+
+        Promise.all(postFiles.map(function(url) {
+          return fetch(url)
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+              var doc = new DOMParser().parseFromString(html, 'text/html');
+              var labelMeta = doc.querySelector('meta[name="post-label"]');
+              var label = labelMeta ? labelMeta.getAttribute('content') : 'POST';
+              var title = doc.querySelector('h1') ? doc.querySelector('h1').textContent.trim() : '';
+              var excerpt = doc.querySelector('.post-detail-body p')
+                ? doc.querySelector('.post-detail-body p').textContent.trim().slice(0, 120) + '...'
+                : '';
+              var img = doc.querySelector('.post-detail-main img');
+              var imgSrc = img
+                ? img.getAttribute('src').replace('../', '')
+                : 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=900&q=80';
+              return { url: url, label: label, title: title, excerpt: excerpt, image: imgSrc };
+            })
+            .catch(function() { return null; });
+        })).then(function(results) {
+          allPosts = results.filter(Boolean);
+          renderPosts();
+        });
+      })();
+
+
+        // Load resume
+        (function () {
         fetch('resume/resume.html')
-          .then(function (res) { return res.text(); })
-          .then(function (html) {
-            var doc = new DOMParser().parseFromString(html, 'text/html');
-            var content = doc.querySelector('.resume-doc') || doc.body;
-            resumePanel.innerHTML = content.innerHTML;
-          })
-          .catch(function (e) {
-            console.warn('Could not load resume:', e);
+        .then(function (res) { return res.text(); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var body = doc.querySelector('body');
+          var container = document.getElementById('resume-content');
+          if (container && body) {
+            // Remove conflicting elements before injecting
+            body.querySelectorAll('script, #theme-toggle, .theme-toggle').forEach(function(el) {
+              el.remove();
+            });
+            // Inject just the inner content, not the .page wrapper
+            var inner = body.querySelector('.page') || body;
+            container.innerHTML = inner.innerHTML;
+          }
+        })
+          .catch(function () {
+            var container = document.getElementById('resume-content');
+            if (container) container.innerHTML = '<p>Could not load resume.</p>';
           });
       })();
+
     </script>
   </body>
 </html>
