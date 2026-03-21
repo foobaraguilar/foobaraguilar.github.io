@@ -257,16 +257,27 @@
         var container = document.getElementById('about-floating-wall');
         if (!container) return;
 
-        var FALL_SPEED = .06;
+        /* All physics in % of the floating container (width for left/width, height for top/height). */
+        var FALL_SPEED = 0.1;
         var MAX_IMAGES = 8;
-        var MARGIN = 6;
-        var MAX_ATTEMPTS = 60;
+        var MARGIN_H = 2;
+        var MARGIN_V = 2;
+        var MAX_ATTEMPTS = 120;
 
         var images = [];
         var positions = [];
         var requestId;
         var hoveredLink = null;
+        /** While pointer is down on a tile, allow overlaps (release can rest on another image). */
+        var heldLink = null;
         var captionTimeoutByEl = new WeakMap();
+
+        window.addEventListener('pointerup', function () {
+          heldLink = null;
+        });
+        window.addEventListener('pointercancel', function () {
+          heldLink = null;
+        });
 
         function normalizeWhitespace(s) {
           return String(s || '').replace(/\s+/g, ' ').trim();
@@ -317,11 +328,59 @@
 
         function isOverlapping(pos1, pos2) {
           return !(
-            pos1.left + pos1.width + MARGIN <= pos2.left ||
-            pos1.left >= pos2.left + pos2.width + MARGIN ||
-            pos1.top + pos1.height + MARGIN <= pos2.top ||
-            pos1.top >= pos2.top + pos2.height + MARGIN
+            pos1.left + pos1.width + MARGIN_H <= pos2.left ||
+            pos1.left >= pos2.left + pos2.width + MARGIN_H ||
+            pos1.top + pos1.height + MARGIN_V <= pos2.top ||
+            pos1.top >= pos2.top + pos2.height + MARGIN_V
           );
+        }
+
+        function clampLeft(left, width) {
+          var maxLeft = 98 - width;
+          if (maxLeft < 2) return 2;
+          if (left < 2) return 2;
+          if (left > maxLeft) return maxLeft;
+          return left;
+        }
+
+        /** Separate in both axes so pairs can’t stay stuck (e.g. clamped at edges). z-index unchanged. */
+        function resolveOverlaps() {
+          var passes = 18;
+          var hDelta = 1.25;
+          var vDelta = 0.85;
+          for (var p = 0; p < passes; p++) {
+            for (var i = 0; i < positions.length; i++) {
+              for (var j = i + 1; j < positions.length; j++) {
+                var li = images[i];
+                var lj = images[j];
+                if (li === hoveredLink || lj === hoveredLink) continue;
+                if (li === heldLink || lj === heldLink) continue;
+                var a = positions[i];
+                var b = positions[j];
+                if (!isOverlapping(a, b)) continue;
+                var ca = a.left + a.width / 2;
+                var cb = b.left + b.width / 2;
+                if (ca <= cb) {
+                  a.left = clampLeft(a.left - hDelta, a.width);
+                  b.left = clampLeft(b.left + hDelta, b.width);
+                } else {
+                  a.left = clampLeft(a.left + hDelta, a.width);
+                  b.left = clampLeft(b.left - hDelta, b.width);
+                }
+                var ta = a.top + a.height / 2;
+                var tb = b.top + b.height / 2;
+                if (ta <= tb) {
+                  a.top -= vDelta;
+                  b.top += vDelta;
+                } else {
+                  a.top += vDelta;
+                  b.top -= vDelta;
+                }
+                positions[i] = a;
+                positions[j] = b;
+              }
+            }
+          }
         }
 
         function randomLeftStrided(width) {
@@ -355,13 +414,14 @@
             img.alt = '';
             img.className = 'floating-image';
 
-            var width = 28 + Math.random() * 10;
-            var height = 24 + Math.random() * 8;
-            if (width > 42) width = 42;
+            /* Random tile size: width % of container width, height % of container height */
+            var width = 26 + Math.random() * 10;
+            var height = 32 + Math.random() * 10;
+            if (width > 40) width = 40;
 
             var pos;
             var attempts = 0;
-            var verticalBand = (i / count) * 80;
+            var verticalBand = (i / count) * 62;
             do {
               pos = {
                 left: randomLeftStrided(width),
@@ -378,11 +438,15 @@
             positions.push(pos);
 
             link.style.width = width + '%';
-            link.style.height = height + 'vh';
+            link.style.height = height + '%';
             link.style.left = pos.left + '%';
-            link.style.top = pos.top + 'vh';
+            link.style.top = pos.top + '%';
             // Fixed permanent depth lane — never changes, so z-index can never flicker
             link.style.zIndex = String(100 + i);
+
+            link.addEventListener('pointerdown', function () {
+              heldLink = link;
+            });
 
             link.appendChild(img);
             container.appendChild(link);
@@ -396,7 +460,7 @@
               var link = images[i];
               var pos = positions[i];
 
-              if (link === hoveredLink) {
+              if (link === hoveredLink || link === heldLink) {
                 continue;
               }
 
@@ -404,7 +468,7 @@
 
               if (newTop > 100) {
                 var attempts = 0;
-                var staggerDepth = -(pos.height + 10 + (i * 40) + Math.random() * 15);
+                var staggerDepth = -(pos.height + 14 + i * 38 + Math.random() * 12);
                 var newPos = {
                   left: randomLeftStrided(pos.width),
                   top: staggerDepth,
@@ -415,12 +479,12 @@
                   attempts < MAX_ATTEMPTS &&
                   positions.some(function (other, idx) {
                     if (idx === i) return false;
-                    var tooClose = Math.abs(newPos.top - other.top) < 15;
+                    var tooClose = Math.abs(newPos.top - other.top) < 10;
                     return isOverlapping(newPos, other) || tooClose;
                   })
                 ) {
                   newPos.left = randomLeftStrided(pos.width);
-                  newPos.top = staggerDepth - (attempts * 5);
+                  newPos.top = staggerDepth - attempts * 4;
                   attempts++;
                 }
                 pos = newPos;
@@ -429,9 +493,15 @@
               }
 
               positions[i] = pos;
-              link.style.left = pos.left + '%';
-              link.style.top = pos.top + 'vh';
-              // z-index is intentionally not updated here — depth lanes are fixed at creation
+            }
+
+            resolveOverlaps();
+
+            for (var k = 0; k < images.length; k++) {
+              var lk = images[k];
+              var pk = positions[k];
+              lk.style.left = pk.left + '%';
+              lk.style.top = pk.top + '%';
             }
           } catch (e) {
             console.warn('Floating images animation:', e);

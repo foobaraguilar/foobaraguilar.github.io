@@ -458,8 +458,23 @@ body.theme-dark .nav-item-active {
 
 .post-detail-body {
   font-size: 15px;
-  line-height: 1.7;
+  line-height: 1.55;
   color: #555;
+}
+
+/* Blog-style reading column on post/project detail pages */
+.post-detail .post-detail-body {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post-detail .post-detail-body p {
+  margin: 0 0 0.65em;
+}
+
+.post-detail .post-detail-body p:last-child {
+  margin-bottom: 0;
 }
 
 .fade-in {
@@ -710,9 +725,11 @@ body.theme-dark .about-me-photo-caption {
   position: relative;
 }
 
+/* Post + project detail pages (posts/*.html, projects/*.html) */
 .post-detail .simple-header {
   text-align: center;
-  padding-top: 6px; /* slide header content down slightly */
+  /* Space that was occupied by the in-flow breadcrumb row so title + subtitle stay put */
+  padding-top: 22px;
   margin-bottom: 18px; /* reduce whitespace under header on detail pages */
 }
 
@@ -721,14 +738,264 @@ body.theme-dark .about-me-photo-caption {
   margin-right: auto;
 }
 
+/* Fixed top-left, same inset as .theme-toggle (top/right) — does not shift centered header content */
+.post-detail .post-detail-breadcrumb-row {
+  position: fixed;
+  top: 34px;
+  left: 34px;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
 .post-detail .breadcrumb-link {
-  position: absolute;
-  left: 0;
-  top: 0;
+  margin-bottom: 0;
 }
 
 .post-detail .post-detail-main {
   margin-top: 2px; /* keep content closer to header */
+}
+
+/* Blog + project detail: title, subtitle, body (not resume — no .post-detail-body) */
+body.post-detail:has(.post-detail-body) .page {
+  padding-top: clamp(56px, 8.5vh, 148px);
+}
+
+.post-detail-engagement {
+  max-width: 640px;
+  margin: 2.5rem auto 0;
+  padding-top: 1.75rem;
+  border-top: 1px solid #e8e8e8;
+}
+
+.post-detail-likes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.post-detail-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.post-detail-like-btn:hover:not(:disabled) {
+  border-color: #c45c5c;
+  background-color: rgba(196, 92, 92, 0.06);
+}
+
+.post-detail-like-btn:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.post-detail-like-btn--liked {
+  border-color: #c45c5c;
+  background-color: rgba(196, 92, 92, 0.1);
+}
+
+.post-detail-likes-icon {
+  font-size: 15px;
+  line-height: 1;
+  color: #c45c5c;
+}
+
+.post-detail-likes-count {
+  font-weight: 600;
+  color: #333;
+}
+
+.post-detail-likes-note {
+  font-size: 13px;
+  color: #888;
+}
+
+.post-detail-comments-heading {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 12px;
+  color: #666;
+}
+
+.post-detail-comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+
+.post-detail-comment-form textarea {
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 72px;
+  box-sizing: border-box;
+}
+
+.post-detail-comment-form textarea:focus {
+  outline: none;
+  border-color: #999;
+}
+
+.post-detail-comment-form button[type='submit'] {
+  align-self: flex-start;
+  padding: 8px 16px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: #333;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.post-detail-comment-form button[type='submit']:hover {
+  background: #222;
+}
+
+.post-detail-comment-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.post-detail-comment-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.post-detail-comment-item:last-child {
+  border-bottom: none;
+}
+
+.post-detail-comment-text {
+  margin: 0 0 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #444;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.post-detail-comment-time {
+  display: block;
+  font-size: 12px;
+  color: #888;
+}
+
+.post-detail-comments-empty {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #777;
+}
+
+.post-detail-comments-empty[hidden] {
+  display: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+body.theme-dark .post-detail-engagement {
+  border-top-color: #333;
+}
+
+body.theme-dark .post-detail-likes,
+body.theme-dark .post-detail-likes-note {
+  color: #a0a0a0;
+}
+
+body.theme-dark .post-detail-likes-count {
+  color: #e5e5e5;
+}
+
+body.theme-dark .post-detail-comments-heading {
+  color: #a8a8a8;
+}
+
+body.theme-dark .post-detail-comments-empty {
+  color: #909090;
+}
+
+body.theme-dark .post-detail-like-btn {
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.theme-dark .post-detail-like-btn:hover:not(:disabled) {
+  border-color: #c45c5c;
+  background-color: rgba(196, 92, 92, 0.12);
+}
+
+body.theme-dark .post-detail-like-btn--liked {
+  border-color: #c45c5c;
+}
+
+body.theme-dark .post-detail-comment-form textarea {
+  color: #f0f0f0;
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+body.theme-dark .post-detail-comment-form textarea:focus {
+  border-color: #666;
+}
+
+body.theme-dark .post-detail-comment-form button[type='submit'] {
+  background: #e5e5e5;
+  color: #111;
+}
+
+body.theme-dark .post-detail-comment-form button[type='submit']:hover {
+  background: #fff;
+}
+
+body.theme-dark .post-detail-comment-item {
+  border-bottom-color: #333;
+}
+
+body.theme-dark .post-detail-comment-text {
+  color: #d8d8d8;
+}
+
+body.theme-dark .post-detail-comment-time {
+  color: #909090;
 }
 
 .breadcrumb-link {
@@ -1017,6 +1284,10 @@ body.theme-dark .journal-post {
     padding: 24px 16px 32px;
   }
 
+  body.post-detail:has(.post-detail-body) .page {
+    padding-top: 52px;
+  }
+
   .site-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1057,9 +1328,12 @@ body.theme-dark .journal-post {
   .sidebar {
     position: fixed;
     top: 112px;
-    right: 16px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
     width: auto;
     min-width: 180px;
+    max-width: calc(100vw - 32px);
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -1125,6 +1399,10 @@ body.theme-dark .journal-post {
 @media (max-width: 480px) {
   .page {
     padding-top: 56px;
+  }
+
+  body.post-detail:has(.post-detail-body) .page {
+    padding-top: 48px;
   }
 
   .theme-toggle {

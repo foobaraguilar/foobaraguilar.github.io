@@ -13,7 +13,9 @@
         <span class="theme-toggle-icon" aria-hidden="true"></span>
       </button>
       <header class="simple-header">
-        <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        <div class="post-detail-breadcrumb-row">
+          <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        </div>
         <h1 class="intro-greeting">Through Trials to Triumph</h1>
         <p class="intro-subtext">
           A simple project detail page to show how card clicks can lead somewhere with a gentle
@@ -29,6 +31,38 @@
             card to detail.
           </p>
         </article>
+        <footer class="post-detail-engagement" aria-label="Reactions and comments">
+          <div class="post-detail-likes">
+            <button
+              type="button"
+              class="post-detail-like-btn"
+              id="post-like-btn"
+              aria-label="Like this post"
+              aria-pressed="false"
+            >
+              <span class="post-detail-likes-icon" aria-hidden="true">♥</span>
+              <span class="post-detail-likes-count" id="post-likes-count">0</span>
+            </button>
+            <span class="post-detail-likes-note">likes</span>
+          </div>
+          <section class="post-detail-comments">
+            <h2 class="post-detail-comments-heading">Comments</h2>
+            <form class="post-detail-comment-form" id="post-comment-form">
+              <label for="post-comment-input" class="visually-hidden">Add a comment</label>
+              <textarea
+                id="post-comment-input"
+                name="comment"
+                rows="3"
+                maxlength="2000"
+                placeholder="Write a comment…"
+                required
+              ></textarea>
+              <button type="submit">Post comment</button>
+            </form>
+            <ul class="post-detail-comment-list" id="post-comment-list" aria-live="polite"></ul>
+            <p class="post-detail-comments-empty" id="post-comment-empty">No comments yet.</p>
+          </section>
+        </footer>
       </main>
     </div>
 
@@ -65,6 +99,7 @@
         });
       })();
     </script>
+    <script src="../assets/post-interactions.js" defer></script>
   </body>
 </html>
 
