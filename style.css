@@ -375,21 +375,27 @@ body.theme-dark .nav-item-active {
 
 .post-image {
   flex-shrink: 0;
+  width: 300px;
+  min-width: 300px;
 }
 
 .post-image-link {
   display: block;
   text-decoration: none;
   color: inherit;
+  width: 100%;
+  height: 188px;
+  overflow: hidden;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
 .post-image-placeholder {
-  width: 300px;
-  height: 188px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 3px;
+  object-position: center center;
   display: block;
-  max-height: 220px;
 }
 
 .post-body {
@@ -1413,9 +1419,14 @@ body.theme-dark .journal-post {
     letter-spacing: 0.5px;
   }
 
-  .post-image-placeholder {
+  .post-image {
     width: 100%;
-    height: 200px; /* slightly shorter on tablets/phones */
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .post-image-link {
+    height: 200px; /* fixed thumb box on tablets/phones */
   }
 
   .post-compact {
@@ -1462,7 +1473,7 @@ body.theme-dark .journal-post {
     row-gap: 24px;
   }
 
-  .post-image-placeholder {
+  .post-image-link {
     height: 170px; /* avoid overly tall images on small phones */
   }
 
