@@ -1396,12 +1396,17 @@ body.theme-dark .journal-post {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 11;
+    /* Above .floating-image-link (z-index 100+) so the menu stays usable */
+    z-index: 210;
   }
 
   body.theme-dark .nav-toggle {
     background-color: #262626;
     border-color: #444;
+  }
+
+  .theme-toggle {
+    z-index: 210;
   }
 
   /* Hide inline sidebar when using mobile hamburger */
@@ -1419,7 +1424,8 @@ body.theme-dark .journal-post {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     padding: 10px 14px 8px;
     display: none;
-    z-index: 9;
+    /* Above floating About images (z-index 100+) */
+    z-index: 200;
   }
 
   body.nav-open .sidebar {
