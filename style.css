@@ -375,8 +375,14 @@ body.theme-dark .nav-item-active {
 
 .post-image {
   flex-shrink: 0;
-  width: 300px;
-  min-width: 300px;
+  min-width: 0;
+}
+
+@media (min-width: 801px) {
+  .post-image {
+    width: 300px;
+    min-width: 300px;
+  }
 }
 
 .post-image-link {
@@ -405,6 +411,8 @@ body.theme-dark .nav-item-active {
   color: #666;
   margin: 0 0 10px;
   max-width: 520px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 body.theme-dark .post-thumb-footer {
@@ -435,6 +443,8 @@ body.theme-dark .post-thumb-footer {
   font-size: 18px;
   letter-spacing: 1px;
   margin: 6px 0 6px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .post-excerpt {
@@ -1362,6 +1372,13 @@ body.theme-dark .journal-post {
 }
 
 @media (max-width: 800px) {
+  /* Prevent stray horizontal scroll from wide flex children / negative margins */
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
   .page {
     padding: 24px 16px 32px;
   }
@@ -1383,6 +1400,24 @@ body.theme-dark .journal-post {
   .layout {
     grid-template-columns: 1fr;
     row-gap: 32px;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .content {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .posts {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #posts-list {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .nav-toggle {
@@ -1461,19 +1496,22 @@ body.theme-dark .journal-post {
     letter-spacing: 0.5px;
   }
 
-  /* Keep thumb left + text right (do not use width:100% on .post-image — it hides .post-body) */
+  /* Keep thumb left + text right; sizes must fit the viewport (no 300px min-width here) */
   .post {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: flex-start;
-    gap: 12px;
+    gap: 10px;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .post-image {
-    flex: 0 0 clamp(120px, 36%, 200px);
-    width: clamp(120px, 36%, 200px);
+    flex: 0 0 30%;
+    width: 30%;
     min-width: 0;
-    max-width: 200px;
+    max-width: 150px;
   }
 
   .post-thumb-footer {
@@ -1529,13 +1567,13 @@ body.theme-dark .journal-post {
   }
 
   .post-image {
-    flex: 0 0 clamp(100px, 34%, 160px);
-    width: clamp(100px, 34%, 160px);
-    max-width: 160px;
+    flex: 0 0 28%;
+    max-width: 130px;
+    width: 28%;
   }
 
   .post-image-link {
-    height: 120px;
+    height: 110px;
   }
 
   .posts-filter-bar {
