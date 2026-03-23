@@ -1508,10 +1508,10 @@ body.theme-dark .journal-post {
   }
 
   .post-image {
-    flex: 0 0 36%;
-    width: 36%;
+    flex: 0 0 42%;
+    width: 42%;
     min-width: 0;
-    max-width: 180px;
+    max-width: 210px;
   }
 
   .post-thumb-footer {
@@ -1519,7 +1519,7 @@ body.theme-dark .journal-post {
   }
 
   .post-image-link {
-    height: 158px;
+    height: 188px;
   }
 
   .post-compact {
@@ -1567,13 +1567,13 @@ body.theme-dark .journal-post {
   }
 
   .post-image {
-    flex: 0 0 34%;
-    max-width: 155px;
-    width: 34%;
+    flex: 0 0 40%;
+    max-width: 185px;
+    width: 40%;
   }
 
   .post-image-link {
-    height: 132px;
+    height: 158px;
   }
 
   .posts-filter-bar {
