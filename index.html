@@ -86,10 +86,10 @@
             <div class="content-panel" data-panel="projects">
               <div class="projects-grid">
                 <!-- Rasp5 -->
-                <a class="project-card" href="projects/minimal-journal-layout.html">
+                <a class="project-card" href="projects/rasp.html">
                   <div class="project-thumb project-thumb-bar"></div>
                   <div class="project-body">
-                    <h2 class="project-title">Rasberry Pis, OpenClaw, Open-Source LLMs</h2>
+                    <h2 class="project-title">Rasberry Pis, OpenClaw, and Open-Source LLMs</h2>
                     <p class="project-excerpt">
                       Building a free open-source engine and benchmarking locally hosted and open-source models cause I am cheap.
                     </p>
@@ -97,7 +97,7 @@
                 </a>
 
                 <!-- Ego Data -->
-                <a class="project-card" href="projects/resonance-playlist.html">
+                <a class="project-card" href="projects/egodata.html">
                   <div class="project-thumb project-thumb-square"></div>
                   <div class="project-body">
                     <h2 class="project-title">Scaling Egocentric Data</h2>
@@ -108,7 +108,7 @@
                 </a>
 
               <!-- Building Julia -->
-              <a class="project-card" href="projects/through-trials-to-triumph.html">
+              <a class="project-card" href="projects/bike.html">
                 <div class="project-thumb project-thumb-circle"></div>
                 <div class="project-body">
                   <h2 class="project-title">Building Julia</h2>
@@ -261,17 +261,17 @@
         var FALL_SPEED = 0.055;
         var MIN_IMAGES = 2;
         var MAX_IMAGES = 3;
-        var MARGIN_H = 6;
-        var MARGIN_V = 6;
+        var MARGIN_H = 2;
+        var MARGIN_V = 2;
         var MAX_ATTEMPTS = 120;
         /** Per-frame separation after drag/gravity — small steps so motion is smooth. */
         var RESOLVE_SOFT_PASSES = 1;
-        var RESOLVE_SOFT_H = 0.42;
-        var RESOLVE_SOFT_V = 0.28;
+        var RESOLVE_SOFT_H = 0.16;
+        var RESOLVE_SOFT_V = 0.1;
         /** Strong separation used only after spawn to clear overlaps immediately (not used in animate). */
         var RESOLVE_HARD_PASSES = 22;
-        var RESOLVE_HARD_H = 1.65;
-        var RESOLVE_HARD_V = 1.1;
+        var RESOLVE_HARD_H = 0.62;
+        var RESOLVE_HARD_V = 0.4;
         var RESOLVE_SPAWN_MAX_ROUNDS = 64;
 
         var images = [];
@@ -469,10 +469,10 @@
             link.appendChild(inner);
             applyTileSource(link, item);
 
-            /* Random tile size: width % of container width, height % of container height */
-            var width = 30 + Math.random() * 9;
-            var height = 37 + Math.random() * 10;
-            if (width > 39) width = 39;
+            /* Random tile size: width % of container width, height % of container height (larger = less aggressive cover crop on screen) */
+            var width = 40 + Math.random() * 10;
+            var height = 46 + Math.random() * 10;
+            if (width > 50) width = 50;
 
             var pos;
             var attempts = 0;
@@ -545,7 +545,7 @@
                   attempts < MAX_ATTEMPTS &&
                   positions.some(function (other, idx) {
                     if (idx === i) return false;
-                    var tooClose = Math.abs(newPos.top - other.top) < 24;
+                    var tooClose = Math.abs(newPos.top - other.top) < 8;
                     return isOverlapping(newPos, other) || tooClose;
                   })
                 ) {
@@ -598,6 +598,7 @@
 
       // Load and filter posts
       (function () {
+        /* Order here = order on the page; thumbnails are posts/images/1.jpg, 2.jpg, … by position */
         var postFiles = [
           'posts/2x50x50.html',
           'posts/backpacking-ca.html',
@@ -626,7 +627,7 @@
           }).join('');
         }
 
-        Promise.all(postFiles.map(function(url) {
+        Promise.all(postFiles.map(function(url, postIndex) {
           return fetch(url)
             .then(function(res) { return res.text(); })
             .then(function(html) {
@@ -643,23 +644,8 @@
                   break;
                 }
               }
-              var img = doc.querySelector('.post-detail-main img');
-              var imgSrc = '';
-              if (img) {
-                imgSrc = img.getAttribute('src').replace(/^\.\.\//, '');
-                if (imgSrc.indexOf('unsplash.com') !== -1) {
-                  try {
-                    var u = new URL(imgSrc, window.location.href);
-                    if (u.searchParams.get('fit') === 'crop') u.searchParams.delete('fit');
-                    imgSrc = u.href;
-                  } catch (e) {
-                    imgSrc = imgSrc.replace(/([?&])fit=crop(&|$)/g, '$1').replace(/\?&/g, '?');
-                  }
-                }
-              } else {
-                imgSrc =
-                  'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&w=900&q=80';
-              }
+              /* Thumbnail: posts/images/1.jpg … N.jpg matches postFiles order (index 0 → 1.jpg) */
+              var imgSrc = 'posts/images/' + (postIndex + 1) + '.jpg';
               return { url: url, label: label, title: title, excerpt: excerpt, image: imgSrc };
             })
             .catch(function() { return null; });
