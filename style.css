@@ -398,6 +398,19 @@ body.theme-dark .nav-item-active {
   display: block;
 }
 
+/* Hero caption on home list: directly under title (same copy as under image on post page) */
+.post-thumb-footer {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #666;
+  margin: 0 0 10px;
+  max-width: 520px;
+}
+
+body.theme-dark .post-thumb-footer {
+  color: #a8a8a8;
+}
+
 .post-body {
   max-width: 520px;
 }
@@ -419,7 +432,7 @@ body.theme-dark .nav-item-active {
 .post-title {
   font-size: 18px;
   letter-spacing: 1px;
-  margin: 6px 0 10px;
+  margin: 6px 0 6px;
 }
 
 .post-excerpt {
@@ -452,16 +465,37 @@ body.theme-dark .nav-item-active {
   margin: 0 auto;
 }
 
+.post-detail-hero {
+  max-width: 520px;
+  margin: 0 auto 1.25rem;
+}
+
 .post-detail-hero-img {
   width: 100%;
-  max-width: 640px;
   height: auto;
-  max-height: 420px;
+  max-height: 300px;
   display: block;
-  margin: 0 auto 1.25rem;
+  margin: 0 auto;
   border-radius: 6px;
   object-fit: cover;
   object-position: center center;
+}
+
+.post-detail-hero-caption {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 520px;
+  margin: 0.5rem auto 0;
+  padding: 0 12px;
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: #666;
+}
+
+body.theme-dark .post-detail-hero-caption {
+  color: #a8a8a8;
 }
 
 .about-me-detail .post-detail-main {
@@ -1422,6 +1456,10 @@ body.theme-dark .journal-post {
   .post-image {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
+  }
+
+  .post-thumb-footer {
     max-width: 100%;
   }
 
