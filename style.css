@@ -412,6 +412,8 @@ body.theme-dark .post-thumb-footer {
 }
 
 .post-body {
+  flex: 1;
+  min-width: 0;
   max-width: 520px;
 }
 
@@ -1459,10 +1461,19 @@ body.theme-dark .journal-post {
     letter-spacing: 0.5px;
   }
 
+  /* Keep thumb left + text right (do not use width:100% on .post-image — it hides .post-body) */
+  .post {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
   .post-image {
-    width: 100%;
+    flex: 0 0 clamp(120px, 36%, 200px);
+    width: clamp(120px, 36%, 200px);
     min-width: 0;
-    max-width: 100%;
+    max-width: 200px;
   }
 
   .post-thumb-footer {
@@ -1470,7 +1481,7 @@ body.theme-dark .journal-post {
   }
 
   .post-image-link {
-    height: 200px; /* fixed thumb box on tablets/phones */
+    height: 140px;
   }
 
   .post-compact {
@@ -1517,10 +1528,15 @@ body.theme-dark .journal-post {
     row-gap: 24px;
   }
 
-  .post-image-link {
-    height: 170px; /* avoid overly tall images on small phones */
+  .post-image {
+    flex: 0 0 clamp(100px, 34%, 160px);
+    width: clamp(100px, 34%, 160px);
+    max-width: 160px;
   }
 
+  .post-image-link {
+    height: 120px;
+  }
 
   .posts-filter-bar {
     position: relative;
