@@ -477,9 +477,14 @@ body.theme-dark .post-thumb-footer {
   margin: 0 auto;
 }
 
+/* Text column width; hero matches earlier layout (520px cap + fixed visual height) */
+body.post-detail {
+  --post-article-max: 640px;
+}
+
 .post-detail-hero {
   max-width: 520px;
-  margin: 0 auto 1.25rem;
+  margin: 20px auto 1.25rem;
 }
 
 .post-detail-hero-img {
@@ -488,7 +493,7 @@ body.theme-dark .post-thumb-footer {
   max-height: 300px;
   display: block;
   margin: 0 auto;
-  border-radius: 6px;
+  border-radius: 8px;
   object-fit: cover;
   object-position: center center;
 }
@@ -496,13 +501,13 @@ body.theme-dark .post-thumb-footer {
 .post-detail-hero-caption {
   box-sizing: border-box;
   width: 100%;
-  max-width: 520px;
-  margin: 0.5rem auto 0;
-  padding: 0 12px;
-  font-size: 12px;
-  line-height: 1.45;
-  letter-spacing: 0.02em;
-  text-align: center;
+  max-width: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  text-align: left;
   color: #666;
 }
 
@@ -533,9 +538,14 @@ body:not(.theme-dark) .post-detail .post-detail-body p {
 
 /* Blog-style reading column on post/project detail pages */
 .post-detail .post-detail-body {
-  max-width: 640px;
+  max-width: var(--post-article-max);
   margin-left: auto;
   margin-right: auto;
+  text-align: left;
+}
+
+.post-detail-main > .post-detail-body:first-child {
+  margin-top: 2rem;
 }
 
 .post-detail .post-detail-body p {
@@ -814,15 +824,77 @@ body.theme-dark .about-me-photo-caption {
 
 /* Post + project detail pages (posts/*.html, projects/*.html) */
 .post-detail .simple-header {
-  text-align: center;
-  /* Space that was occupied by the in-flow breadcrumb row so title + subtitle stay put */
-  padding-top: 22px;
-  margin-bottom: 18px; /* reduce whitespace under header on detail pages */
+  /* Centered column, left-aligned copy (Substack-style) */
+  text-align: left;
+  padding-top: 18px;
+  margin-bottom: 0;
+}
+
+/* Substack-style header: section label + title + deck + date */
+.post-detail .post-detail-header-inner {
+  max-width: var(--post-article-max);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+body.theme-dark .post-detail .post-detail-header-inner {
+  border-bottom-color: #333;
+}
+
+.post-detail-kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #777;
+  margin: 0 0 10px;
+  text-align: left;
+}
+
+.post-detail .intro-greeting {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  text-align: left;
 }
 
 .post-detail .intro-subtext {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0;
+  max-width: none;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1.45;
+  color: #444;
+  text-align: left;
+}
+
+.post-detail-date {
+  display: block;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #555;
+  margin: 12px 0 0;
+  font-weight: 400;
+  text-align: left;
+}
+
+body.theme-dark .post-detail-kicker {
+  color: #8e8e8e;
+}
+
+body.theme-dark .post-detail-date {
+  color: #a8a8a8;
+}
+
+body.theme-dark .post-detail .intro-subtext {
+  color: #b0b0b0;
 }
 
 /* Fixed top-left on post/project detail only — stays above scrolling content (see body.post-detail .theme-toggle) */
@@ -846,7 +918,7 @@ body.post-detail .theme-toggle {
 }
 
 .post-detail .post-detail-main {
-  margin-top: 2px; /* keep content closer to header */
+  margin-top: 4px;
 }
 
 /* Blog + project detail: title, subtitle, body (not resume — no .post-detail-body) */
@@ -855,10 +927,11 @@ body.post-detail:has(.post-detail-body) .page {
 }
 
 .post-detail-engagement {
-  max-width: 640px;
-  margin: 2.5rem auto 0;
-  padding-top: 1.75rem;
-  border-top: 1px solid #e8e8e8;
+  max-width: var(--post-article-max);
+  margin: 2.75rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid #e6e6e6;
+  text-align: left;
 }
 
 .post-detail-likes {
@@ -1500,12 +1573,20 @@ body.theme-dark .journal-post {
     font-size: 28px;
   }
 
+  .post-detail .intro-greeting {
+    font-size: 28px;
+  }
+
   .intro-lead {
     font-size: 16px;
   }
 
   .intro-subtext {
     font-size: 13px;
+  }
+
+  .post-detail-date {
+    font-size: 15px;
   }
 
   .sidebar-title,
@@ -1573,6 +1654,10 @@ body.theme-dark .journal-post {
   }
 
   .intro-greeting {
+    font-size: 24px;
+  }
+
+  .post-detail .intro-greeting {
     font-size: 24px;
   }
 

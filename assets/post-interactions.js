@@ -93,27 +93,28 @@
     var listEl = document.getElementById('post-comment-list');
     var emptyEl = document.getElementById('post-comment-empty');
 
-    if (!likeBtn || !countEl) return;
-
     var state = loadState();
 
-    function applyLikeUI() {
-      countEl.textContent = String(state.likes);
-      likeBtn.setAttribute('aria-pressed', state.userLiked ? 'true' : 'false');
-      likeBtn.disabled = state.userLiked;
-      likeBtn.classList.toggle('post-detail-like-btn--liked', state.userLiked);
+    if (likeBtn && countEl) {
+      function applyLikeUI() {
+        countEl.textContent = String(state.likes);
+        likeBtn.setAttribute('aria-pressed', state.userLiked ? 'true' : 'false');
+        likeBtn.disabled = state.userLiked;
+        likeBtn.classList.toggle('post-detail-like-btn--liked', state.userLiked);
+      }
+
+      applyLikeUI();
+
+      likeBtn.addEventListener('click', function () {
+        if (state.userLiked) return;
+        state.userLiked = true;
+        state.likes += 1;
+        saveState(state);
+        applyLikeUI();
+      });
     }
 
-    applyLikeUI();
     renderComments(listEl, emptyEl, state.comments);
-
-    likeBtn.addEventListener('click', function () {
-      if (state.userLiked) return;
-      state.userLiked = true;
-      state.likes += 1;
-      saveState(state);
-      applyLikeUI();
-    });
 
     if (form && input) {
       form.addEventListener('submit', function (e) {
