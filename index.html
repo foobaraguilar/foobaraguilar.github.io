@@ -163,8 +163,10 @@
         }
 
         var stored = localStorage.getItem('theme');
-        if (stored === 'dark' || stored === 'light') {
-          applyTheme(stored);
+        if (stored === 'dark') {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
         }
 
         toggle.addEventListener('click', function () {
@@ -249,7 +251,7 @@
         if (!container) return;
 
         /* All physics in % of the floating container (width for left/width, height for top/height). */
-        var FALL_SPEED = 0.055;
+        var FALL_SPEED = 0.20;
         var MIN_IMAGES = 2;
         var MAX_IMAGES = 3;
         var MARGIN_H = 2;
@@ -270,8 +272,33 @@
         /** Full photo list; tiles take the next entry each time one respawns from the top */
         var rotationPool = [];
         var nextPoolIndex = 0;
-        var requestId;
+        var requestId = null;
         var hoveredLink = null;
+        var aboutPanel =
+          container.closest && container.closest('.content-panel');
+        var animateFrame = 0;
+
+        /** Stable % strings — avoids subpixel jitter from overlap math over long runs. */
+        function pct(n) {
+          return Math.round(n * 1000) / 1000;
+        }
+        function pctStr(n) {
+          return pct(n) + '%';
+        }
+
+        function stopLoop() {
+          if (requestId != null) {
+            cancelAnimationFrame(requestId);
+            requestId = null;
+          }
+        }
+
+        function startLoop() {
+          if (requestId != null) return;
+          if (!aboutPanel || !aboutPanel.classList.contains('active')) return;
+          if (document.hidden) return;
+          requestId = requestAnimationFrame(animate);
+        }
         /** While pointer is down on a tile, allow overlaps (release can rest on another image). */
         var heldLink = null;
         var captionTimeoutByEl = new WeakMap();
@@ -298,6 +325,9 @@
         container.addEventListener('mouseout', function (e) {
           var stillOverLink = findFloatingLink(e.relatedTarget);
           if (!stillOverLink) hoveredLink = null;
+        });
+        container.addEventListener('pointerleave', function () {
+          hoveredLink = null;
         });
 
         container.addEventListener('click', function (e) {
@@ -461,9 +491,9 @@
             applyTileSource(link, item);
 
             /* Random tile size: width % of container width, height % of container height (larger = less aggressive cover crop on screen) */
-            var width = 40 + Math.random() * 10;
-            var height = 46 + Math.random() * 10;
-            if (width > 50) width = 50;
+            var width = 36 + Math.random() * 10;
+            var height = 42 + Math.random() * 10;
+            if (width > 46) width = 46;
 
             var pos;
             var attempts = 0;
@@ -486,8 +516,8 @@
 
             link.style.width = width + '%';
             link.style.height = height + '%';
-            link.style.left = pos.left + '%';
-            link.style.top = pos.top + '%';
+            link.style.left = pctStr(pos.left);
+            link.style.top = pctStr(pos.top);
             // Fixed permanent depth lane — never changes, so z-index can never flicker
             link.style.zIndex = String(100 + i);
 
@@ -504,12 +534,16 @@
             resolveOverlapsHard();
           }
           for (var sync = 0; sync < images.length; sync++) {
-            images[sync].style.left = positions[sync].left + '%';
-            images[sync].style.top = positions[sync].top + '%';
+            images[sync].style.left = pctStr(positions[sync].left);
+            images[sync].style.top = pctStr(positions[sync].top);
           }
         }
 
         function animate() {
+          if (!aboutPanel || !aboutPanel.classList.contains('active') || document.hidden) {
+            requestId = null;
+            return;
+          }
           try {
             for (var i = 0; i < images.length; i++) {
               var link = images[i];
@@ -546,25 +580,35 @@
                 }
                 newPos.top = Math.max(newPos.top, respawnFloor);
                 pos = newPos;
+                pos.left = pct(pos.left);
+                pos.top = pct(pos.top);
                 if (rotationPool.length) {
                   var ri = nextPoolIndex % rotationPool.length;
                   nextPoolIndex++;
                   applyTileSource(link, rotationPool[ri]);
                 }
               } else {
-                pos.top = newTop;
+                pos.top = pct(newTop);
               }
 
               positions[i] = pos;
             }
 
-            resolveOverlaps();
+            animateFrame++;
+            if (animateFrame % 2 === 0) {
+              resolveOverlaps();
+            }
+            for (var rj = 0; rj < positions.length; rj++) {
+              var pr = positions[rj];
+              pr.left = pct(pr.left);
+              pr.top = pct(pr.top);
+            }
 
             for (var k = 0; k < images.length; k++) {
               var lk = images[k];
               var pk = positions[k];
-              lk.style.left = pk.left + '%';
-              lk.style.top = pk.top + '%';
+              lk.style.left = pctStr(pk.left);
+              lk.style.top = pctStr(pk.top);
             }
           } catch (e) {
             console.warn('Floating images animation:', e);
@@ -580,10 +624,22 @@
           { src: 'about_me/images/3.jpg', caption: 'I Love Ireland!' },
         ];
         setupImages(items);
-        requestId = requestAnimationFrame(animate);
+        startLoop();
+
+        document.querySelectorAll('.sidebar .nav-item[data-tab]').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var key = btn.getAttribute('data-tab');
+            if (key === 'about') startLoop();
+            else stopLoop();
+          });
+        });
+        document.addEventListener('visibilitychange', function () {
+          if (document.hidden) stopLoop();
+          else if (aboutPanel && aboutPanel.classList.contains('active')) startLoop();
+        });
 
         window.addEventListener('beforeunload', function () {
-          if (requestId) cancelAnimationFrame(requestId);
+          stopLoop();
         });
       })();
 

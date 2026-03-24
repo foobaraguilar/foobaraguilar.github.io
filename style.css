@@ -825,15 +825,20 @@ body.theme-dark .about-me-photo-caption {
   margin-right: auto;
 }
 
-/* Fixed top-left, same inset as .theme-toggle (top/right) — does not shift centered header content */
+/* Fixed top-left on post/project detail only — stays above scrolling content (see body.post-detail .theme-toggle) */
 .post-detail .post-detail-breadcrumb-row {
   position: fixed;
   top: 34px;
   left: 34px;
-  z-index: 10;
+  z-index: 200;
   margin: 0;
   padding: 0;
   text-align: left;
+}
+
+/* Theme toggle: index.html keeps default z-index; on detail pages raise so hero/body never covers it */
+body.post-detail .theme-toggle {
+  z-index: 200;
 }
 
 .post-detail .breadcrumb-link {
@@ -1444,6 +1449,19 @@ body.theme-dark .journal-post {
 
   .theme-toggle {
     z-index: 210;
+  }
+
+  /* Post/project detail: keep Back + theme above scrolling panels (overrides 210) */
+  body.post-detail .theme-toggle {
+    z-index: 260;
+    right: 16px;
+    top: max(20px, env(safe-area-inset-top, 0px));
+  }
+
+  body.post-detail .post-detail-breadcrumb-row {
+    z-index: 260;
+    left: 16px;
+    top: max(20px, env(safe-area-inset-top, 0px));
   }
 
   /* Hide inline sidebar when using mobile hamburger */

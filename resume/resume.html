@@ -173,8 +173,10 @@
         }
 
         var stored = localStorage.getItem('theme');
-        if (stored === 'dark' || stored === 'light') {
-          applyTheme(stored);
+        if (stored === 'dark') {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
         }
 
         toggle.addEventListener('click', function () {
