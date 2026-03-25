@@ -897,20 +897,38 @@ body.theme-dark .post-detail .intro-subtext {
   color: #b0b0b0;
 }
 
-/* Fixed top-left on post/project detail only — stays above scrolling content (see body.post-detail .theme-toggle) */
+/* Back + theme sit in normal document flow — scroll away with the page (not viewport-fixed). */
+.post-detail-chrome-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 8px;
+  min-height: 40px;
+}
+
+.post-detail-chrome-row--align-end {
+  justify-content: flex-end;
+}
+
 .post-detail .post-detail-breadcrumb-row {
-  position: fixed;
-  top: 34px;
-  left: 34px;
-  z-index: 200;
+  position: static;
+  flex: 1;
+  min-width: 0;
   margin: 0;
   padding: 0;
   text-align: left;
 }
 
-/* Theme toggle: index.html keeps default z-index; on detail pages raise so hero/body never covers it */
 body.post-detail .theme-toggle {
-  z-index: 200;
+  position: static;
+  top: auto;
+  right: auto;
+  left: auto;
+  flex-shrink: 0;
+  margin: 0;
 }
 
 .post-detail .breadcrumb-link {
@@ -919,11 +937,6 @@ body.post-detail .theme-toggle {
 
 .post-detail .post-detail-main {
   margin-top: 4px;
-}
-
-/* Blog + project detail: title, subtitle, body (not resume — no .post-detail-body) */
-body.post-detail:has(.post-detail-body) .page {
-  padding-top: clamp(56px, 8.5vh, 148px);
 }
 
 .post-detail-engagement {
@@ -1461,10 +1474,6 @@ body.theme-dark .journal-post {
     padding: 24px 16px 32px;
   }
 
-  body.post-detail:has(.post-detail-body) .page {
-    padding-top: 52px;
-  }
-
   .site-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1522,19 +1531,6 @@ body.theme-dark .journal-post {
 
   .theme-toggle {
     z-index: 210;
-  }
-
-  /* Post/project detail: keep Back + theme above scrolling panels (overrides 210) */
-  body.post-detail .theme-toggle {
-    z-index: 260;
-    right: 16px;
-    top: max(20px, env(safe-area-inset-top, 0px));
-  }
-
-  body.post-detail .post-detail-breadcrumb-row {
-    z-index: 260;
-    left: 16px;
-    top: max(20px, env(safe-area-inset-top, 0px));
   }
 
   /* Hide inline sidebar when using mobile hamburger */
@@ -1642,10 +1638,6 @@ body.theme-dark .journal-post {
 @media (max-width: 480px) {
   .page {
     padding-top: 56px;
-  }
-
-  body.post-detail:has(.post-detail-body) .page {
-    padding-top: 48px;
   }
 
   .theme-toggle {
