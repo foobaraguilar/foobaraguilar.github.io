@@ -123,6 +123,10 @@
           </section>
         </section>
       </main>
+
+      <footer class="site-footer">
+        <p class="site-footer-text">© 2026 Ruben Aguilar. All rights reserved.</p>
+      </footer>
     </div>
 
     <script>
@@ -251,7 +255,7 @@
         if (!container) return;
 
         /* All physics in % of the floating container (width for left/width, height for top/height). */
-        var FALL_SPEED = 0.08;
+        var FALL_SPEED = 0.070;
         var MIN_IMAGES = 2;
         var MAX_IMAGES = 3;
         var MARGIN_H = 2;
@@ -645,11 +649,11 @@
 
       // Load and filter posts
       (function () {
-        /* Order here = order on the page; thumbnails are posts/images/1.jpg, 2.jpg, … by position */
+        /* Order here = order on the page. Thumbnail URL is read from each post’s hero image src when present. */
         var postFiles = [
           'posts/2x50x50.html',
-          'posts/backpacking-ca.html',
           'posts/backpacking-patagonia.html',
+          'posts/backpacking-ca.html',
         ];
 
         var allPosts = [];
@@ -669,6 +673,13 @@
             var thumbFooter =
               p.heroCaption &&
               '<p class="post-thumb-footer">' + escapeHtml(p.heroCaption) + '</p>';
+            var dateLine =
+              p.dateText &&
+              '<time class="post-list-date"' +
+              (p.dateTime ? ' datetime="' + escapeHtml(p.dateTime) + '"' : '') +
+              '>' +
+              escapeHtml(p.dateText) +
+              '</time>';
             return (
               '<article class="post' + (idx > 0 ? ' post-compact' : '') + '">' +
               '<div class="post-image">' +
@@ -677,7 +688,10 @@
               '</a>' +
               '</div>' +
               '<div class="post-body">' +
-              '<div class="post-meta"><span class="post-tag">' + escapeHtml(p.label) + '</span></div>' +
+              '<div class="post-meta">' +
+              '<span class="post-tag">' + escapeHtml(p.label) + '</span>' +
+              (dateLine || '') +
+              '</div>' +
               '<h3 class="post-title">' + escapeHtml(p.title) + '</h3>' +
               (thumbFooter || '') +
               '<a href="' + p.url + '" class="post-read-more">READ MORE</a>' +
@@ -695,8 +709,20 @@
               var labelMeta = doc.querySelector('meta[name="post-label"]');
               var label = labelMeta ? labelMeta.getAttribute('content') : 'POST';
               var title = doc.querySelector('h1') ? doc.querySelector('h1').textContent.trim() : '';
-              /* Thumbnail: posts/images/1.jpg … N.jpg matches postFiles order (index 0 → 1.jpg) */
+              var baseDir = url.replace(/[^/]+$/, '');
               var imgSrc = 'posts/images/' + (postIndex + 1) + '.jpg';
+              var heroImgEl = doc.querySelector('.post-detail-hero-img');
+              var heroSrc = heroImgEl && heroImgEl.getAttribute('src');
+              if (heroSrc) {
+                heroSrc = heroSrc.trim();
+                imgSrc =
+                  heroSrc.indexOf('/') === 0 ? heroSrc.slice(1) : baseDir + heroSrc.replace(/^\.\//, '');
+              }
+              var timeEl = doc.querySelector('time.post-detail-date');
+              var dateText = timeEl
+                ? timeEl.textContent.replace(/\s+/g, ' ').trim()
+                : '';
+              var dateTime = timeEl ? timeEl.getAttribute('datetime') || '' : '';
               var capEl = doc.querySelector('.post-detail-hero-caption');
               var heroCaption = capEl ? capEl.textContent.replace(/^\s+|\s+$/g, '') : '';
               return {
@@ -705,12 +731,49 @@
                 title: title,
                 image: imgSrc,
                 heroCaption: heroCaption,
+                dateText: dateText,
+                dateTime: dateTime,
               };
             })
             .catch(function() { return null; });
         })).then(function(results) {
           allPosts = results.filter(Boolean);
           renderPosts();
+        });
+      })();
+
+      // Project list: dates from each project page (time.post-detail-date)
+      (function () {
+        var panel = document.querySelector('.content-panel[data-panel="projects"]');
+        if (!panel) return;
+        var cards = panel.querySelectorAll('a.project-card[href]');
+        cards.forEach(function (card) {
+          var href = card.getAttribute('href');
+          if (!href) return;
+          var titleEl = card.querySelector('.project-title');
+          if (!titleEl) return;
+          if (
+            titleEl.nextElementSibling &&
+            titleEl.nextElementSibling.classList.contains('post-list-date')
+          ) {
+            return;
+          }
+          fetch(href)
+            .then(function (res) {
+              return res.text();
+            })
+            .then(function (html) {
+              var doc = new DOMParser().parseFromString(html, 'text/html');
+              var srcTime = doc.querySelector('time.post-detail-date');
+              if (!srcTime || !titleEl.parentNode) return;
+              var node = document.createElement('time');
+              node.className = 'post-list-date';
+              var dt = srcTime.getAttribute('datetime');
+              if (dt) node.setAttribute('datetime', dt);
+              node.textContent = (srcTime.textContent || '').replace(/\s+/g, ' ').trim();
+              titleEl.insertAdjacentElement('afterend', node);
+            })
+            .catch(function () {});
         });
       })();
 

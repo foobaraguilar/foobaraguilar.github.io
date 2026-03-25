@@ -28,6 +28,31 @@ a {
   margin: 0 auto;
   padding: 64px 40px 80px;
   position: relative;
+  /* Shared with About floating wall + Projects panel (see .floating-container, .projects-grid) */
+  --about-wall-height: 80vh;
+}
+
+.site-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e6e6e6;
+  text-align: center;
+}
+
+.site-footer-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #888;
+  letter-spacing: 0.03em;
+}
+
+body.theme-dark .site-footer {
+  border-top-color: #333;
+}
+
+body.theme-dark .site-footer-text {
+  color: #9a9a9a;
 }
 
 .site-header {
@@ -193,8 +218,19 @@ body.theme-dark .nav-icon::before {
   font-weight: 600;
   margin: 0 0 10px;
   color: #666;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Shorter rule than full sidebar width */
+.sidebar-title::after {
+  content: '';
+  display: block;
+  width: 68%;
+  max-width: 158px;
+  height: 1px;
+  margin-top: 10px;
+  background-color: #e0e0e0;
 }
 
 .sidebar-nav {
@@ -426,7 +462,23 @@ body.theme-dark .post-thumb-footer {
 }
 
 .post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
   margin-bottom: 6px;
+}
+
+.post-list-date {
+  font-size: 12px;
+  line-height: 1.4;
+  color: #888;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+body.theme-dark .post-list-date {
+  color: #9a9a9a;
 }
 
 .post-tag {
@@ -462,10 +514,17 @@ body.theme-dark .post-thumb-footer {
   letter-spacing: 1.6px;
   text-transform: uppercase;
   color: #777;
+  margin-top: 2px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #c5c5c5;
 }
 
 .post-read-more:hover {
   color: #333;
+}
+
+body.theme-dark .post-read-more {
+  border-bottom-color: #666;
 }
 
 .post-compact {
@@ -707,7 +766,7 @@ body.theme-dark .resume-bullets {
 
 .floating-container {
   position: relative;
-  height: 80vh;
+  height: var(--about-wall-height);
   width: 100%;
   overflow: hidden;
   /* Shared radius for the falling-wall tiles (soft corners at any viewport size) */
@@ -1196,6 +1255,9 @@ body.theme-dark .post-detail-comment-time {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
   margin-top: 4px;
+  min-height: var(--about-wall-height);
+  box-sizing: border-box;
+  align-content: start;
 }
 
 @keyframes project-card-fade-in {
@@ -1422,6 +1484,10 @@ body.theme-dark .post-excerpt {
 body.theme-dark .sidebar-title,
 body.theme-dark .filter-label {
   color: #aaaaaa;
+}
+
+body.theme-dark .sidebar-title::after {
+  background-color: #444;
 }
 
 body.theme-dark .content-title {
