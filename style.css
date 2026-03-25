@@ -536,9 +536,10 @@ body.theme-dark .post-read-more {
   margin: 0 auto;
 }
 
-/* Text column width; hero matches earlier layout (520px cap + fixed visual height) */
+/* Text column width; hero matches earlier layout (520px cap); image max height shared by all post pages */
 body.post-detail {
   --post-article-max: 640px;
+  --post-hero-img-max-height: 440px;
 }
 
 .post-detail-hero {
@@ -549,7 +550,7 @@ body.post-detail {
 .post-detail-hero-img {
   width: 100%;
   height: auto;
-  max-height: 300px;
+  max-height: var(--post-hero-img-max-height, 440px);
   display: block;
   margin: 0 auto;
   border-radius: 8px;
@@ -613,6 +614,63 @@ body:not(.theme-dark) .post-detail .post-detail-body p {
 
 .post-detail .post-detail-body p:last-child {
   margin-bottom: 0;
+}
+
+/* Longform journal prose (optional: body.post-detail--longform + .post-detail-body--longform) */
+body.post-detail.post-detail--longform {
+  --post-article-max: min(42rem, 100%);
+}
+
+.post-detail-body--longform {
+  font-size: 18px;
+  line-height: 1.62;
+  text-indent: 0;
+  padding-top: 0.25rem;
+}
+
+.post-detail--longform .post-detail-body--longform p {
+  margin: 0 0 1.05em;
+  text-indent: 0;
+}
+
+.post-detail--longform .post-detail-body--longform .post-series-next,
+.post-detail--longform .post-detail-body--longform .post-series-prev {
+  margin: 1.25em 0 0.5em;
+  font-size: 0.9em;
+}
+
+.post-detail--longform .post-detail-body--longform .post-series-next a,
+.post-detail--longform .post-detail-body--longform .post-series-prev a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.post-detail--longform .post-detail-body--longform .post-series-prev {
+  margin: 0 0 1em;
+}
+
+.post-detail--longform .post-prose-scroll-hint {
+  text-align: center;
+  margin-top: 3.25rem;
+  margin-bottom: 0;
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: 1;
+  opacity: 0.42;
+  letter-spacing: 0;
+}
+
+.post-detail--longform .post-detail-hero {
+  max-width: var(--post-article-max);
+  width: 100%;
+  margin: 20px auto 1.25rem;
+  box-sizing: border-box;
+}
+
+.post-detail--longform .post-detail-hero-caption {
+  text-align: center;
+  margin-top: 0.65rem;
 }
 
 .fade-in {

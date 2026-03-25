@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="post-label" content="JOURNAL" />
+    <title>2x100x50 · Part II</title>
+    <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body class="post-detail post-detail--longform">
+    <div class="page">
+      <div class="post-detail-chrome-row">
+        <div class="post-detail-breadcrumb-row">
+          <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-toggle-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <header class="simple-header">
+        <div class="post-detail-header-inner">
+          <p class="post-detail-kicker">Journal</p>
+          <h1 class="intro-greeting">2 Ultramarathons x 100 miles x 50 days — Part II</h1>
+          <p class="intro-subtext">
+            Six weeks later, Salomons, and the same result.
+          </p>
+          <time class="post-detail-date" datetime="2025-03-16">March 16, 2025</time>
+        </div>
+      </header>
+
+      <main class="post-detail-main fade-in">
+        <div class="post-detail-hero">
+          <img class="post-detail-hero-img" src="images/1-2.png" alt="" />
+          <p class="post-detail-hero-caption">Marin Ultra Challenge</p>
+        </div>
+        <article class="post-detail-body post-detail-body--longform">
+          <p class="post-series-prev"><a href="2x50x50.html">← Part I</a></p>
+          <p>Forty-three days later I was registered for another one.</p>
+          <p>
+            On February 6th I signed up for a 50 miler on March 14th. Six weeks out. I can't fully explain it except to say something felt empty after the first one — like it left a door open I couldn't close. The idea was objectively crazy. Impossible, even. But somewhere in the back of my mind was this thought I couldn't shake: if I could actually do this, that would mean something. That would make me that guy.
+          </p>
+          <p>
+            So I got to work. I was carb loading properly the days before, something I'd learned the hard way the first time around. I was biking the steep hills into Marin just to make it harder on myself, to build something extra in my legs. And I bought Salomon trail shoes — new, max cushion, actual grip. No more road shoes on muddy singletrack. I wasn't making that mistake twice.
+          </p>
+          <p>Race morning I was ready. Really ready this time.</p>
+          <p>
+            The fueling worked. It was absolutely disgusting — gels and powder and chews at mile 20, 30, 40 while your body is screaming for real food — but it worked. I wore a knee brace on my right knee which kept it solid and stable the whole way through.
+          </p>
+          <p>
+            What it also did, quietly and invisibly, was shift the load. Somewhere in the back half my hamstring started talking. By the finish line it was screaming. Two more weeks of barely walking.
+          </p>
+          <p>30th out of 50. Again.</p>
+          <p>I am apparently that guy. That guy just can't walk for a month out of the year.</p>
+          <div class="post-prose-scroll-hint" aria-hidden="true">↓</div>
+        </article>
+        <footer class="post-detail-engagement" aria-label="Reactions and comments">
+          <div class="post-detail-likes">
+            <button
+              type="button"
+              class="post-detail-like-btn"
+              id="post-like-btn"
+              aria-label="Like this post"
+              aria-pressed="false"
+            >
+              <span class="post-detail-likes-icon" aria-hidden="true">♥</span>
+              <span class="post-detail-likes-count" id="post-likes-count">0</span>
+            </button>
+            <span class="post-detail-likes-note">likes</span>
+          </div>
+          <section class="post-detail-comments">
+            <h2 class="post-detail-comments-heading">Comments</h2>
+            <form class="post-detail-comment-form" id="post-comment-form">
+              <label for="post-comment-input" class="visually-hidden">Add a comment</label>
+              <textarea
+                id="post-comment-input"
+                name="comment"
+                rows="3"
+                maxlength="2000"
+                placeholder="Write a comment…"
+                required
+              ></textarea>
+              <button type="submit">Post comment</button>
+            </form>
+            <ul class="post-detail-comment-list" id="post-comment-list" aria-live="polite"></ul>
+            <p class="post-detail-comments-empty" id="post-comment-empty">No comments yet.</p>
+          </section>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        var body = document.body;
+        var toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+
+        var favicon = document.getElementById('site-favicon');
+
+        function setFavicon() {
+          if (!favicon) return;
+          favicon.setAttribute('href', '../assets/favicon.png');
+        }
+
+        function applyTheme(theme) {
+          var isDark = theme === 'dark';
+          body.classList.toggle('theme-dark', isDark);
+          var root = document.documentElement;
+          root.classList.toggle('theme-dark', isDark);
+          setFavicon();
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        var stored = localStorage.getItem('theme');
+        if (stored === 'dark') {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
+        }
+
+        toggle.addEventListener('click', function () {
+          var next = body.classList.contains('theme-dark') ? 'light' : 'dark';
+          applyTheme(next);
+        });
+      })();
+    </script>
+    <script src="../assets/post-interactions.js" defer></script>
+  </body>
+</html>
