@@ -570,6 +570,13 @@ body.theme-dark .post-detail-hero-img.post-detail-hero-img--screenshot {
   background: #1a1a1a;
 }
 
+/* Narrow route / map strip (e.g. Strava map crop); no screenshot letterbox */
+.post-detail-hero-img.post-detail-hero-img--screenshot.post-detail-hero-img--route-map,
+body.theme-dark .post-detail-hero-img.post-detail-hero-img--screenshot.post-detail-hero-img--route-map {
+  max-height: min(320px, 48vh);
+  background: transparent;
+}
+
 .post-detail-hero-caption {
   box-sizing: border-box;
   width: 100%;
@@ -662,24 +669,9 @@ body.post-detail.post-detail--longform {
   margin: 0 0 1em;
 }
 
-.post-detail--longform .post-prose-scroll-hint {
-  text-align: center;
-  margin-top: 3.25rem;
-  margin-bottom: 0;
-  font-size: 1.15rem;
-  font-weight: 300;
-  line-height: 1;
-  opacity: 0.42;
-  letter-spacing: 0;
-}
-
 /* Part I (2x50x50): less space below “Part II →”, before likes */
 .post-detail--compact-series.post-detail--longform .post-detail-body--longform .post-series-next {
   margin-bottom: 0.2em;
-}
-
-.post-detail--compact-series.post-detail--longform .post-prose-scroll-hint {
-  margin-top: 0.85rem;
 }
 
 .post-detail--compact-series .post-detail-engagement {
