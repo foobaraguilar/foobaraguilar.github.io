@@ -48,88 +48,8 @@
         </div>
       </header>
 
-      <main class="layout">
-        <section class="sidebar">
-          <h2 class="sidebar-title">QUICK LINKS</h2>
-          <nav class="sidebar-nav">
-            <button type="button" class="nav-item nav-item-active" data-tab="about">
-              <span class="nav-icon nav-icon-about" aria-hidden="true"></span>
-              <span class="nav-label">About Me</span>
-            </button>
-            <button type="button" class="nav-item" data-tab="projects">
-              <span class="nav-icon nav-icon-projects" aria-hidden="true"></span>
-              <span class="nav-label">Projects</span>
-            </button>
-            <button type="button" class="nav-item" data-tab="posts">
-              <span class="nav-icon nav-icon-journal" aria-hidden="true"></span>
-              <span class="nav-label">Posts</span>
-            </button>
-            <button type="button" class="nav-item" data-tab="resume">
-              <span class="nav-icon nav-icon-resume" aria-hidden="true"></span>
-              <span class="nav-label">Resume</span>
-            </button>
-          </nav>
-        </section>
-
-        <section class="content">
-          <div class="content-header">
-            <h2 class="content-title" id="content-title">About Me</h2>
-          </div>
-
-          <section class="content-panels">
-            <!-- ABOUT ME panel -->
-            <div class="content-panel active" data-panel="about">
-              <div id="about-floating-wall" class="floating-container"></div>
-            </div>
-
-            <!-- PROJECTS panel -->
-            <div class="content-panel" data-panel="projects">
-              <div class="projects-grid">
-                <!-- Rasp5 -->
-                <a class="project-card" href="projects/rasp.html">
-                  <div class="project-thumb project-thumb-bar"></div>
-                  <div class="project-body">
-                    <h2 class="project-title">Rasberry Pis, OpenClaw, and Open-Source LLMs</h2>
-                    <p class="project-excerpt">
-                      Building a free open-source engine and benchmarking locally hosted and open-source models cause I am cheap.
-                    </p>
-                  </div>
-                </a>
-
-                <!-- Ego Data -->
-                <a class="project-card" href="projects/egodata.html">
-                  <div class="project-thumb project-thumb-square"></div>
-                  <div class="project-body">
-                    <h2 class="project-title">Scaling Egocentric Data</h2>
-                    <p class="project-excerpt">
-                      Egocentric data collection and annotation at scale.
-                    </p>
-                  </div>
-                </a>
-
-
-              </div>
-            </div>
-
-            <!-- POSTS panel -->
-            <div class="content-panel" data-panel="posts">
-              <section class="posts" id="posts-list"></section>
-            </div>
-
-            <!-- RESUME panel -->
-            <div class="content-panel" data-panel="resume">
-              <div id="resume-content"></div>
-            </div>
-          </section>
-        </section>
-      </main>
-
-      <footer class="site-footer">
-        <p class="site-footer-text">© 2026 Ruben Aguilar. All rights reserved.</p>
-      </footer>
-    </div>
-
-    <script>
+      <!-- Theme toggle + avatar -->
+      <script>
       (function () {
         var body = document.body;
         var toggle = document.getElementById('theme-toggle');
@@ -178,84 +98,54 @@
           applyTheme(next);
         });
       })();
+      </script>
 
-      (function () {
-        var body = document.body;
-        var navToggle = document.getElementById('nav-toggle');
-        var title = document.getElementById('content-title');
-        var triggers = Array.prototype.slice.call(
-          document.querySelectorAll('.sidebar .nav-item')
-        );
-        var panels = Array.prototype.slice.call(
-          document.querySelectorAll('.content-panel')
-        );
+      <main class="layout">
+        <section class="sidebar">
+          <h2 class="sidebar-title">QUICK LINKS</h2>
+          <nav class="sidebar-nav">
+            <button type="button" class="nav-item nav-item-active" data-tab="about">
+              <span class="nav-icon nav-icon-about" aria-hidden="true"></span>
+              <span class="nav-label">About Me</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="projects">
+              <span class="nav-icon nav-icon-projects" aria-hidden="true"></span>
+              <span class="nav-label">Projects</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="posts">
+              <span class="nav-icon nav-icon-journal" aria-hidden="true"></span>
+              <span class="nav-label">Posts</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="resume">
+              <span class="nav-icon nav-icon-resume" aria-hidden="true"></span>
+              <span class="nav-label">Resume</span>
+            </button>
+          </nav>
+        </section>
 
-        var titles = {
-          about: 'About Me',
-          projects: 'Projects',
-          posts: 'Latest Post',
-          resume: 'Resume',
-        };
+        <section class="content">
+          <div class="content-header">
+            <h2 class="content-title" id="content-title">About Me</h2>
+          </div>
 
-        var validTabs = ['about', 'projects', 'posts', 'resume'];
+          <section class="content-panels">
+            <!-- ABOUT ME panel -->
+            <div class="content-panel active" data-panel="about">
+              <div id="about-floating-wall" class="floating-container"></div>
+            </div>
 
-        var contentSection = title && title.parentElement && title.parentElement.parentElement;
+            <!-- About Me floating wall -->
+            <script>
 
-        if (navToggle) {
-          navToggle.addEventListener('click', function () {
-            var isOpen = body.classList.toggle('nav-open');
-            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-          });
-        }
-
-        function showPanel(key) {
-          panels.forEach(function (panel) {
-            var match = panel.getAttribute('data-panel') === key;
-            panel.classList.toggle('active', match);
-          });
-
-          triggers.forEach(function (btn) {
-            btn.classList.toggle('nav-item-active', btn.getAttribute('data-tab') === key);
-          });
-
-          if (title) {
-            title.textContent = key === 'resume' ? '' : (titles[key] || '');
-          }
-          if (contentSection) {
-            contentSection.classList.toggle('resume-active', key === 'resume');
-          }
-
-          if (validTabs.indexOf(key) !== -1) {
-            localStorage.setItem('activeTab', key);
-          }
-        }
-
-        triggers.forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var key = btn.getAttribute('data-tab');
-            if (!key) return;
-            showPanel(key);
-
-            if (body.classList.contains('nav-open')) {
-              body.classList.remove('nav-open');
-              if (navToggle) {
-                navToggle.setAttribute('aria-expanded', 'false');
-              }
-            }
-          });
-        });
-
-        var savedTab = localStorage.getItem('activeTab');
-        showPanel(validTabs.indexOf(savedTab) !== -1 ? savedTab : 'about');
-      })();
-
-      // About Me floating images "waterfall"
-      (function () {
+      // About Me: floating images ("waterfall")
+      window.__initAboutFloatingWall = function () {
+        if (window.__aboutFloatingWallInited) return;
         var container = document.getElementById('about-floating-wall');
         if (!container) return;
+        window.__aboutFloatingWallInited = true;
 
         /* All physics in % of the floating container (width for left/width, height for top/height). */
-        var FALL_SPEED = 0.08;
+        var FALL_SPEED = 0.055;
         var MIN_IMAGES = 2;
         var MAX_IMAGES = 3;
         var MARGIN_H = 2;
@@ -625,7 +515,16 @@
           { src: 'about_me/images/2.jpg', caption: 'Mariposa and I in Acatenango' },
           { src: 'about_me/images/4.jpg', caption: 'Day on the docks' },
           { src: 'about_me/images/5.jpg', caption: 'Guatemala, Tikal Rope Swing' },
-          { src: 'about_me/images/3.jpg', caption: 'I Love Ireland!' },
+          { src: 'about_me/images/3.jpg', caption: 'I love Ireland!' },
+          { src: 'about_me/images/wall-raft-splash.png', caption: 'Whitewater' },
+          { src: 'about_me/images/wall-summit-dog.png', caption: 'Above the clouds' },
+          { src: 'about_me/images/wall-raft-crew.png', caption: 'Raft crew in the rapids' },
+          { src: 'about_me/images/wall-sail-scrub.png', caption: 'Boat day' },
+          { src: 'about_me/images/wall-lake-peaks.png', caption: 'Lake and peaks' },
+          { src: 'about_me/images/wall-trail-run.png', caption: 'Trail running' },
+          { src: 'about_me/images/wall-sail-bay-sun.png', caption: 'Sailing the bay' },
+          { src: 'about_me/images/wall-sail-marina.png', caption: 'Marina, San Francisco' },
+          { src: 'about_me/images/wall-colorful-street.png', caption: 'Painted streets' },
         ];
         setupImages(items);
         startLoop();
@@ -645,14 +544,95 @@
         window.addEventListener('beforeunload', function () {
           stopLoop();
         });
+      };
+            </script>
+
+            <!-- PROJECTS panel -->
+            <div class="content-panel" data-panel="projects">
+              <div class="projects-grid">
+                <!-- Rasp5 -->
+                <a class="project-card" href="projects/rasp.html">
+                  <div class="project-thumb project-thumb-bar"></div>
+                  <div class="project-body">
+                    <h2 class="project-title">Rasberry Pis, OpenClaw, and Open-Source LLMs</h2>
+                    <p class="project-excerpt">
+                      Building a free open-source engine and benchmarking locally hosted and open-source models cause I am cheap.
+                    </p>
+                  </div>
+                </a>
+
+                <!-- Ego Data -->
+                <a class="project-card" href="projects/egodata.html">
+                  <div class="project-thumb project-thumb-square"></div>
+                  <div class="project-body">
+                    <h2 class="project-title">Scaling Egocentric Data</h2>
+                    <p class="project-excerpt">
+                      Egocentric data collection and annotation at scale.
+                    </p>
+                  </div>
+                </a>
+
+
+              </div>
+            </div>
+
+
+            <!-- Projects: dates on cards -->
+            <script>
+
+      // Project list: dates from each project page (time.post-detail-date)
+      (function () {
+        var panel = document.querySelector('.content-panel[data-panel="projects"]');
+        if (!panel) return;
+        var cards = panel.querySelectorAll('a.project-card[href]');
+        cards.forEach(function (card) {
+          var href = card.getAttribute('href');
+          if (!href) return;
+          var titleEl = card.querySelector('.project-title');
+          if (!titleEl) return;
+          if (
+            titleEl.nextElementSibling &&
+            titleEl.nextElementSibling.classList.contains('post-list-date')
+          ) {
+            return;
+          }
+          fetch(href)
+            .then(function (res) {
+              return res.text();
+            })
+            .then(function (html) {
+              var doc = new DOMParser().parseFromString(html, 'text/html');
+              var srcTime = doc.querySelector('time.post-detail-date');
+              if (!srcTime || !titleEl.parentNode) return;
+              var node = document.createElement('time');
+              node.className = 'post-list-date';
+              var dt = srcTime.getAttribute('datetime');
+              if (dt) node.setAttribute('datetime', dt);
+              node.textContent = (srcTime.textContent || '').replace(/\s+/g, ' ').trim();
+              titleEl.insertAdjacentElement('afterend', node);
+            })
+            .catch(function () {});
+        });
       })();
+
+
+
+            </script>
+            <!-- POSTS panel -->
+            <div class="content-panel" data-panel="posts">
+              <section class="posts" id="posts-list"></section>
+            </div>
+
+
+            <!-- Posts list loader -->
+            <script>
 
       // Load and filter posts
       (function () {
         /* Order here = order on the page. Thumbnail URL is read from each post’s hero image src when present. */
         var postFiles = [
-          'posts/2x50x50.html',
           'posts/2x50x50-part2.html',
+          'posts/2x50x50.html',
           'posts/backpacking-patagonia.html',
           'posts/backpacking-ca.html',
         ];
@@ -743,66 +723,124 @@
         });
       })();
 
-      // Project list: dates from each project page (time.post-detail-date)
+
+            </script>
+            <!-- RESUME panel -->
+            <div class="content-panel" data-panel="resume">
+              <div id="resume-content"></div>
+            </div>
+
+            <!-- Resume embed -->
+            <script>
+      // Load resume
       (function () {
-        var panel = document.querySelector('.content-panel[data-panel="projects"]');
-        if (!panel) return;
-        var cards = panel.querySelectorAll('a.project-card[href]');
-        cards.forEach(function (card) {
-          var href = card.getAttribute('href');
-          if (!href) return;
-          var titleEl = card.querySelector('.project-title');
-          if (!titleEl) return;
-          if (
-            titleEl.nextElementSibling &&
-            titleEl.nextElementSibling.classList.contains('post-list-date')
-          ) {
-            return;
-          }
-          fetch(href)
-            .then(function (res) {
-              return res.text();
-            })
-            .then(function (html) {
-              var doc = new DOMParser().parseFromString(html, 'text/html');
-              var srcTime = doc.querySelector('time.post-detail-date');
-              if (!srcTime || !titleEl.parentNode) return;
-              var node = document.createElement('time');
-              node.className = 'post-list-date';
-              var dt = srcTime.getAttribute('datetime');
-              if (dt) node.setAttribute('datetime', dt);
-              node.textContent = (srcTime.textContent || '').replace(/\s+/g, ' ').trim();
-              titleEl.insertAdjacentElement('afterend', node);
-            })
-            .catch(function () {});
-        });
-      })();
-
-
-        // Load resume
-        (function () {
         fetch('resume/resume.html')
-        .then(function (res) { return res.text(); })
-        .then(function (html) {
-          var doc = new DOMParser().parseFromString(html, 'text/html');
-          var body = doc.querySelector('body');
-          var container = document.getElementById('resume-content');
-          if (container && body) {
-            // Remove conflicting elements before injecting
-            body.querySelectorAll('script, #theme-toggle, .theme-toggle').forEach(function(el) {
-              el.remove();
-            });
-            // Inject just the inner content, not the .page wrapper
-            var inner = body.querySelector('.page') || body;
-            container.innerHTML = inner.innerHTML;
-          }
-        })
+          .then(function (res) {
+            return res.text();
+          })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, 'text/html');
+            var body = doc.querySelector('body');
+            var container = document.getElementById('resume-content');
+            if (container && body) {
+              body.querySelectorAll('script, #theme-toggle, .theme-toggle').forEach(function (el) {
+                el.remove();
+              });
+              var inner = body.querySelector('.page') || body;
+              container.innerHTML = inner.innerHTML;
+            }
+          })
           .catch(function () {
             var container = document.getElementById('resume-content');
             if (container) container.innerHTML = '<p>Could not load resume.</p>';
           });
       })();
+            </script>
 
-    </script>
+            <!-- Shell: tab routing + floating wall boot -->
+            <script>
+
+      (function () {
+        var body = document.body;
+        var navToggle = document.getElementById('nav-toggle');
+        var title = document.getElementById('content-title');
+        var triggers = Array.prototype.slice.call(
+          document.querySelectorAll('.sidebar .nav-item')
+        );
+        var panels = Array.prototype.slice.call(
+          document.querySelectorAll('.content-panel')
+        );
+
+        var titles = {
+          about: 'About Me',
+          projects: 'Projects',
+          posts: 'Latest Post',
+          resume: 'Resume',
+        };
+
+        var validTabs = ['about', 'projects', 'posts', 'resume'];
+
+        var contentSection = title && title.parentElement && title.parentElement.parentElement;
+
+        if (navToggle) {
+          navToggle.addEventListener('click', function () {
+            var isOpen = body.classList.toggle('nav-open');
+            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+          });
+        }
+
+        function showPanel(key) {
+          panels.forEach(function (panel) {
+            var match = panel.getAttribute('data-panel') === key;
+            panel.classList.toggle('active', match);
+          });
+
+          triggers.forEach(function (btn) {
+            btn.classList.toggle('nav-item-active', btn.getAttribute('data-tab') === key);
+          });
+
+          if (title) {
+            title.textContent = key === 'resume' ? '' : (titles[key] || '');
+          }
+          if (contentSection) {
+            contentSection.classList.toggle('resume-active', key === 'resume');
+          }
+
+          if (validTabs.indexOf(key) !== -1) {
+            localStorage.setItem('activeTab', key);
+          }
+        }
+
+        triggers.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var key = btn.getAttribute('data-tab');
+            if (!key) return;
+            showPanel(key);
+
+            if (body.classList.contains('nav-open')) {
+              body.classList.remove('nav-open');
+              if (navToggle) {
+                navToggle.setAttribute('aria-expanded', 'false');
+              }
+            }
+          });
+        });
+
+        var savedTab = localStorage.getItem('activeTab');
+        showPanel(validTabs.indexOf(savedTab) !== -1 ? savedTab : 'about');
+
+        if (window.__initAboutFloatingWall) window.__initAboutFloatingWall();
+      })();
+
+            </script>
+          </section>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p class="site-footer-text">© 2026 Ruben Aguilar. All rights reserved.</p>
+      </footer>
+    </div>
+
   </body>
 </html>

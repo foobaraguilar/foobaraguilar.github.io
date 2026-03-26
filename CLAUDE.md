@@ -14,7 +14,6 @@ Context for AI assistants (Claude Code, Qwen Coder, etc.) working on this repo.
 | Home / main shell | `index.html` (avatar, sidebar tabs, theme toggle, posts/projects loaders) |
 | Global styles | `style.css` |
 | Post & project **detail** pages | `posts/*.html`, `projects/*.html` |
-| About Me photo captions (standalone) | `about_me/*.html`, `about_me/caption_template.html` |
 | Resume | `resume/resume.html` |
 | Shared scripts | `assets/post-interactions.js`, `assets/favicon.png`, etc. |
 
