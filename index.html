@@ -108,13 +108,13 @@
               <span class="nav-icon nav-icon-about" aria-hidden="true"></span>
               <span class="nav-label">About Me</span>
             </button>
-            <button type="button" class="nav-item" data-tab="projects">
-              <span class="nav-icon nav-icon-projects" aria-hidden="true"></span>
-              <span class="nav-label">Projects</span>
-            </button>
             <button type="button" class="nav-item" data-tab="posts">
               <span class="nav-icon nav-icon-journal" aria-hidden="true"></span>
               <span class="nav-label">Posts</span>
+            </button>
+            <button type="button" class="nav-item" data-tab="projects">
+              <span class="nav-icon nav-icon-projects" aria-hidden="true"></span>
+              <span class="nav-label">Projects</span>
             </button>
             <button type="button" class="nav-item" data-tab="resume">
               <span class="nav-icon nav-icon-resume" aria-hidden="true"></span>
@@ -778,7 +778,7 @@
           resume: 'Resume',
         };
 
-        var validTabs = ['about', 'projects', 'posts', 'resume'];
+        var validTabs = ['about', 'posts', 'projects', 'resume'];
 
         var contentSection = title && title.parentElement && title.parentElement.parentElement;
 
