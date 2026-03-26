@@ -558,6 +558,18 @@ body.post-detail {
   object-position: center center;
 }
 
+/* App / UI screenshots: show full frame without cropping */
+.post-detail-hero-img.post-detail-hero-img--screenshot {
+  object-fit: contain;
+  object-position: center center;
+  max-height: min(520px, 85vh);
+  background: #e8e8e8;
+}
+
+body.theme-dark .post-detail-hero-img.post-detail-hero-img--screenshot {
+  background: #1a1a1a;
+}
+
 .post-detail-hero-caption {
   box-sizing: border-box;
   width: 100%;
@@ -661,6 +673,20 @@ body.post-detail.post-detail--longform {
   letter-spacing: 0;
 }
 
+/* Part I (2x50x50): less space below “Part II →”, before likes */
+.post-detail--compact-series.post-detail--longform .post-detail-body--longform .post-series-next {
+  margin-bottom: 0.2em;
+}
+
+.post-detail--compact-series.post-detail--longform .post-prose-scroll-hint {
+  margin-top: 0.85rem;
+}
+
+.post-detail--compact-series .post-detail-engagement {
+  margin-top: 1.35rem;
+  padding-top: 1.25rem;
+}
+
 .post-detail--longform .post-detail-hero {
   max-width: var(--post-article-max);
   width: 100%;
@@ -671,6 +697,50 @@ body.post-detail.post-detail--longform {
 .post-detail--longform .post-detail-hero-caption {
   text-align: center;
   margin-top: 0.65rem;
+}
+
+/* In-article closing photo (e.g. Part II finish line) */
+.post-detail--longform .post-detail-body--longform .post-detail-end-hero {
+  margin-top: 1.75rem;
+  margin-bottom: 0;
+}
+
+.post-detail--longform .post-detail-body--longform .post-detail-body-inline-hero {
+  margin-top: 1.35rem;
+  margin-bottom: 0.35rem;
+}
+
+/* Two-up photos at end of longform posts (e.g. Part I aftermath) */
+.post-detail--longform .post-detail-body--longform .post-detail-photo-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin: 1.5rem 0 0.25rem;
+  align-items: stretch;
+}
+
+/* Same frame for both cells (976×1024); landscape shots crop via object-fit: cover */
+.post-detail--longform .post-detail-body--longform .post-detail-photo-pair-item {
+  margin: 0;
+  min-width: 0;
+  aspect-ratio: 976 / 1024;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.post-detail--longform .post-detail-body--longform .post-detail-photo-pair-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 0;
+}
+
+@media (max-width: 520px) {
+  .post-detail--longform .post-detail-body--longform .post-detail-photo-pair {
+    grid-template-columns: 1fr;
+  }
 }
 
 .fade-in {
