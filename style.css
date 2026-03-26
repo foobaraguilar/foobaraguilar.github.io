@@ -1596,6 +1596,12 @@ body.theme-dark .journal-post {
 
   .page {
     padding: 24px 16px 32px;
+    /* Shorter About wall + capped tiles so floating photos aren’t overly tall on phones */
+    --about-wall-height: 62vh;
+  }
+
+  .floating-container .floating-image-link {
+    max-height: 28vh;
   }
 
   .site-header {
@@ -1762,6 +1768,11 @@ body.theme-dark .journal-post {
 @media (max-width: 480px) {
   .page {
     padding-top: 56px;
+    --about-wall-height: 54vh;
+  }
+
+  .floating-container .floating-image-link {
+    max-height: 24vh;
   }
 
   .theme-toggle {
