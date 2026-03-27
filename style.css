@@ -1732,7 +1732,7 @@ body.theme-dark .journal-post {
     left: 50%;
     right: auto;
     /* Nudge right so the panel clears the avatar column (still roughly centered) */
-    transform: translateX(calc(-50% + min(52px, 12vw)));
+    transform: translateX(calc(-50% + min(88px, 22vw)));
     width: auto;
     min-width: 180px;
     max-width: calc(100vw - 32px);
