@@ -147,7 +147,9 @@
         window.__aboutFloatingWallInited = true;
 
         /* All physics in % of the floating container (width for left/width, height for top/height). */
-        var FALL_SPEED = 0.08;
+        /** Vertical drift: % of wall height per second (not per frame — keeps speed on 30fps mobile). */
+        var FALL_SPEED_PER_SEC = 10;
+        var lastAnimTime = 0;
         var MIN_IMAGES = 2;
         var MAX_IMAGES = 3;
         var MARGIN_H = 2;
@@ -187,6 +189,7 @@
             cancelAnimationFrame(requestId);
             requestId = null;
           }
+          lastAnimTime = 0;
         }
 
         function startLoop() {
@@ -441,6 +444,12 @@
             return;
           }
           try {
+            var now = performance.now();
+            if (!lastAnimTime) lastAnimTime = now;
+            var dt = Math.min(0.05, (now - lastAnimTime) / 1000);
+            lastAnimTime = now;
+            var fallStep = FALL_SPEED_PER_SEC * dt;
+
             for (var i = 0; i < images.length; i++) {
               var link = images[i];
               var pos = positions[i];
@@ -449,7 +458,7 @@
                 continue;
               }
 
-              var newTop = pos.top + FALL_SPEED;
+              var newTop = pos.top + fallStep;
 
               if (newTop > 100) {
                 var attempts = 0;
@@ -516,15 +525,15 @@
           { src: 'about_me/images/1.jpg', caption: 'Golden Gate Classic' },
           { src: 'about_me/images/2.jpg', caption: 'Mariposa and I in Acatenango' },
           { src: 'about_me/images/4.jpg', caption: 'Day on the docks' },
-          { src: 'about_me/images/5.jpg', caption: 'Guatemala, Tikal Rope Swing' },
+          { src: 'about_me/images/5.jpg', caption: 'Famous Tikal, Guatemala Rope Swing, blew out my eardrumn attempting front flip' },
           { src: 'about_me/images/3.jpg', caption: 'I love Ireland!' },
           { src: 'about_me/images/wall-raft-splash.png', caption: 'Destroyed by Rio Futafalu' },
           { src: 'about_me/images/wall-summit-dog.png', caption: 'Above the clouds in Guatemala' },
           { src: 'about_me/images/wall-raft-crew.png', caption: 'Front right, recovering' },
           { src: 'about_me/images/wall-sail-scrub.png', caption: 'Another Day On The Job' },
-          { src: 'about_me/images/wall-lake-peaks.png', caption: 'Lake and peaks' },
+          { src: 'about_me/images/wall-lake-peaks.png', caption: "Laguna Pinilla's Hidden Lake" },
           { src: 'about_me/images/wall-trail-run.png', caption: 'Marin Ultra Challenge 50mi' },
-          { src: 'about_me/images/wall-sail-bay-sun.png', caption: 'Noah <3' },
+          { src: 'about_me/images/wall-sail-bay-sun.png', caption: 'Noah' },
           { src: 'about_me/images/wall-sail-marina.png', caption: 'Pier 40, San Francisco' },
           { src: 'about_me/images/wall-colorful-street.png', caption: 'Calle de las Sombrillas' },
         ];
