@@ -26,7 +26,7 @@ a {
 .page {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 64px 40px 80px;
+  padding: 36px 40px 72px;
   position: relative;
   /* Shared with About floating wall + Projects panel (see .floating-container, .projects-grid) */
   --about-wall-height: 80vh;
@@ -1005,7 +1005,7 @@ body.theme-dark .about-me-photo-caption {
 .post-detail .simple-header {
   /* Centered column, left-aligned copy (Substack-style) */
   text-align: left;
-  padding-top: 18px;
+  padding-top: 6px;
   margin-bottom: 0;
 }
 
@@ -1657,7 +1657,7 @@ body.theme-dark .journal-post {
   }
 
   .page {
-    padding: 24px 16px 32px;
+    padding: 16px 16px 32px;
     /* Shorter About wall + capped tiles so floating photos aren’t overly tall on phones */
     --about-wall-height: 62vh;
   }
@@ -1829,7 +1829,7 @@ body.theme-dark .journal-post {
 
 @media (max-width: 480px) {
   .page {
-    padding-top: 56px;
+    padding-top: 44px;
     --about-wall-height: 54vh;
   }
 
