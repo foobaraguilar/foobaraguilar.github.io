@@ -1372,12 +1372,14 @@ body.theme-dark .post-detail-comment-time {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
   gap: 24px;
   margin-top: 4px;
   min-height: var(--about-wall-height);
   box-sizing: border-box;
   align-content: start;
+  justify-content: start;
+  align-items: start;
 }
 
 @keyframes project-card-fade-in {
@@ -1397,6 +1399,7 @@ body.theme-dark .post-detail-comment-time {
   border-radius: 4px;
   border: 1px solid #eee;
   padding: 12px;
+  max-width: 100%;
   opacity: 0;
   animation: project-card-fade-in 1.1s ease-out forwards;
   transition: box-shadow 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
