@@ -1843,7 +1843,7 @@ body.theme-dark .journal-post {
     display: block;
     width: min(100%, 340px);
     border-top: 1px solid #e6e6e6;
-    margin: 0 0 1.5rem;
+    margin: 0 auto 1.5rem;
   }
 
   body.theme-dark .site-footer::before {
