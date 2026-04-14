@@ -1709,7 +1709,7 @@ body.theme-dark .journal-post {
     display: inline-flex;
     position: fixed;
     top: 20px;   /* align vertically with theme toggle */
-    left: 20px;  /* symmetric inset from left */
+    left: 16px;  /* match mobile page gutter */
     width: 40px; /* match theme toggle size */
     height: 40px;
     border-radius: 50%;
@@ -1729,6 +1729,7 @@ body.theme-dark .journal-post {
 
   .theme-toggle {
     z-index: 210;
+    right: 16px; /* match mobile page gutter */
   }
 
   /* Hide inline sidebar when using mobile hamburger */
