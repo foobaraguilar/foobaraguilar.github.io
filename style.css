@@ -1834,20 +1834,8 @@ body.theme-dark .journal-post {
   }
 
   .site-footer {
-    border-top: none;
-    padding-top: 0;
-  }
-
-  .site-footer::before {
-    content: '';
-    display: block;
-    width: min(100%, 340px);
     border-top: 1px solid #e6e6e6;
-    margin: 0 auto 1.5rem;
-  }
-
-  body.theme-dark .site-footer::before {
-    border-top-color: #333;
+    padding-top: 1.5rem;
   }
 }
 
