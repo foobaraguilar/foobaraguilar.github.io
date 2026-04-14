@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lessons From Building Egocentric Data Ops</title>
+    <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      .post-detail-body--longform .section-title {
+        font-size: 1.2em;
+        line-height: 1.35;
+        margin-top: 1.2em;
+        margin-bottom: 0.35em;
+      }
+    </style>
+  </head>
+  <body class="post-detail post-detail--longform">
+    <div class="page">
+      <div class="post-detail-chrome-row">
+        <div class="post-detail-breadcrumb-row">
+          <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-toggle-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <header class="simple-header">
+        <div class="post-detail-header-inner">
+          <p class="post-detail-kicker">Research</p>
+          <h1 class="intro-greeting">Lessons From Building Egocentric Data Ops</h1>
+          <p class="intro-subtext">What the pipeline looks like from the inside</p>
+          <time class="post-detail-date" datetime="2026-04-13">April 12, 2026</time>
+        </div>
+      </header>
+
+      <main class="post-detail-main fade-in">
+        <div class="post-detail-hero">
+          <img
+            class="post-detail-hero-img"
+            src="images/lessons-egocentric-data-ops.png"
+            alt="Egocentric motion capture scene with simplified avatars moving across a checkered floor."
+          />
+        </div>
+        <article class="post-detail-body post-detail-body--longform">
+          <p>
+            When I started building egocentric data ops, there was no established way to
+            do it. No reference architecture, no annotation standards, no QA benchmarks to pull
+            from. What I had was a problem worth solving and the slow realization 
+            that the hardest problems wouldn't surface until months later. I built the
+            playbook as I went - through annotation failures, QA gaps, and pipelines that broke in
+            ways I couldn't have seen coming. This is what I learned.
+          </p>
+
+          <p class="section-title"><strong>Labs Want Good Distribution</strong></p>
+          <p>
+            Volume feels like the obvious metric. It isn't. What drives model lift is still an open question, and 
+            labs are evaluating whether your data covers a full distribution of real-world 
+            variation — different people, environments, workflows, failure modes, edge cases. 
+            Building collection workflows that systematically produce genuine variation rather than 
+            surface-level variety is one of the hardest ops problems in this space, and it's the one 
+            that determines whether you land recurring contracts or get churned.
+          </p>
+
+          <p class="section-title"><strong>Raw Footage Is the Easy Part</strong></p>
+          <p>
+            Egocentric video is abundant. Egocentric video that's actually useful to a lab is rare.
+            The gap between the two is an annotation problem — full body estimation from a single
+            camera, skeleton reconstruction through occlusion, hand pose from partial frames. None
+            of this has clean off-the-shelf solutions, and most ops teams don't realize that until
+            they're already deep into a pipeline built on assumptions that don't hold up.
+          </p>
+
+          <p class="section-title"><strong>Hardware Complexity Is an Ops Tax</strong></p>
+          <p>
+            There's a strong temptation in this space to solve data quality problems with more
+            hardware - better rigs, more sensors, custom wearables. From an ops perspective that's
+            almost always the wrong call. Every additional hardware component multiplies your
+            collection overhead: logistics, calibration, failure rates, ingestion pipelines, SD
+            card handling. 
+          </p>
+
+          <p class="section-title"><strong>Annotation Errors Surface Once It's Too Late</strong></p>
+          <p>
+            The feedback loop between annotation decisions and model quality is brutally slow. 
+            Generic models produce annotations that look plausible but are wrong
+            in subtle ways. Joint drift in occlusion, bad height metadata, IMUs tacked on without
+            proper reconstruction - these errors don't surface in your QA and don't surface to the
+            lab until it's too late. Building annotation infrastructure that
+            catches these errors before delivery is a core ops challenge.
+          </p>
+
+          <p class="section-title"><strong>Task Design MATTERS</strong></p>
+          <p>
+            The instinct is to collect a large general dataset and let the lab figure out what's
+            useful. That doesn't work. What I learned is that the ops investment has to happen
+            before collection starts. Small decisions about the task design stage have outsized effects on whether the data is usable. The ops
+            challenge is that this slows down the front end of the pipeline significantly, but it's
+            the only thing that prevents expensive re-collection.
+          </p>
+
+          <p class="section-title"><strong>Experience Is an Ops Product</strong></p>
+          <p>
+            The collection experience is a data quality decision. How you design the interface your
+            recorders interact with - how tasks are communicated, how compliance is enforced, how
+            feedback is delivered in real time - directly determines what you get out of the
+            pipeline. Every dropped session, moment of confusion, or compliance gap is a
+            quality problem that shows up downstream. Most teams treat the collection experience as
+            an afterthought. It isn't. The experience the recorder has is the first layer of
+            quality control you have, and it's the one most teams underinvest in.
+          </p>
+
+          <p class="section-title"><strong>Design Determines Data Quality More Than You'd Expect</strong></p>
+          <p>
+            Open-ended collection produces mediocre data. What actually works operationally is
+            bounty systems tied to specific tasks and edge cases - workers who understand exactly
+            what's valuable produce meaningfully better coverage and compliance. The other thing
+            that works: voice annotation. Getting recorders to narrate what they're doing while they
+            do it gives you free ground truth that no model can replicate. From an ops perspective
+            it's zero marginal cost and it's some of the most valuable signal in the dataset.
+          </p>
+
+        </article>
+        <footer class="post-detail-engagement" aria-label="Reactions and comments">
+          <div class="post-detail-likes">
+            <button
+              type="button"
+              class="post-detail-like-btn"
+              id="post-like-btn"
+              aria-label="Like this post"
+              aria-pressed="false"
+            >
+              <span class="post-detail-likes-icon" aria-hidden="true">♥</span>
+              <span class="post-detail-likes-count" id="post-likes-count">0</span>
+            </button>
+            <span class="post-detail-likes-note">likes</span>
+          </div>
+          <section class="post-detail-comments">
+            <h2 class="post-detail-comments-heading">Comments</h2>
+            <form class="post-detail-comment-form" id="post-comment-form">
+              <label for="post-comment-input" class="visually-hidden">Add a comment</label>
+              <textarea
+                id="post-comment-input"
+                name="comment"
+                rows="3"
+                maxlength="2000"
+                placeholder="Write a comment…"
+                required
+              ></textarea>
+              <button type="submit">Post comment</button>
+            </form>
+            <ul class="post-detail-comment-list" id="post-comment-list" aria-live="polite"></ul>
+            <p class="post-detail-comments-empty" id="post-comment-empty">No comments yet.</p>
+          </section>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        var body = document.body;
+        var toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+
+        var favicon = document.getElementById('site-favicon');
+
+        function setFavicon() {
+          if (!favicon) return;
+          favicon.setAttribute('href', '../assets/favicon.png');
+        }
+
+        function applyTheme(theme) {
+          var isDark = theme === 'dark';
+          body.classList.toggle('theme-dark', isDark);
+          var root = document.documentElement;
+          root.classList.toggle('theme-dark', isDark);
+          setFavicon();
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        var stored = localStorage.getItem('theme');
+        if (stored === 'dark') {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
+        }
+
+        toggle.addEventListener('click', function () {
+          var next = body.classList.contains('theme-dark') ? 'light' : 'dark';
+          applyTheme(next);
+        });
+      })();
+    </script>
+    <script src="../assets/post-interactions.js" defer></script>
+  </body>
+</html>

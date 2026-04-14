@@ -6,6 +6,108 @@
     <title>Sensor Depth and Scale: Rethinking Granularity</title>
     <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
     <link rel="stylesheet" href="../style.css" />
+    <style>
+      .passcode-gate {
+        max-width: 360px;
+        margin: 1.25rem auto 0;
+        padding: 1.25rem 1.25rem 1.1rem;
+        border: 1px solid #e3e3e3;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.05);
+      }
+      .passcode-gate h2 {
+        margin: 0 0 0.4rem;
+        font-size: 1.08rem;
+        letter-spacing: 0.01em;
+      }
+      .passcode-gate p {
+        margin: 0 0 0.9rem;
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.45;
+      }
+      .passcode-gate-form {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: stretch;
+      }
+      .passcode-gate-form input {
+        width: 100%;
+        margin: 0;
+        padding: 10px 12px;
+        font: inherit;
+        font-size: 14px;
+        line-height: 1.4;
+        color: #333;
+        background: #fff;
+        border: 1px solid #d7d7d7;
+        border-radius: 8px;
+        box-sizing: border-box;
+      }
+      .passcode-gate-form input:focus {
+        outline: none;
+        border-color: #999;
+      }
+      .passcode-gate-form button[type='submit'] {
+        width: 100%;
+        padding: 8px 16px;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: #fff;
+        background: #333;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .passcode-gate-form button[type='submit']:hover {
+        background: #222;
+      }
+      .passcode-gate-error {
+        margin-top: 0.65rem;
+        min-height: 1.2em;
+        color: #c0392b;
+        font-size: 0.88rem;
+      }
+      body.theme-dark .passcode-gate {
+        border-color: #333;
+        background: linear-gradient(180deg, #171717 0%, #131313 100%);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+      body.theme-dark .passcode-gate h2 {
+        color: #f2f2f2;
+      }
+      body.theme-dark .passcode-gate p {
+        color: #a6a6a6;
+      }
+      body.theme-dark .passcode-gate-form input {
+        color: #f0f0f0;
+        background: #1a1a1a;
+        border-color: #444;
+      }
+      body.theme-dark .passcode-gate-form input:focus {
+        border-color: #666;
+      }
+      body.theme-dark .passcode-gate-form button[type='submit'] {
+        background: #e5e5e5;
+        color: #111;
+      }
+      body.theme-dark .passcode-gate-form button[type='submit']:hover {
+        background: #fff;
+      }
+      body.theme-dark .passcode-gate-error {
+        color: #ff8a80;
+      }
+      @media (max-width: 560px) {
+        .passcode-gate {
+          max-width: 92%;
+        }
+      }
+    </style>
   </head>
   <body class="post-detail">
     <div class="page">
@@ -19,14 +121,32 @@
       </div>
       <header class="simple-header">
         <div class="post-detail-header-inner">
-          <p class="post-detail-kicker">Projects</p>
+          <p class="post-detail-kicker">Research</p>
           <h1 class="intro-greeting">Sensor Depth and Scale: Rethinking Granularity</h1>
-          <p class="intro-subtext">Coming April 18th</p>
-          <time class="post-detail-date" datetime="2025-03-01">April 18th, 2026</time>
+          <p class="intro-subtext">My opinion about modern sensor data collection</p>
+          <time class="post-detail-date" datetime="2025-03-01">April 12th, 2026</time>
         </div>
       </header>
 
-      <main class="post-detail-main fade-in">
+      <section class="passcode-gate" id="passcode-gate">
+        <h2>Passcode Required</h2>
+        <form class="passcode-gate-form" id="passcode-gate-form">
+          <input
+            id="passcode-input"
+            name="passcode"
+            type="password"
+            inputmode="numeric"
+            maxlength="4"
+            autocomplete="off"
+            placeholder="Passcode"
+            required
+          />
+          <button type="submit">Unlock</button>
+        </form>
+        <p class="passcode-gate-error" id="passcode-gate-error" aria-live="polite"></p>
+      </section>
+
+      <main class="post-detail-main fade-in" id="protected-content" hidden>
         <article class="post-detail-body">
           <p>
              
@@ -101,6 +221,61 @@
         toggle.addEventListener('click', function () {
           var next = body.classList.contains('theme-dark') ? 'light' : 'dark';
           applyTheme(next);
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var gate = document.getElementById('passcode-gate');
+        var form = document.getElementById('passcode-gate-form');
+        var input = document.getElementById('passcode-input');
+        var error = document.getElementById('passcode-gate-error');
+        var content = document.getElementById('protected-content');
+        if (!gate || !form || !input || !error || !content) return;
+
+        // SHA-256 hash for current passcode ("ruben-only").
+        var PASSCODE_HASH = 'bda5459a0e2644a21da04c7aa147f30b2849ac296c7e92b69002f4172e0da20f';
+        var STORAGE_KEY = 'egodataUnlocked:v1';
+
+        function toHex(buffer) {
+          var bytes = new Uint8Array(buffer);
+          var hex = '';
+          for (var i = 0; i < bytes.length; i++) {
+            hex += bytes[i].toString(16).padStart(2, '0');
+          }
+          return hex;
+        }
+
+        function unlock() {
+          sessionStorage.setItem(STORAGE_KEY, '1');
+          gate.hidden = true;
+          content.hidden = false;
+        }
+
+        if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+          unlock();
+          return;
+        }
+
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          var value = (input.value || '').trim();
+          if (!value) return;
+          error.textContent = '';
+
+          crypto.subtle
+            .digest('SHA-256', new TextEncoder().encode(value))
+            .then(function (digest) {
+              if (toHex(digest) === PASSCODE_HASH) {
+                unlock();
+                return;
+              }
+              error.textContent = 'Incorrect passcode.';
+              input.select();
+            })
+            .catch(function () {
+              error.textContent = 'Could not validate passcode in this browser.';
+            });
         });
       })();
     </script>

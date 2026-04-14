@@ -359,6 +359,8 @@ body.theme-dark .nav-item-active {
   border-top: none;
   padding-top: 0;
   margin-top: 8px;
+  min-height: var(--about-wall-height);
+  box-sizing: border-box;
 }
 
 @keyframes post-fade-in-left {
