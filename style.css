@@ -1374,13 +1374,13 @@ body.theme-dark .post-detail-comment-time {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 340px));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   margin-top: 4px;
   min-height: var(--about-wall-height);
   box-sizing: border-box;
   align-content: start;
-  justify-content: start;
+  justify-content: stretch;
   align-items: start;
 }
 
@@ -1679,6 +1679,7 @@ body.theme-dark .journal-post {
   .avatar-placeholder {
     margin-top: 40px;    /* slide avatar down so it clears the top circles */
     margin-bottom: 16px;
+    transform: translateY(18px);
   }
 
   .layout {
