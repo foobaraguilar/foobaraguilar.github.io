@@ -1833,6 +1833,23 @@ body.theme-dark .journal-post {
   .content-header {
     justify-content: flex-start;
   }
+
+  .site-footer {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .site-footer::before {
+    content: '';
+    display: block;
+    width: min(100%, 340px);
+    border-top: 1px solid #e6e6e6;
+    margin: 0 0 1.5rem;
+  }
+
+  body.theme-dark .site-footer::before {
+    border-top-color: #333;
+  }
 }
 
 @media (max-width: 480px) {
