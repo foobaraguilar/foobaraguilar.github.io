@@ -1677,7 +1677,7 @@ body.theme-dark .journal-post {
   }
 
   .avatar-placeholder {
-    margin-top: 40px;    /* slide avatar down so it clears the top circles */
+    margin-top: 46px;    /* nudge slightly lower on mobile to match original placement */
     margin-bottom: 16px;
   }
 
