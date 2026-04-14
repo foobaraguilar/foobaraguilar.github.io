@@ -1833,6 +1833,11 @@ body.theme-dark .journal-post {
     justify-content: flex-start;
   }
 
+  .projects-grid {
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+  }
+
   .site-footer {
     border-top: 1px solid #e6e6e6;
     padding-top: 1.5rem;
