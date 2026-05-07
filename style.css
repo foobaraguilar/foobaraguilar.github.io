@@ -836,11 +836,11 @@ body.post-detail.post-detail--longform {
 .resume-dates {
   font-size: 13px;
   color: #666;
-  margin-bottom: 6px;
+  margin-bottom: 0;
 }
 
 .resume-bullets {
-  margin: 4px 0 0;
+  margin: 0;
   padding-left: 18px;
   color: #444;
 }
