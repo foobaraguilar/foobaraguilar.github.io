@@ -1481,6 +1481,25 @@ body.theme-dark .project-thumb-circle::before {
   border-color: #e5e5e5;
 }
 
+/* Coding and Coffee project card — light logo on neutral tray */
+.project-thumb-cc-logo {
+  background-color: #fafafa;
+  background-image: url('projects/images/coding-and-coffee/logo-final-light.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.project-thumb-cc-logo::before {
+  display: none;
+}
+
+body.theme-dark .project-thumb-cc-logo {
+  background-color: #fafafa;
+  background-image: url('projects/images/coding-and-coffee/logo-final-light.png');
+  border-color: #444;
+}
+
 .project-body {
   display: flex;
   flex-direction: column;

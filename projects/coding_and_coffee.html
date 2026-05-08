@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Good Intentions Don't Ship — Coding and Coffee</title>
+    <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      .post-detail-body--longform .section-title {
+        font-size: 1.2em;
+        line-height: 1.35;
+        margin-top: 1.2em;
+        margin-bottom: 0.35em;
+      }
+
+      .post-detail-body--longform .section-title:first-child {
+        margin-top: 0;
+      }
+
+      .post-detail-body--longform a.cc-partner-link {
+        color: #1565c0;
+        text-decoration: underline;
+        text-underline-offset: 0.18em;
+      }
+
+      .post-detail-body--longform a.cc-partner-link:hover {
+        color: #0d47a1;
+      }
+
+      body.theme-dark .post-detail-body--longform a.cc-partner-link {
+        color: #90caf9;
+      }
+
+      body.theme-dark .post-detail-body--longform a.cc-partner-link:hover {
+        color: #bbdefb;
+      }
+
+      .post-detail-body--longform .cc-pdf-pane-links a {
+        color: #1565c0;
+        text-decoration: underline;
+        text-underline-offset: 0.15em;
+      }
+
+      .post-detail-body--longform .cc-pdf-pane-links a:hover {
+        color: #0d47a1;
+      }
+
+      body.theme-dark .post-detail-body--longform .cc-pdf-pane-links a {
+        color: #90caf9;
+      }
+
+      body.theme-dark .post-detail-body--longform .cc-pdf-pane-links a:hover {
+        color: #bbdefb;
+      }
+
+      .cc-logo-showcase {
+        max-width: var(--post-article-max, 42rem);
+        margin: 1.25rem auto 1.5rem;
+        box-sizing: border-box;
+      }
+
+      .cc-logo-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
+        align-items: stretch;
+      }
+
+      .cc-logo-grid figure {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .cc-logo-grid .cc-logo-frame {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.65rem;
+        border-radius: 10px;
+        background: #e8e8e8;
+        box-sizing: border-box;
+        min-height: 140px;
+      }
+
+      body.theme-dark .cc-logo-grid .cc-logo-frame {
+        background: #1a1a1a;
+      }
+
+      .cc-logo-grid img {
+        width: 100%;
+        max-width: 280px;
+        height: auto;
+        max-height: 200px;
+        object-fit: contain;
+        display: block;
+        margin: 0 auto;
+      }
+
+      @media (max-width: 520px) {
+        .cc-logo-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .cc-logo-grid .cc-logo-frame {
+          min-height: 120px;
+        }
+      }
+
+      .cc-pdf-viewer-section {
+        --cc-pdf-embed-h: min(72vh, 760px);
+        max-width: min(56rem, 100%);
+        margin: 0 auto 2rem;
+        padding: 0 0.35rem;
+        box-sizing: border-box;
+      }
+
+      /* Wider than the reading column when nested inside .post-detail-body */
+      .post-detail-body--longform .cc-pdf-viewer-section.cc-pdf-viewer-section--breakout {
+        width: min(56rem, calc(100vw - 1.25rem));
+        max-width: min(56rem, calc(100vw - 1.25rem));
+        margin-left: 50%;
+        transform: translateX(-50%);
+        padding-left: 0.35rem;
+        padding-right: 0.35rem;
+        position: relative;
+      }
+
+      .cc-pdf-viewer-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        align-items: stretch;
+      }
+
+      .cc-pdf-pane {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      .cc-pdf-curriculum-section-heading {
+        margin: 0 0 0.65rem;
+        font-size: 0.98rem;
+        font-weight: 600;
+      }
+
+      .cc-pdf-scroll {
+        flex: 1;
+        height: var(--cc-pdf-embed-h);
+        min-height: 280px;
+        border-radius: 10px;
+        overflow: auto;
+        border: 1px solid #ccc;
+        background: #525252;
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      body.theme-dark .cc-pdf-scroll {
+        border-color: #444;
+        background: #2a2a2a;
+      }
+
+      /* object + nested iframe both fill the scroll box so round-one fallback matches primary embed */
+      .cc-pdf-scroll > object.cc-pdf-embed {
+        width: 100%;
+        height: var(--cc-pdf-embed-h);
+        min-height: 280px;
+        border: 0;
+        display: block;
+      }
+
+      .cc-pdf-scroll object.cc-pdf-embed iframe {
+        width: 100%;
+        height: 100%;
+        min-height: var(--cc-pdf-embed-h);
+        border: 0;
+        display: block;
+      }
+
+      .cc-pdf-scroll .cc-pdf-embed,
+      .cc-pdf-scroll iframe {
+        width: 100%;
+        height: 100%;
+        min-height: var(--cc-pdf-embed-h);
+        border: 0;
+        display: block;
+      }
+
+      .cc-pdf-pane-links {
+        margin-top: 0.45rem;
+        font-size: 0.84rem;
+        line-height: 1.45;
+      }
+
+      @media (max-width: 820px) {
+        .cc-pdf-viewer-section {
+          --cc-pdf-embed-h: min(65vh, 640px);
+        }
+
+        .cc-pdf-viewer-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .cc-routine-gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+        margin: 1.35rem auto 1.25rem;
+        max-width: var(--post-article-max, 42rem);
+      }
+
+      .cc-routine-gallery figure {
+        margin: 0;
+      }
+
+      .cc-routine-gallery img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+      }
+
+      body.theme-dark .cc-routine-gallery img {
+        border-color: #444;
+      }
+
+      .cc-routine-gallery .cc-routine-gallery-wide {
+        grid-column: 1 / -1;
+      }
+
+      @media (max-width: 640px) {
+        .cc-routine-gallery {
+          grid-template-columns: 1fr;
+        }
+
+        .cc-routine-gallery .cc-routine-gallery-wide {
+          grid-column: auto;
+        }
+      }
+
+      .cc-getting-real-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.85rem;
+        margin: 1.35rem auto 0.35rem;
+        max-width: var(--post-article-max, 42rem);
+      }
+
+      .cc-getting-real-pair figure {
+        margin: 0;
+      }
+
+      .cc-getting-real-pair img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+      }
+
+      body.theme-dark .cc-getting-real-pair img {
+        border-color: #444;
+      }
+
+      @media (max-width: 640px) {
+        .cc-getting-real-pair {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .cc-hero-final-logo {
+        max-width: min(var(--post-article-max, 42rem), 100%);
+        margin: 12px auto 10px;
+        box-sizing: border-box;
+      }
+
+      .cc-hero-final-logo .cc-logo-final-img {
+        width: 100%;
+        max-height: min(260px, 46vw);
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        padding: 1.35rem 1.75rem;
+        box-sizing: border-box;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        background: #fafafa;
+      }
+
+      body.theme-dark .cc-hero-final-logo .cc-logo-final-img {
+        border-color: #444;
+      }
+    </style>
+  </head>
+  <body class="post-detail post-detail--longform">
+    <div class="page">
+      <div class="post-detail-chrome-row">
+        <div class="post-detail-breadcrumb-row">
+          <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-toggle-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <header class="simple-header">
+        <div class="post-detail-header-inner">
+          <p class="post-detail-kicker">Project</p>
+          <h1 class="intro-greeting">Good Intentions Don't Ship</h1>
+          <p class="intro-subtext">Coding and Coffee</p>
+        </div>
+      </header>
+
+      <main class="post-detail-main fade-in">
+        <div class="post-detail-hero cc-hero-final-logo">
+          <img
+            class="cc-logo-final-img"
+            src="images/coding-and-coffee/logo-final-light.png"
+            alt="Coding and Coffee logo: bracket mug with steam; lowercase coding and coffee wordmark and Lincoln NE."
+            width="480"
+            height="240"
+            loading="eager"
+          />
+        </div>
+        <article class="post-detail-body post-detail-body--longform">
+          <p>
+            Sophomore year of university. I had just gotten out of a four-year relationship. I wasn't
+            sleeping. Somewhere between midnight and sunrise, twelve pages about revolutionizing computer
+            science education in Lincoln, Nebraska poured out of me — not a journal entry, not a text I'd
+            regret sending, but a program proposal.
+          </p>
+          <p>
+            The name was Coffee &amp; Coding. Specifically that. Not the other way around — and yes, I knew
+            it sounded better the other way. That was the point. If it was too smooth, too easy, people
+            would let it pass right through them. I wanted it to snag a little.
+          </p>
+
+          <p class="section-title"><strong>The Challenge</strong></p>
+          <p>
+            Freshman year at UNL I took CSCE 155A, the first CS course in the program. I passed with a B+
+            and felt like I had learned almost nothing. I took it again over the summer, passed with a C,
+            and for the first time actually understood what was happening.
+          </p>
+          <p>
+            That gap bothered me. So I started asking the students who seemed to breeze through it what their
+            secret was. The answer was always the same: they had taken CS in high school. Some had been
+            coding for years before they ever set foot in the classroom.
+          </p>
+          <p>
+            It wasn't that they were smarter. It was that their schools had given them a head start that
+            mine hadn't. And at the time — before AI, back when chatbots were still intent-based, when
+            software engineering was one of the most reliably lucrative fields you could enter — a lot of
+            underfunded schools simply didn't have access to that curriculum. It felt like an enormous thing
+            to just accept.
+          </p>
+          <p>I didn't accept it.</p>
+
+          <p class="section-title"><strong>The Idea</strong></p>
+          <p>
+            What came out of that breakup night was a twelve-page manifesto. The plan was straightforward in
+            my head: show up to high schools with curriculum and teach students. Give them what their
+            schools hadn't. Close the gap before university made it permanent.
+          </p>
+          <p>
+            The manifesto covered a five-phase Java curriculum, separate tracks for schools with and without
+            existing CS programs, a coffee shop partnership network, guaranteed student internships at local
+            companies post-program, and a reward system where students earned stickers, mugs, t-shirts and
+            more for completing each phase.
+          </p>
+
+          <p class="section-title"><strong>The Creative Liberties</strong></p>
+          <p>
+            The proposal described existing interest from local coffee shops. The truth is I had briefly run
+            the idea by a barista I was trying to impress. She said it sounded cool. I recorded that as
+            interest. If you squint, it's not entirely a lie.
+          </p>
+          <p>
+            The guaranteed internships post-program — that wording might have been a stretch. Those were
+            intentions I had not yet acted on. The proposal did not fully distinguish between those two
+            things.
+          </p>
+          <p>
+            I had nothing but good intentions. The document just occasionally presented those intentions as
+            infrastructure.
+          </p>
+
+          <p class="section-title"><strong>Twelve Pages and a Dream</strong></p>
+          <p>I printed copies and started pitching.</p>
+          <p>
+            I didn't start small. Starbucks, Scooters, the big regional chains — go big or go home. They
+            sent me home before I'd really gotten started.
+          </p>
+          <p>
+            So I went smaller. Local shops, independent owners. Some handed me a black coffee on the way out.
+            A few actually listened. And after enough of those conversations I started getting real interest.
+          </p>
+          <p>Not commitments. Interest.</p>
+          <p>
+            Then the goalpost moved. The people who were genuinely curious stopped being satisfied with the
+            paper. They wanted a website. A curriculum mockup. Something that looked like a real program and
+            not a very passionate document written at 2am after a breakup.
+          </p>
+          <p>Which, to be clear, is exactly what it was.</p>
+          <p>
+            The vision was real. But a vision needs a body. And it turns out there is a significant amount of
+            infrastructure required before a school will allow you anywhere near their students —
+            understandably so. You need institutional backing, cleared mentors, liability considerations,
+            administrative approval. I had none of that.
+          </p>
+
+          <p class="section-title"><strong>The Logo</strong></p>
+          <p>The first thing a real program needed was a face.</p>
+          <p>
+            I went through iteration after iteration trying to land on something that fit the vision. I
+            started with friends. Eventually I connected with a professional logo design firm, pro bono —
+            courtesy of my ex-girlfriend's best friend's sister. The weight of that ask was not lost on me.
+            And when I saw the result, I wasn't impressed. It didn't feel like the program I had in my head.
+          </p>
+
+          <section class="cc-logo-showcase" aria-labelledby="cc-logo-heading">
+            <h2 id="cc-logo-heading" class="visually-hidden">Logo iterations</h2>
+            <div class="cc-logo-grid">
+              <figure>
+                <div class="cc-logo-frame">
+                  <img
+                    src="images/coding-and-coffee/logo-iter-01-bean-usb.png"
+                    alt="Pixel art logo: coffee bean with USB cable and C&amp;C lettering."
+                    width="280"
+                    height="200"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+              <figure>
+                <div class="cc-logo-frame">
+                  <img
+                    src="images/coding-and-coffee/logo-iter-02-pixel-teacup-caps.png"
+                    alt="Pixel art teacup with sprouting leaves and CODING AND COFFEE in block caps."
+                    width="280"
+                    height="200"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+              <figure>
+                <div class="cc-logo-frame">
+                  <img
+                    src="images/coding-and-coffee/logo-iter-03-flat-cup.png"
+                    alt="Flat illustration: split green takeaway cup, coral lid, sleeve band, steam and Coding n' Coffee lettering."
+                    width="280"
+                    height="200"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+              <figure>
+                <div class="cc-logo-frame">
+                  <img
+                    src="images/coding-and-coffee/logo-iter-04-pixel-teacup-lowercase.png"
+                    alt="Pixel art teacup with two green leaves and lowercase coding and coffee text."
+                    width="280"
+                    height="200"
+                    loading="lazy"
+                  />
+                </div>
+              </figure>
+            </div>
+          </section>
+
+          <p>
+            Then a student in Massachusetts reached out and said they had a vision for it. They definitely
+            did.
+          </p>
+
+          <section
+            class="cc-pdf-viewer-section cc-pdf-viewer-section--breakout"
+            aria-label="Design deck PDFs"
+          >
+            <div class="cc-pdf-viewer-row">
+              <div class="cc-pdf-pane">
+                <div class="cc-pdf-scroll">
+                  <object
+                    class="cc-pdf-embed"
+                    data="documents/coding-and-coffee/coding-and-coffee-round-1.pdf"
+                    type="application/pdf"
+                  >
+                    <iframe
+                      src="documents/coding-and-coffee/coding-and-coffee-round-1.pdf"
+                      title="Coding and Coffee Round 1 PDF"
+                      loading="lazy"
+                    ></iframe>
+                  </object>
+                </div>
+              </div>
+              <div class="cc-pdf-pane">
+                <div class="cc-pdf-scroll">
+                  <object
+                    class="cc-pdf-embed"
+                    data="documents/coding-and-coffee/coffee-and-coding-round-two.pdf"
+                    type="application/pdf"
+                  >
+                    <iframe
+                      src="documents/coding-and-coffee/coffee-and-coding-round-two.pdf"
+                      title="Coffee and Coding Round Two PDF"
+                      loading="lazy"
+                    ></iframe>
+                  </object>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <p class="section-title"><strong>The First Real Partnerships</strong></p>
+          <p>
+            Eventually I landed two partnerships that changed the shape of things.
+          </p>
+          <p>
+            The first was <a href="https://millcoffee.com/" class="cc-partner-link" target="_blank" rel="noopener noreferrer">The Mill</a>. They were interested — genuinely — but didn't have the space. Hosting a
+            program four hours a week would eat into real estate they needed for their own operations. At
+            the end of the day, business comes first, and I respected that.
+          </p>
+          <p>
+            What they offered instead was unlimited free coffee and permission to carry their brand. I could
+            use their logo, reference the partnership, and show up to pitches with a well-known local name
+            behind me. There was no money in it. But The Mill had weight in Lincoln, and I started putting
+            that all over my materials.
+          </p>
+          <p>
+            The second was <a href="https://www.thebay.org/" class="cc-partner-link" target="_blank" rel="noopener noreferrer">The Bay</a>. They were in the middle of building out a collective space and
+            specifically wanted to host programs in a new computer room — which also happened to double as a
+            coffee shop and venue. It was exactly what Coffee &amp; Coding needed on paper.
+          </p>
+          <p>
+            The overhead of actually running four hours of programming instruction a week, though, turned
+            out to be its own project entirely.
+          </p>
+
+          <div class="cc-getting-real-pair" role="group" aria-label="The Mill and The Bay venues">
+            <figure>
+              <img
+                src="images/coding-and-coffee/partnership-mill-exterior.png"
+                alt="Exterior of The Mill Coffee &amp; Tea in Lincoln: brick storefront with THE MILL and Coffee &amp; Tea signage, glass entrance, sidewalk patio with bike rack and white canopy seating."
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
+                src="images/coding-and-coffee/partnership-bay-exterior.png"
+                alt="Black and white exterior of The Bay: corner building with large THE BAY lettering and community-focused signage."
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <p class="section-title"><strong>It Started Getting Real</strong></p>
+          <p>
+            Something shifted as I kept pushing. People were starting to know me by name — people I had never
+            met. I started joining organizations, hosting official events, building presence.
+          </p>
+          <p>
+            And then something I hadn't expected: really smart people — students I had watched breeze past me
+            in CS classes — were showing up and asking if they could be mentors. Not just smart, but genuinely
+            personable. The kind of people you actually want in a room with a high schooler trying to figure
+            out if this field is for them.
+          </p>
+          <p>
+            Here's the thing — these people didn't just look good on a resume. They came with real ideas. They
+            helped me significantly brush out the curriculum into something that could actually hold up in a
+            room full of skeptical high schoolers.
+          </p>
+
+          <div class="cc-getting-real-pair" role="group" aria-label="Campus presence and outreach posts">
+            <figure>
+              <img
+                src="images/coding-and-coffee/mentors-money-cseatunl-showcase.png"
+                alt="Instagram screenshot from cseatunl: Initialize UNL showcase with two students behind a desk, laptops, whiteboard labeled Exec Board and Dev Team; caption mentions Initialize UNL sharing member projects."
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
+                src="images/coding-and-coffee/mentors-money-initialize-unl-post.png"
+                alt="Facebook post by Initialize UNL dated April 16, 2019 describing Coding and Coffee as an education outreach group with weekly mentorship and Friday sessions at The Bay; photo collage of mentors and students with laptops and coffee."
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <section
+            class="cc-pdf-viewer-section cc-pdf-viewer-section--breakout"
+            aria-label="Early curriculum PDF samples"
+          >
+            <h3 class="cc-pdf-curriculum-section-heading">Phase 1.1: Iterations 1 and 2</h3>
+            <div class="cc-pdf-viewer-row">
+              <div class="cc-pdf-pane">
+                <div class="cc-pdf-scroll">
+                  <object
+                    class="cc-pdf-embed"
+                    data="documents/coding-and-coffee/phase-1-1.pdf"
+                    type="application/pdf"
+                  >
+                    <iframe
+                      src="documents/coding-and-coffee/phase-1-1.pdf"
+                      title="Phase 1.1 curriculum PDF"
+                      loading="lazy"
+                    ></iframe>
+                  </object>
+                </div>
+                <p class="cc-pdf-pane-links">
+                  <a
+                    href="documents/coding-and-coffee/phase-1-1.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open Phase 1.1 curriculum PDF in a new tab"
+                    >Open PDF in New Tab</a
+                  >
+                </p>
+              </div>
+              <div class="cc-pdf-pane">
+                <div class="cc-pdf-scroll">
+                  <object
+                    class="cc-pdf-embed"
+                    data="documents/coding-and-coffee/hello-world-1-1.pdf"
+                    type="application/pdf"
+                  >
+                    <iframe
+                      src="documents/coding-and-coffee/hello-world-1-1.pdf"
+                      title="Hello World lesson PDF version 1.1"
+                      loading="lazy"
+                    ></iframe>
+                  </object>
+                </div>
+                <p class="cc-pdf-pane-links">
+                  <a
+                    href="documents/coding-and-coffee/hello-world-1-1.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open Hello World exercise 1.1 PDF in a new tab"
+                    >Open PDF in New Tab</a
+                  >
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <p class="section-title"><strong>Getting Mentors. Getting Money.</strong></p>
+          <p>
+            I started thinking about the mentor requirements more seriously. Honors students. Former FANG
+            experience. Real credentials that would signal to schools and sponsors that this wasn't just a
+            passion project anymore. I wrote up the requirements, started advertising, and began to attract
+            exactly the kind of talent I had hoped for.
+          </p>
+          <p>For the record: I did not meet my own requirements.</p>
+          <p>
+            So I started showing up to every pitch event on campus — offered by anyone, for anything. It
+            didn't take long before I'd raised just over a thousand dollars. That number might not sound like
+            much. But my rent at the time was $300 a month and I was making $12 an hour as a developer. It
+            felt significant. I ordered my first round of shirts.
+          </p>
+
+          <div class="cc-getting-real-pair" role="group" aria-label="Coding and Coffee outreach flyers">
+            <figure>
+              <img
+                src="images/coding-and-coffee/flyer-chalkboard-getting-mentors.png"
+                alt="Flyer on a dark chalkboard texture: Coding and Coffee; Tuesdays 2:30–5:30 at The Bay; Raspberry Pi line art; Java and free coffee callouts; codingandcoffee.org contact."
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
+                src="images/coding-and-coffee/flyer-peach-getting-mentors.png"
+                alt="Peach-background flyer: coding and coffee wordmark; Raspberry Pi over cup graphic; The Bay Tuesdays 2:15–6:15; Java, honors CS mentorship, and free coffee; Lincoln NE."
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <p class="section-title"><strong>The Routine</strong></p>
+          <p>
+            By this point I had given in. The program was now Coding and Coffee. The other way did sound
+            better. I was never going to win that fight.
+          </p>
+          <div class="cc-routine-gallery" role="group" aria-label="Coding and Coffee in practice">
+            <figure class="cc-routine-gallery-wide">
+              <img
+                src="images/coding-and-coffee/routine-landing-hero.png"
+                alt="Screenshot of the Coding and Coffee website landing page: black background, monospace headline Coding and Coffee in blue, tagline about Java, mentorship, and coffee, login button."
+                loading="lazy"
+              />
+            </figure>
+            <figure class="cc-routine-gallery-wide">
+              <img
+                src="images/coding-and-coffee/routine-team-shirts-selfie.png"
+                alt="Three organizers in matching Coding and Coffee pocket tees, smiling and holding coffee mugs."
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
+                src="images/coding-and-coffee/routine-mentors-imac.png"
+                alt="Two mentors collaborating at a wooden desk against a brick wall, focused on an iMac and laptop showing code."
+                loading="lazy"
+              />
+            </figure>
+            <figure>
+              <img
+                src="images/coding-and-coffee/routine-table-coffee-workspace.png"
+                alt="Group session around a long wood table with laptops, a large coffee carafe, cups, and backpacks in a bright coworking-style room."
+                loading="lazy"
+              />
+            </figure>
+          </div>
+
+          <p>
+            We had real backing from the community. A consistent schedule. Kids who were showing up not just
+            for the curriculum but for each other — the in-person dynamic, the problems, the feeling of being
+            part of something. The thing that Coding and Coffee was always supposed to be at its core was a
+            community first, a class second. And that part was real.
+          </p>
+          <p>
+            I was deep in conversations about funneling our students into local internships before they ever
+            reached college. The original problem — the gap I had lived through — felt like it was actually
+            getting addressed.
+          </p>
+          <p>Then COVID hit.</p>
+          <p>
+            Within weeks we had to move everything remote. I knew immediately what that meant. The entire
+            value proposition of the program lived in the room — the coffee, the mentors, the in-person
+            energy. None of that translated to a Zoom link. Along with a lot of other things that spring,
+            Coding and Coffee shut down.
+          </p>
+          <p>More formative than any class or internship, Coding and Coffee taught me what real impact actually feels like, what it costs to build it — and that sometimes, the world has other plans.</p>
+        </article>
+        <footer class="post-detail-engagement" aria-label="Reactions and comments">
+          <div class="post-detail-likes">
+            <button
+              type="button"
+              class="post-detail-like-btn"
+              id="post-like-btn"
+              aria-label="Like this post"
+              aria-pressed="false"
+            >
+              <span class="post-detail-likes-icon" aria-hidden="true">♥</span>
+              <span class="post-detail-likes-count" id="post-likes-count">0</span>
+            </button>
+            <span class="post-detail-likes-note">likes</span>
+          </div>
+          <section class="post-detail-comments">
+            <h2 class="post-detail-comments-heading">Comments</h2>
+            <form class="post-detail-comment-form" id="post-comment-form">
+              <label for="post-comment-input" class="visually-hidden">Add a comment</label>
+              <textarea
+                id="post-comment-input"
+                name="comment"
+                rows="3"
+                maxlength="2000"
+                placeholder="Write a comment…"
+                required
+              ></textarea>
+              <button type="submit">Post comment</button>
+            </form>
+            <ul class="post-detail-comment-list" id="post-comment-list" aria-live="polite"></ul>
+            <p class="post-detail-comments-empty" id="post-comment-empty">No comments yet.</p>
+          </section>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        var body = document.body;
+        var toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+
+        var favicon = document.getElementById('site-favicon');
+
+        function setFavicon() {
+          if (!favicon) return;
+          favicon.setAttribute('href', '../assets/favicon.png');
+        }
+
+        function applyTheme(theme) {
+          var isDark = theme === 'dark';
+          body.classList.toggle('theme-dark', isDark);
+          var root = document.documentElement;
+          root.classList.toggle('theme-dark', isDark);
+          setFavicon();
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        var stored = localStorage.getItem('theme');
+        if (stored === 'dark') {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
+        }
+
+        toggle.addEventListener('click', function () {
+          var next = body.classList.contains('theme-dark') ? 'light' : 'dark';
+          applyTheme(next);
+        });
+      })();
+    </script>
+    <script src="../assets/post-interactions.js" defer></script>
+  </body>
+</html>
