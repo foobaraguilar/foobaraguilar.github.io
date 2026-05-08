@@ -1481,22 +1481,37 @@ body.theme-dark .project-thumb-circle::before {
   border-color: #e5e5e5;
 }
 
-/* Coding and Coffee project card — light logo on neutral tray */
-.project-thumb-cc-logo {
-  background-color: #fafafa;
-  background-image: url('projects/images/coding-and-coffee/logo-final-light.png');
+/* Lessons / ego+exo research — same hero image as project page */
+.project-thumb-lessons-hero {
+  background-color: #1a1a1a;
+  background-image: url('projects/images/lessons-egocentric-data-ops.png');
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
+  background-position: center center;
+  background-size: cover;
 }
 
-.project-thumb-cc-logo::before {
+.project-thumb-lessons-hero::before {
   display: none;
 }
 
-body.theme-dark .project-thumb-cc-logo {
-  background-color: #fafafa;
-  background-image: url('projects/images/coding-and-coffee/logo-final-light.png');
+/* Coding and Coffee project card — same hero photo as project page */
+.project-thumb-cc-photo {
+  background-color: #2a2a2a;
+  background-image: url('projects/images/coding-and-coffee/project-card-photo.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+.project-thumb-cc-photo::before {
+  display: none;
+}
+
+body.theme-dark .project-thumb-cc-photo {
+  border-color: #444;
+}
+
+body.theme-dark .project-thumb-lessons-hero {
   border-color: #444;
 }
 
