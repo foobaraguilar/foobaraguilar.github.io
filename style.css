@@ -1494,13 +1494,13 @@ body.theme-dark .project-thumb-circle::before {
   display: none;
 }
 
-/* Coding and Coffee project card — same hero photo as project page */
+/* Coding and Coffee project card — same logo as project page hero */
 .project-thumb-cc-photo {
-  background-color: #2a2a2a;
-  background-image: url('projects/images/coding-and-coffee/project-card-photo.png');
+  background-color: #ffffff;
+  background-image: url('projects/images/coding-and-coffee/logo-final-light.png');
   background-repeat: no-repeat;
   background-position: center center;
-  background-size: cover;
+  background-size: contain;
 }
 
 .project-thumb-cc-photo::before {
@@ -1508,6 +1508,7 @@ body.theme-dark .project-thumb-circle::before {
 }
 
 body.theme-dark .project-thumb-cc-photo {
+  background-color: #ffffff;
   border-color: #444;
 }
 
