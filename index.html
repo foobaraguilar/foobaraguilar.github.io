@@ -108,7 +108,7 @@
           <nav class="sidebar-nav">
             <button type="button" class="nav-item nav-item-active" data-tab="about">
               <span class="nav-icon nav-icon-about" aria-hidden="true"></span>
-              <span class="nav-label">About Me</span>
+              <span class="nav-label">My Wall</span>
             </button>
             <button type="button" class="nav-item" data-tab="posts">
               <span class="nav-icon nav-icon-journal" aria-hidden="true"></span>
@@ -127,7 +127,7 @@
 
         <section class="content">
           <div class="content-header">
-            <h2 class="content-title" id="content-title">About Me</h2>
+            <h2 class="content-title" id="content-title">My Wall</h2>
           </div>
 
           <section class="content-panels">
@@ -358,7 +358,7 @@
           var cap = item.caption || '';
           if (cap) link.setAttribute('data-caption', cap);
           else link.removeAttribute('data-caption');
-          link.setAttribute('aria-label', cap ? cap : 'About Me image');
+          link.setAttribute('aria-label', cap ? cap : 'My Wall image');
         }
 
         function setupImages(sources) {
@@ -640,6 +640,7 @@
       (function () {
         /* Order here = order on the page. Thumbnail URL is read from each post’s hero image src when present. */
         var postFiles = [
+          'posts/ai-manifesto.html',
           'posts/2x50x50-part2.html',
           'posts/2x50x50.html',
         ];
@@ -779,7 +780,7 @@
         );
 
         var titles = {
-          about: 'About Me',
+          about: 'My Wall',
           projects: 'Research/Projects',
           posts: 'Personal Posts',
           resume: 'Resume',
