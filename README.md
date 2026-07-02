@@ -1,7 +1,5 @@
 # personal page
 
-My personal site. Plain HTML/CSS/JS, no build step — lives on [GitHub Pages](https://foobaraguilar.github.io).
-
 If you like the setup, feel free to fork it and make it yours. No license gymnastics — just swap the copy, photos, and content.
 
 ## What's on the site
