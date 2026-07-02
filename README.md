@@ -1,4 +1,4 @@
-# rubenaguilar.github.io
+# personal page
 
 My personal site. Plain HTML/CSS/JS, no build step — lives on [GitHub Pages](https://foobaraguilar.github.io).
 
