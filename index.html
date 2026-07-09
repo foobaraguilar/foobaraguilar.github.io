@@ -522,20 +522,20 @@
         }
 
         var items = [
-          { src: 'about_me/images/1.jpg', caption: 'Golden Gate Classic' },
-          { src: 'about_me/images/2.jpg', caption: 'Mariposa and I in Acatenango' },
-          { src: 'about_me/images/4.jpg', caption: 'Day on the docks' },
-          { src: 'about_me/images/5.jpg', caption: 'Famous Tikal, Guatemala Rope Swing, blew out my eardrumn attempting front flip' },
-          { src: 'about_me/images/3.jpg', caption: 'I love Ireland!' },
-          { src: 'about_me/images/wall-raft-splash.png', caption: 'Destroyed by Rio Futafalu' },
-          { src: 'about_me/images/wall-summit-dog.png', caption: 'Above the clouds in Guatemala' },
-          { src: 'about_me/images/wall-raft-crew.png', caption: 'Front right, recovering' },
-          { src: 'about_me/images/wall-sail-scrub.png', caption: 'Another Day On The Job' },
-          { src: 'about_me/images/wall-lake-peaks.png', caption: "Laguna Pinilla's Hidden Lake" },
-          { src: 'about_me/images/wall-trail-run.png', caption: 'Marin Ultra Challenge 50mi' },
-          { src: 'about_me/images/wall-sail-bay-sun.png', caption: 'Noah' },
-          { src: 'about_me/images/wall-sail-marina.png', caption: 'Pier 40, San Francisco' },
-          { src: 'about_me/images/wall-colorful-street.png', caption: 'Calle de las Sombrillas' },
+          { src: 'wall/images/1.jpg', caption: 'Golden Gate Classic' },
+          { src: 'wall/images/2.jpg', caption: 'Mariposa and I in Acatenango' },
+          { src: 'wall/images/4.jpg', caption: 'Day on the docks' },
+          { src: 'wall/images/5.jpg', caption: 'Famous Tikal, Guatemala Rope Swing, blew out my eardrumn attempting front flip' },
+          { src: 'wall/images/3.jpg', caption: 'I love Ireland!' },
+          { src: 'wall/images/wall-raft-splash.png', caption: 'Destroyed by Rio Futafalu' },
+          { src: 'wall/images/wall-summit-dog.png', caption: 'Above the clouds in Guatemala' },
+          { src: 'wall/images/wall-raft-crew.png', caption: 'Front right, recovering' },
+          { src: 'wall/images/wall-sail-scrub.png', caption: 'Another Day On The Job' },
+          { src: 'wall/images/wall-lake-peaks.png', caption: "Laguna Pinilla's Hidden Lake" },
+          { src: 'wall/images/wall-trail-run.png', caption: 'Marin Ultra Challenge 50mi' },
+          { src: 'wall/images/wall-sail-bay-sun.png', caption: 'Noah' },
+          { src: 'wall/images/wall-sail-marina.png', caption: 'Pier 40, San Francisco' },
+          { src: 'wall/images/wall-colorful-street.png', caption: 'Calle de las Sombrillas' },
         ];
         setupImages(items);
         startLoop();
@@ -563,8 +563,16 @@
               <div class="projects-grid">
                 <!-- Rasp5 -->
 
+                <a class="project-card" href="white-papers/junebug.html">
+                  <div class="project-thumb project-thumb-square project-thumb-junebug"></div>
+                  <div class="project-body">
+                    <h2 class="project-title">Junebug</h2>
+                    <p class="project-excerpt">A local-first multi-agent operating system<br aria-hidden="true" /><span class="project-excerpt-pad" aria-hidden="true">&nbsp;</span></p>
+                  </div>
+                </a>
+
                 <!--Human-Centric Data Collection at Scale-->
-                <a class="project-card" href="projects/lessons.html">
+                <a class="project-card" href="white-papers/lessons.html">
                   <div class="project-thumb project-thumb-square project-thumb-lessons-hero"></div>
                   <div class="project-body">
                     <h2 class="project-title">Lessons From Building Human-Centric Ego+Exo Data Ops</h2>
@@ -574,7 +582,7 @@
                   </div>
                 </a>
 
-                <a class="project-card" href="projects/coding_and_coffee.html">
+                <a class="project-card" href="white-papers/coding_and_coffee.html">
                   <div class="project-thumb project-thumb-square project-thumb-cc-photo"></div>
                   <div class="project-body">
                     <h2 class="project-title">Coding and Coffee</h2>
@@ -640,9 +648,9 @@
       (function () {
         /* Order here = order on the page. Thumbnail URL is read from each post’s hero image src when present. */
         var postFiles = [
-          'posts/ai-manifesto.html',
-          'posts/2x50x50-part2.html',
-          'posts/2x50x50.html',
+          'blogs/ai-manifesto.html',
+          'blogs/2x50x50-part2.html',
+          'blogs/2x50x50.html',
         ];
 
         var allPosts = [];
@@ -699,7 +707,7 @@
               var label = labelMeta ? labelMeta.getAttribute('content') : 'POST';
               var title = doc.querySelector('h1') ? doc.querySelector('h1').textContent.trim() : '';
               var baseDir = url.replace(/[^/]+$/, '');
-              var imgSrc = 'posts/images/' + (postIndex + 1) + '.jpg';
+              var imgSrc = 'blogs/images/' + (postIndex + 1) + '.jpg';
               var heroImgEl = doc.querySelector('.post-detail-hero-img');
               var heroSrc = heroImgEl && heroImgEl.getAttribute('src');
               if (heroSrc) {

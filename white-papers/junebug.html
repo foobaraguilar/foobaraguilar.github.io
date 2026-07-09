@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Junebug</title>
+    <meta name="description" content="Explore Junebug: a local-first multi-agent operating system built on OpenClaw." />
+    <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../style.css" />
+    <style>
+      .post-detail-body--longform .section-title {
+        font-size: 1.2em;
+        line-height: 1.35;
+        margin-top: 1.2em;
+        margin-bottom: 0.35em;
+      }
+
+      .post-detail-body--longform .section-title:first-child {
+        margin-top: 0;
+      }
+
+/* Junebug architecture — extends site style.css */
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/* Explorer — diagram is the page's primary visual */
+.explorer {
+  margin: 0 0 2.5rem;
+}
+
+.explorer-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Diagram */
+.diagram-stage {
+  width: 100%;
+}
+
+.diagram-card {
+  border: 1px solid #111;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+body.theme-dark .diagram-card {
+  border-color: #f0f0f0;
+  background: #1a1a1a;
+}
+
+.diagram-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 8px;
+}
+
+#diagram-svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+  margin: 0 auto;
+  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.diagram-hint {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #666;
+}
+
+body.theme-dark .diagram-hint {
+  color: #a8a8a8;
+}
+
+/* Build order — below diagram */
+.build-order {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid #111;
+  border-radius: 8px;
+  background: #fff;
+}
+
+body.theme-dark .build-order {
+  border-color: #f0f0f0;
+  background: #1a1a1a;
+}
+
+.build-order-title {
+  margin: 0 0 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #777;
+}
+
+body.theme-dark .build-order-title {
+  color: #8e8e8e;
+}
+
+.build-order-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+@media (min-width: 640px) {
+  .build-order-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 12px;
+  }
+}
+
+@media (min-width: 900px) {
+  .build-order-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.build-order-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #555;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.build-order-btn:hover,
+.build-order-btn.is-active {
+  background: #f5f5f5;
+  color: #111;
+}
+
+body.theme-dark .build-order-btn {
+  color: #ccc;
+}
+
+body.theme-dark .build-order-btn:hover,
+body.theme-dark .build-order-btn.is-active {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.build-order-step {
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  color: #111;
+  min-width: 1.1em;
+}
+
+body.theme-dark .build-order-step {
+  color: #f0f0f0;
+}
+
+.build-order-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.build-order-hint {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #666;
+  text-align: center;
+}
+
+body.theme-dark .build-order-hint {
+  color: #a8a8a8;
+}
+
+/* SVG text */
+.node-title {
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.node-sub,
+.container-sub,
+.annotation-sub,
+.diagram-sublabel {
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.container-title {
+  font-size: 16px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.diagram-container .container-title,
+.diagram-container .container-sub {
+  text-anchor: start;
+}
+
+.annotation-title {
+  font-size: 11px;
+  font-weight: 600;
+  font-style: normal;
+  pointer-events: none;
+}
+
+.diagram-node.is-annotation .annotation-sub {
+  font-size: 9px;
+}
+
+.diagram-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.diagram-conn-label {
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.diagram-conn {
+  transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
+}
+
+.diagram-conn--dim {
+  opacity: 0.18;
+}
+
+.diagram-node {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.diagram-node.is-dimmed {
+  opacity: 0.25;
+}
+
+.diagram-node-rect {
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.diagram-node:hover .diagram-node-rect {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+}
+
+body.theme-dark .diagram-node:hover .diagram-node-rect {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+
+.step-number {
+  font-size: 15px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Panel (modal) */
+.panel {
+  display: flex;
+  flex-direction: column;
+  max-height: min(85vh, 720px);
+  overflow: hidden;
+  background: #fff;
+}
+
+body.theme-dark .panel {
+  background: #1a1a1a;
+}
+
+.panel-header {
+  position: relative;
+  flex-shrink: 0;
+  padding: 16px 44px 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+body.theme-dark .panel-header {
+  border-bottom-color: #333;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.panel-subtitle {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #444;
+}
+
+body.theme-dark .panel-subtitle {
+  color: #b0b0b0;
+}
+
+.panel-close {
+  display: flex;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #888;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.panel-close:hover {
+  color: #333;
+  background: #f5f5f5;
+}
+
+body.theme-dark .panel-close:hover {
+  color: #f0f0f0;
+  background: #2a2a2a;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 16px;
+}
+
+.panel-section {
+  margin-bottom: 18px;
+}
+
+.panel-section h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #777;
+}
+
+body.theme-dark .panel-section h3 {
+  color: #8e8e8e;
+}
+
+.panel-section p {
+  margin: 0 0 10px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #555;
+}
+
+body.theme-dark .panel-section p {
+  color: #ffffff;
+}
+
+.panel-muted {
+  color: #888 !important;
+}
+
+body.theme-dark .panel-muted {
+  color: #999 !important;
+}
+
+.panel-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 15px;
+  line-height: 1.55;
+  color: #555;
+}
+
+body.theme-dark .panel-steps {
+  color: #ffffff;
+}
+
+.panel-steps li {
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.step-cmd {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-radius: 5px;
+  border: 1px solid #d8dee4;
+  background: #f6f8fa;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  color: #24292f;
+}
+
+body.theme-dark .step-cmd {
+  border-color: #444;
+  background: #161b22;
+  color: #e6edf3;
+}
+
+.panel-files {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.panel-files li {
+  margin-bottom: 4px;
+}
+
+.panel-files code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #f5f5f5;
+}
+
+body.theme-dark .panel-files code {
+  background: #2a2a2a;
+}
+
+.panel-prompt {
+  margin: 0;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #eee;
+  background: #fafafa;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  color: #555;
+}
+
+body.theme-dark .panel-prompt {
+  border-color: #333;
+  background: #111;
+  color: #bbb;
+}
+
+/* Code blocks */
+.code-block {
+  margin-bottom: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #d8dee4;
+  background: #f6f8fa;
+}
+
+body.theme-dark .code-block {
+  border-color: #444;
+  background: #161b22;
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-bottom: 1px solid #d8dee4;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #656d76;
+  background: #eef1f4;
+}
+
+body.theme-dark .code-block-header {
+  border-bottom-color: #444;
+  color: #8b949e;
+  background: #21262d;
+}
+
+.copy-btn {
+  border: 0;
+  background: transparent;
+  color: #656d76;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.copy-btn:hover {
+  color: #111;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+body.theme-dark .copy-btn {
+  color: #8b949e;
+}
+
+body.theme-dark .copy-btn:hover {
+  color: #f0f0f0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #24292f;
+}
+
+body.theme-dark .code-block pre {
+  color: #e6edf3;
+}
+
+.tok-cmt { color: #6e7781; font-style: italic; }
+.tok-key { color: #0550ae; }
+.tok-str { color: #0a3069; }
+.tok-num { color: #0550ae; }
+.tok-kw { color: #cf222e; }
+.tok-fn { color: #8250df; }
+.tok-val { color: #24292f; }
+
+body.theme-dark .tok-cmt { color: #8b949e; }
+body.theme-dark .tok-key { color: #79c0ff; }
+body.theme-dark .tok-str { color: #a5d6ff; }
+body.theme-dark .tok-num { color: #79c0ff; }
+body.theme-dark .tok-kw { color: #ff7b72; }
+body.theme-dark .tok-fn { color: #d2a8ff; }
+body.theme-dark .tok-val { color: #e6edf3; }
+
+.panel-next {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0;
+}
+
+.next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #333;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.next-btn:hover {
+  border-color: #111;
+  background: #f0f0f0;
+}
+
+body.theme-dark .next-btn {
+  border-color: #555;
+  background: #222;
+  color: #e5e5e5;
+}
+
+body.theme-dark .next-btn:hover {
+  border-color: #aaa;
+  background: #2a2a2a;
+}
+
+/* Context — vertical longform sections */
+.junebug-context {
+  margin-top: 0;
+  max-width: var(--post-article-max);
+}
+
+.junebug-section {
+  margin: 0 0 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e6e6e6;
+}
+
+.junebug-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.junebug-section:last-child {
+  margin-bottom: 0;
+}
+
+body.theme-dark .junebug-section {
+  border-top-color: #333;
+}
+
+.junebug-section .section-title {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+}
+
+.junebug-list {
+  margin: 0 0 1em;
+  padding-left: 1.35em;
+}
+
+.junebug-list li {
+  margin-bottom: 0.55em;
+  padding-left: 0.15em;
+}
+
+.junebug-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Node detail modal */
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.panel-sheet {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 50;
+  width: min(640px, calc(100% - 2rem));
+  max-height: min(85vh, 720px);
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  animation: modal-in 0.2s ease-out;
+}
+
+body.theme-dark .panel-sheet {
+  border-color: #333;
+  background: #1a1a1a;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+body.sheet-open {
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .panel-sheet {
+    width: calc(100% - 1rem);
+    max-height: 90vh;
+    top: auto;
+    bottom: 0.5rem;
+    transform: translateX(-50%);
+    animation: modal-in-mobile 0.22s ease-out;
+  }
+
+  @keyframes modal-in-mobile {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram-node-rect,
+  .diagram-conn,
+  .panel-sheet {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+    </style>
+  </head>
+  <body class="post-detail post-detail--longform architecture-page">
+    <div class="page">
+      <div class="post-detail-chrome-row">
+        <div class="post-detail-breadcrumb-row">
+          <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-toggle-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <header class="simple-header">
+        <div class="post-detail-header-inner">
+          <p class="post-detail-kicker">Project</p>
+          <h1 class="intro-greeting">Junebug</h1>
+          <p class="intro-subtext">A local-first multi-agent operating system built on OpenClaw.</p>
+          <time class="post-detail-date" datetime="2026-07-09">July 9, 2026</time>
+        </div>
+      </header>
+
+      <main class="post-detail-main fade-in">
+        <section class="explorer" aria-label="Interactive architecture explorer">
+          <div class="explorer-stack">
+            <div class="diagram-stage">
+              <div class="diagram-card">
+                <div id="diagram-scroll" class="diagram-scroll">
+                  <svg id="diagram-svg" viewBox="-36 0 1084 750" role="img" aria-label="Junebug architecture diagram"></svg>
+                </div>
+              </div>
+              <p class="diagram-hint">Interactive Diagram: Click Nodes</p>
+            </div>
+
+            <div class="build-order-wrap">
+              <aside class="build-order" aria-label="Build order">
+                <h2 class="build-order-title">Build order</h2>
+                <ol id="build-order-list" class="build-order-list"></ol>
+              </aside>
+              <p class="build-order-hint">Follow the nine numbered steps to build from scratch</p>
+            </div>
+          </div>
+        </section>
+
+        <article class="post-detail-body post-detail-body--longform junebug-context">
+          <section class="junebug-section">
+            <p class="section-title"><strong>What is Junebug?</strong></p>
+            <p>Junebug is a personal AI operating system — small, local, specialized agents instead of one giant chatbot doing everything.</p>
+          </section>
+
+          <section class="junebug-section">
+            <p class="section-title"><strong>Why Junebug?</strong></p>
+            <p>Most AI assistants run one massive general-purpose model for every task: expensive at scale, overpowered for most of what you actually ask it, and your data lives on someone else's servers. Junebug takes the opposite approach — light, local models, each one scoped to do a specific job well, running entirely on your own machine.</p>
+            <ul class="junebug-list">
+              <li><strong>Local-first.</strong> Your data never leaves your hardware.</li>
+              <li><strong>Specialized over generalized.</strong> A model built to edit your website doesn't need to also summarize physics papers — narrow scope means better results for less compute.</li>
+              <li><strong>You're always in the loop.</strong> Nothing external happens — no emails sent, no code pushed — without your explicit approval.</li>
+              <li><strong>Modular by design.</strong> Add a new agent for a new task without touching what already works.</li>
+            </ul>
+            <p>Built on OpenClaw.</p>
+          </section>
+
+          <section class="junebug-section">
+            <p class="section-title"><strong>Where Junebug is headed</strong></p>
+            <p>Junebug starts as one agent doing one job well. The architecture is built to grow from there.</p>
+            <ul class="junebug-list">
+              <li><strong>A roster of specialists.</strong> Beyond the first agent, future agents each handle a narrow domain — one for code, one for correspondence, one for whatever comes next — coordinated by a lightweight router instead of one model trying to be everything.</li>
+              <li><strong>Fine-tuned, not just prompted.</strong> As real usage surfaces what each agent is bad at, that becomes training data — small LoRA fine-tunes on top of small base models, so specialists get sharper over time instead of just bigger.</li>
+              <li><strong>Still entirely yours.</strong> More agents, more capability, same rule: it runs on your hardware, and nothing leaves the machine without you saying yes.</li>
+              <li><strong>A pattern, not just a project.</strong> The goal isn't just "my assistant" — it's a reusable harness anyone can point at their own machine, their own tools, their own data.</li>
+            </ul>
+            <p>Junebug isn't trying to out-scale the big labs. It's betting that a handful of small, well-trained specialists — under your control, on your own machine — beats one expensive generalist you don't fully trust.</p>
+          </section>
+        </article>
+
+        <footer class="post-detail-engagement" aria-label="Reactions and comments">
+          <div class="post-detail-likes">
+            <button
+              type="button"
+              class="post-detail-like-btn"
+              id="post-like-btn"
+              aria-label="Like this post"
+              aria-pressed="false"
+            >
+              <span class="post-detail-likes-icon" aria-hidden="true">♥</span>
+              <span class="post-detail-likes-count" id="post-likes-count">0</span>
+            </button>
+            <span class="post-detail-likes-note">likes</span>
+          </div>
+          <section class="post-detail-comments">
+            <h2 class="post-detail-comments-heading">Comments</h2>
+            <form class="post-detail-comment-form" id="post-comment-form">
+              <label for="post-comment-input" class="visually-hidden">Add a comment</label>
+              <textarea
+                id="post-comment-input"
+                name="comment"
+                rows="3"
+                maxlength="2000"
+                placeholder="Write a comment…"
+                required
+              ></textarea>
+              <button type="submit">Post comment</button>
+            </form>
+            <ul class="post-detail-comment-list" id="post-comment-list" aria-live="polite"></ul>
+            <p class="post-detail-comments-empty" id="post-comment-empty">No comments yet.</p>
+          </section>
+        </footer>
+      </main>
+    </div>
+
+    <div id="sheet-backdrop" class="sheet-backdrop hidden" hidden aria-hidden="true"></div>
+    <div id="panel-sheet" class="panel-sheet hidden" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <article id="panel-sheet-content" class="panel" aria-live="polite"></article>
+    </div>
+
+    <script>
+/* Junebug architecture explorer — static node data (no ES modules) */
+
+const NODES = {
+  "path1-pull": {
+    title: "Install Ollama",
+    subtitle: "Path 1 — pull a base model",
+    step: 1,
+    status: "active",
+    purpose: "Pull a local model into Ollama.",
+    why: "Junebug is local-first. Before any agent runs, you need a small model on your Mac that can route, triage, and handle lightweight tasks without cloud API costs.",
+    overview:
+      "Path 1 is the zero-GPU onboarding path. Pull a compact base model straight into Ollama on your Mac. This same model powers the Main Agent router and can back specialist agents before you invest in fine-tuning.",
+    setup: [
+      { n: "1.1", do: "Install Ollama via Homebrew (or download from https://ollama.com).", cmd: "brew install ollama" },
+      { n: "1.2", do: "Open the Ollama app once so the background daemon starts.", cmd: "open -a Ollama" },
+      { n: "1.3", do: "Pull the base model (~2GB, runs fine on CPU).", cmd: "ollama pull qwen2.5:3b" },
+      { n: "1.4", do: "Confirm qwen2.5:3b appears in the list.", cmd: "ollama list" },
+      { n: "1.5", do: "Smoke test — you should get a reply.", cmd: 'ollama run qwen2.5:3b "Hello"' },
+      { n: "1.6", do: "In step 2, point OpenClaw's Ollama provider at http://localhost:xxxx (default port 11434)." },
+    ],
+    troubleshooting: [
+      {
+        problem: "ollama: command not found",
+        fix: "Restart your shell after install, or run open -a Ollama from Applications.",
+      },
+      {
+        problem: "Model pulls but responses are empty",
+        fix: "Check Activity Monitor for memory pressure — close heavy apps or use a smaller quant.",
+      },
+    ],
+    related: ["local-model-main", "local-model-a", "junebug-runtime"],
+    next: "junebug-runtime",
+  },
+
+  "junebug-runtime": {
+    title: "Configure OpenClaw",
+    subtitle: "Junebug persistent runtime",
+    step: 2,
+    status: "active",
+    purpose: "Always-on OpenClaw process that hosts every agent.",
+    why: "A single chatbot script dies when your laptop sleeps. OpenClaw gives you a gateway with persistent sessions, tool registration, and skill files — the operating system layer Junebug is built on.",
+    overview:
+      "The beige container in the diagram is Junebug itself: a persistent OpenClaw runtime on your Mac. It owns the gateway, session store, tool manifests, and skill definitions. Every specialist agent is a session inside this process — not a separate daemon.",
+    setup: [
+      { n: "2.1", do: "Check Node.js version (OpenClaw needs 22.19+).", cmd: "node --version" },
+      { n: "2.2", do: "Install OpenClaw globally.", cmd: "npm install -g openclaw@latest" },
+      { n: "2.3", do: "Run the setup wizard — creates ~/.openclaw and installs the gateway service.", cmd: "openclaw onboard --install-daemon" },
+      { n: "2.4", do: "Confirm the gateway is running (localhost:xxxx, default port 18789).", cmd: "openclaw gateway status" },
+      { n: "2.5", do: "Edit ~/.openclaw/config.yaml — add Ollama, tools, and gateway settings (see example code).", cmd: "openclaw sessions list" },
+      { n: "2.6", do: "Add agent and skill YAML files under agents/ and skills/ in your workspace." },
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `# ~/.openclaw/config.yaml (simplified)
+gateway:
+  host: localhost
+  port: xxxx  # OpenClaw default: 18789
+
+providers:
+  ollama:
+    base_url: http://localhost:xxxx  # Ollama default: 11434
+    default_model: qwen2.5:3b
+
+tools:
+  - filesystem
+  - git
+  - request_approval`,
+      },
+    ],
+    troubleshooting: [
+      {
+        problem: "Gateway won't bind to port",
+        fix: "Check for stale processes: lsof -i :xxxx (OpenClaw default port: 18789) and kill orphaned openclaw instances.",
+      },
+      {
+        problem: "Sessions lost after restart",
+        fix: "Verify session store path is writable and included in your backup/sync exclude list.",
+      },
+    ],
+    related: ["main-agent", "telegram", "approval-gate"],
+    next: "telegram",
+  },
+
+  telegram: {
+    title: "Telegram",
+    subtitle: "Shared interface + approval channel",
+    step: 3,
+    status: "active",
+    purpose: "Mobile interface for tasks and approvals.",
+    why: "You need one channel for inbound work and outbound confirmations. Telegram is always in your pocket, supports photos for the website agent, and inline buttons map cleanly to approve/reject flows.",
+    overview:
+      "Every inbound message hits the Main Agent first. Every approval request from the gate returns here. Telegram is both the UX and the safety interlock — you never approve a deploy from a terminal you forgot was open.",
+    setup: [
+      { n: "3.1", do: "In Telegram, message @BotFather and send /newbot.", cmd: "# Telegram → @BotFather → /newbot" },
+      { n: "3.2", do: "Copy the bot token BotFather replies with.", cmd: 'export TELEGRAM_BOT_TOKEN="paste-your-token"' },
+      { n: "3.3", do: "Get your Telegram user id for the allowlist.", cmd: "# Telegram → @userinfobot" },
+      { n: "3.4", do: "Add bot_token and allowed_user_ids to ~/.openclaw/config.yaml (see example code)." },
+      { n: "3.5", do: "Enable the Telegram channel in OpenClaw.", cmd: "openclaw channel telegram enable" },
+      { n: "3.6", do: "Test in Telegram — open your bot, send /start, then send a message.", cmd: "# Telegram → your bot → /start → hello" },
+      { n: "3.7", do: "Confirm the gateway received it.", cmd: "openclaw gateway status" },
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `telegram:
+  bot_token: \${TELEGRAM_BOT_TOKEN}
+  allowed_user_ids:
+    - 123456789  # your Telegram user id`,
+      },
+    ],
+    troubleshooting: [
+      {
+        problem: "Bot doesn't respond",
+        fix: "Confirm gateway is running and token has no trailing whitespace.",
+      },
+      {
+        problem: "Someone else can message your bot",
+        fix: "Tighten allowed_user_ids — never run without an allowlist in production.",
+      },
+    ],
+    related: ["main-agent", "approval-gate", "website-dev-agent"],
+    next: "main-agent",
+  },
+
+  "main-agent": {
+    title: "Main Agent",
+    subtitle: "Router & orchestrator",
+    step: 4,
+    status: "active",
+    purpose: "Route inbound messages to the right specialist.",
+    why: "A single agent that writes code, checks email, and deploys websites will context-switch itself into failure. The Main Agent stays small: classify intent, pick a specialist, pass context, done.",
+    overview:
+      "The Main Agent is the air traffic controller. It uses the smallest local model (qwen2.5:3b) because it only needs to understand intent and call the delegate tool — not write HTML or draft emails.",
+    setup: [
+      { n: "4.1", do: "Create agents/main-agent.yaml — set model: router (alias from step 5; see example code)." },
+      { n: "4.2", do: "Write agents/main-agent.prompt.md — list specialists and when to delegate." },
+      { n: "4.3", do: "Register the delegate tool in OpenClaw (see example code)." },
+      { n: "4.4", do: "Set max_tokens: 512 in agents/main-agent.yaml." },
+      { n: "4.5", do: "Test routing.", cmd: "openclaw agent run main-agent --message 'update my homepage hero'" },
+      { n: "4.6", do: "Confirm a session was created.", cmd: "openclaw sessions list" },
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `# agents/main-agent.yaml
+id: main-agent
+model: router
+max_tokens: 512`,
+      },
+      {
+        language: "json",
+        snippet: `{
+  "tool": "delegate",
+  "parameters": {
+    "target_agent": "website-dev-agent",
+    "message": "<user message>",
+    "attachments": ["<photo file ids>"]
+  }
+}`,
+      },
+    ],
+    prompts: [
+      `You are the Main Agent for Junebug. For each inbound Telegram message:
+1. Classify intent: website, inbox, general, or unknown.
+2. If website-related → delegate to website-dev-agent with full message + attachments.
+3. If inbox-related → delegate to agent-n (when available).
+4. Otherwise answer briefly or ask one clarifying question.
+Never perform git operations or send messages yourself.`,
+    ],
+    troubleshooting: [
+      {
+        problem: "Wrong specialist picked",
+        fix: "Add negative examples to the routing prompt and log misfires for review.",
+      },
+      {
+        problem: "Router is slow",
+        fix: "Reduce max tokens and ensure Ollama isn't cold-starting on every message.",
+      },
+    ],
+    related: ["local-model-main", "website-dev-agent", "agent-n", "telegram"],
+    next: "local-model-main",
+  },
+
+  "local-model-main": {
+    title: "Local Model",
+    subtitle: "qwen2.5:3b — the router brain",
+    step: 5,
+    status: "active",
+    purpose: "Small local model for fast routing.",
+    why: "The router runs on every message. A 3B local model on CPU is fast enough for classification and keeps your interaction loop snappy even offline.",
+    overview:
+      "This is the orange box directly under the Main Agent. Same physical model as Path 1, different logical alias in OpenClaw. Isolating aliases lets you swap models per agent without rewiring the architecture.",
+    setup: [
+      { n: "5.1", do: "Check that qwen2.5:3b is available locally.", cmd: "ollama list" },
+      { n: "5.2", do: "If missing, pull it (same model as step 1).", cmd: "ollama pull qwen2.5:3b" },
+      { n: "5.3", do: "In ~/.openclaw/config.yaml, create alias router → qwen2.5:3b (see example code)." },
+      { n: "5.4", do: "In agents/main-agent.yaml, set model: router." },
+      { n: "5.5", do: "Set temperature to 0.2 on the router alias." },
+      { n: "5.6", do: "Smoke test classification.", cmd: 'ollama run qwen2.5:3b "Classify: swap hero image on my site"' },
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `# ~/.openclaw/config.yaml (providers section)
+providers:
+  ollama:
+    base_url: http://localhost:xxxx  # default: 11434
+    models:
+      router: qwen2.5:3b
+    parameters:
+      router:
+        temperature: 0.2`,
+      },
+    ],
+    troubleshooting: [
+      {
+        problem: "Main Agent hallucinates agent names",
+        fix: "Lower temperature and enumerate valid delegate targets in the system prompt.",
+      },
+    ],
+    related: ["main-agent", "path1-pull"],
+    next: "website-dev-agent",
+  },
+
+  "website-dev-agent": {
+    title: "Personal Website Agent",
+    subtitle: "Telegram photos → git commits",
+    step: 6,
+    status: "active",
+    purpose: "Handle site repo edits from Telegram.",
+    why: "Website work has a clear filesystem boundary, predictable tools (git, HTML/CSS), and a natural Telegram workflow (send a photo, say where it goes). This is the first specialist because it's high-value and low-risk to iterate on.",
+    overview:
+      "When you send a photo and say 'use this as the new hero', the Main Agent delegates here. This agent has filesystem + git tools scoped to your site repo and stops at the approval gate before any push.",
+    setup: [
+      { n: "6.1", do: "Create agents/website-dev-agent.yaml with filesystem, git, and request_approval tools (see example code)." },
+      { n: "6.2", do: "Set filesystem_roots to your site repo only — e.g. ~/foobaraguilar.github.io." },
+      { n: "6.3", do: "Set model: website-dev (alias from step 7)." },
+      { n: "6.4", do: "Write agents/website-dev-agent.prompt.md — repo layout, photo paths, never push (only request_approval)." },
+      { n: "6.5", do: "Confirm you can access the repo.", cmd: "cd ~/foobaraguilar.github.io && git status" },
+      { n: "6.6", do: "Test the agent from the terminal.", cmd: "openclaw agent run website-dev-agent --message 'change hero text to Hello'" },
+      { n: "6.7", do: "Test from Telegram — send a photo or small edit request; confirm a commit is staged without a push." },
+    ],
+    prompts: [
+      `You are the Personal Website Dev Agent. You own the site git repo.
+- Accept Telegram photos and save to the correct assets/ path.
+- Edit HTML/CSS to match the user's request.
+- Stage and commit changes with clear messages.
+- NEVER push or deploy — call request_approval instead.`,
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `agent:
+  id: website-dev-agent
+  model: website-dev
+  tools:
+    - filesystem
+    - git
+    - request_approval
+  filesystem_roots:
+    - ~/foobaraguilar.github.io`,
+      },
+    ],
+    troubleshooting: [
+      {
+        problem: "Agent edits wrong files",
+        fix: "Tighten filesystem_roots and add repo structure to the system prompt.",
+      },
+      {
+        problem: "Photos not attaching to context",
+        fix: "Verify Telegram media download path and delegate payload includes file refs.",
+      },
+    ],
+    related: ["local-model-a", "approval-gate", "git-deploy", "telegram"],
+    next: "local-model-a",
+  },
+
+  "local-model-a": {
+    title: "Local Model A",
+    subtitle: "Website specialist inference",
+    step: 7,
+    status: "active",
+    purpose: "Inference slot for the website agent.",
+    why: "If the website agent needs a bigger model later, you swap this alias without touching the Main Agent or future specialists.",
+    overview:
+      "Local model A is the inference endpoint for website work. Today it shares the Path 1 base model. Tomorrow it might be a coder-tuned 7B — the wiring stays the same.",
+    setup: [
+      { n: "7.1", do: "Separate alias for website work — same Ollama model as step 1 today, swappable later without touching the router." },
+      { n: "7.2", do: "Confirm the model is available.", cmd: "ollama list" },
+      { n: "7.3", do: "Pull qwen2.5:3b if it is not listed.", cmd: "ollama pull qwen2.5:3b" },
+      { n: "7.4", do: "Optional: pull a coder model for heavier HTML edits.", cmd: "ollama pull qwen2.5-coder:7b" },
+      { n: "7.5", do: "In ~/.openclaw/config.yaml, create alias website-dev → qwen2.5:3b (see example code)." },
+      { n: "7.6", do: "In agents/website-dev-agent.yaml, set model: website-dev." },
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `# ~/.openclaw/config.yaml (providers section)
+providers:
+  ollama:
+    models:
+      website-dev: qwen2.5:3b  # or qwen2.5-coder:7b`,
+      },
+    ],
+    related: ["website-dev-agent", "path1-pull", "approval-gate"],
+    next: "approval-gate",
+  },
+
+  "approval-gate": {
+    title: "Approval Gate",
+    subtitle: "Confirm via Telegram before exit",
+    step: 8,
+    status: "active",
+    purpose: "Block pushes and sends until you approve on Telegram.",
+    why: "Autonomous agents that push to production while you sleep are demos, not personal infrastructure. The approval gate is the trust layer that makes local-first agents safe to run 24/7.",
+    overview:
+      "Every specialist calls request_approval before git push, deploy hooks, or email send. The gate posts a summary + diff preview to Telegram and blocks until you approve or reject.",
+    setup: [
+      { n: "8.1", do: "Implement the request_approval tool in OpenClaw (see example code)." },
+      { n: "8.2", do: "When an agent calls it, post a summary and diff preview to Telegram with Approve / Reject buttons." },
+      { n: "8.3", do: "Block the agent session until you tap a button." },
+      { n: "8.4", do: "On approve, run the action. On reject, revert staged changes." },
+      { n: "8.5", do: "Test end-to-end — ask the website agent to deploy; you should get a Telegram approval prompt.", cmd: "# Telegram → approve or reject the deploy prompt" },
+    ],
+    code: [
+      {
+        language: "typescript",
+        snippet: `// Simplified approval flow
+async function requestApproval(payload: ApprovalPayload) {
+  const id = hash(payload);
+  await telegram.send(userId, formatDiff(payload), {
+    buttons: [
+      { text: "Approve", callback: \`approve:\${id}\` },
+      { text: "Reject", callback: \`reject:\${id}\` },
+    ],
+  });
+  return await waitForCallback(id, { timeout: "24h" });
+}`,
+      },
+    ],
+    troubleshooting: [
+      {
+        problem: "Double deploy on double-tap",
+        fix: "Track completed approval ids and ignore duplicate callbacks.",
+      },
+      {
+        problem: "Agent pushes without waiting",
+        fix: "Enforce approval at the tool layer — git push tool requires valid approval token.",
+      },
+    ],
+    related: ["telegram", "git-deploy", "action-n", "website-dev-agent"],
+    next: "git-deploy",
+  },
+
+  "git-deploy": {
+    title: "Git Repo → Site",
+    subtitle: "Auto-deploys on push",
+    step: 9,
+    status: "active",
+    purpose: "Push on approval; GitHub Pages deploys the rest.",
+    why: "The website agent's job ends at a clean commit. Approval triggers push. Your existing CI/Pages workflow handles the rest — no custom deploy scripts inside the agent.",
+    overview:
+      "On approval, Junebug pushes to your site repo. GitHub Actions builds and deploys to Pages. Optional: post the live URL back to Telegram when the workflow completes.",
+    setup: [
+      { n: "9.1", do: "Create a push-only deploy key for your site repo on GitHub (Settings → Deploy keys)." },
+      { n: "9.2", do: "In the approval handler, wire Approve → git push origin main (see example code)." },
+      { n: "9.3", do: "Confirm GitHub Actions deploys on push to main.", cmd: "gh run list --workflow=pages.yml" },
+      { n: "9.4", do: "On approval, the handler runs push — not manually.", cmd: "git push origin main  # only inside approval handler" },
+    ],
+    code: [
+      {
+        language: "yaml",
+        snippet: `# .github/workflows/pages.yml (existing pattern)
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/deploy-pages@v4`,
+      },
+    ],
+    troubleshooting: [
+      {
+        problem: "Push succeeds but site doesn't update",
+        fix: "Check GitHub Actions tab for workflow failures; verify Pages source branch.",
+      },
+    ],
+    related: ["approval-gate", "website-dev-agent"],
+    next: null,
+  },
+
+  "claude-code": {
+    title: "Claude Code",
+    subtitle: "Edits configs — dev-time only",
+    step: null,
+    status: "dev",
+    purpose: "Edit configs locally — not part of the live runtime.",
+    setup: [
+      { n: "—", do: "Keep Junebug config in a git-tracked directory." },
+      { n: "—", do: "Edit agents/ and skills/ with your editor." },
+      { n: "—", do: "Restart the gateway after changes (localhost:xxxx, default port 18789).", cmd: "openclaw gateway restart" },
+    ],
+    related: ["junebug-runtime", "main-agent", "website-dev-agent"],
+    next: null,
+  },
+
+  "agent-n": {
+    title: "Agent N",
+    subtitle: "Inbox heartbeat specialist",
+    step: null,
+    status: "planned",
+    purpose: "Next specialist — inbox automation (planned).",
+    setup: [
+      "Clone website-dev-agent: own session, tools, model slot.",
+      "Add IMAP poll and SMTP send behind the approval gate.",
+      "Add inbox keywords to the Main Agent routing prompt.",
+      "Bind to local-model-n when Path 2 is ready.",
+    ],
+    related: ["local-model-n", "approval-gate", "action-n", "main-agent"],
+    next: "path2-dataset",
+  },
+
+  "local-model-n": {
+    title: "Local Model N",
+    subtitle: "Fine-tuned adapter slot",
+    step: null,
+    status: "planned",
+    purpose: "Fine-tuned model slot for Agent N (planned).",
+    setup: [
+      "Complete the Path 2 pipeline.",
+      "ollama create agent-n -f Modelfile",
+      "Register alias agent-n in OpenClaw.",
+      "Bind only to agent-n.",
+    ],
+    related: ["agent-n", "path2-ollama-create"],
+    next: null,
+  },
+
+  "action-n": {
+    title: "Action N",
+    subtitle: "Draft, confirm, send",
+    step: null,
+    status: "planned",
+    purpose: "Outbound action after approval (planned).",
+    setup: [
+      "Wire the outbound tool for your specialist (e.g. SMTP send).",
+      "Draft with local-model-n.",
+      "Route execution through the approval gate.",
+    ],
+    related: ["agent-n", "approval-gate"],
+    next: null,
+  },
+
+  "path2-dataset": {
+    title: "Your Dataset",
+    subtitle: "Path 2 — step 1",
+    step: null,
+    status: "planned",
+    purpose: "Training data for a specialist model (planned).",
+    setup: [
+      "Collect labeled input/output pairs.",
+      "Format as JSONL with instruction, input, and output fields.",
+      "Hold out 10% for eval.",
+      "Upload to Colab or Kaggle.",
+    ],
+    related: ["path2-colab", "local-model-n"],
+    next: "path2-colab",
+  },
+
+  "path2-colab": {
+    title: "Colab / Kaggle",
+    subtitle: "Path 2 — LoRA fine-tune",
+    step: null,
+    status: "planned",
+    purpose: "LoRA fine-tune on free GPU (planned).",
+    setup: [
+      "Open the Junebug LoRA notebook template.",
+      "Mount or upload your JSONL dataset.",
+      "Train rank-16 LoRA on qwen2.5 base.",
+      "Export adapter files.",
+    ],
+    related: ["path2-dataset", "path2-ollama-create"],
+    next: "path2-ollama-create",
+  },
+
+  "path2-ollama-create": {
+    title: "ollama create",
+    subtitle: "Path 2 — import adapter",
+    step: null,
+    status: "planned",
+    purpose: "Import the fine-tuned adapter into Ollama (planned).",
+    setup: [
+      "Copy adapter files to ~/models/agent-n/.",
+      "Write a Modelfile with FROM and ADAPTER.",
+      "Run ollama create agent-n -f Modelfile.",
+      "Smoke test, then register in OpenClaw.",
+    ],
+    commands: ["ollama create agent-n -f Modelfile", "ollama run agent-n"],
+    code: [
+      {
+        language: "dockerfile",
+        snippet: `# Modelfile
+FROM qwen2.5:3b
+ADAPTER ./adapter
+PARAMETER temperature 0.7`,
+      },
+    ],
+    related: ["local-model-n", "path2-colab"],
+    next: "local-model-n",
+  },
+};
+
+const SETUP_ORDER = [
+  "path1-pull",
+  "junebug-runtime",
+  "telegram",
+  "main-agent",
+  "local-model-main",
+  "website-dev-agent",
+  "local-model-a",
+  "approval-gate",
+  "git-deploy",
+];
+
+const DIAGRAM_VIEW = { x: -36, y: 0, width: 1084, height: 750 };
+
+const DIAGRAM_LAYOUT = [
+  { id: "telegram", x: 392, y: 4, width: 240, height: 52, shape: "solid", accent: "green" },
+  { id: "claude-code", x: 862, y: 2, width: 148, height: 38, shape: "annotation", accent: "neutral" },
+  { id: "junebug-runtime", x: 140, y: 88, width: 728, height: 500, shape: "solid", accent: "neutral" },
+  { id: "main-agent", x: 362, y: 128, width: 300, height: 68, shape: "solid", accent: "purple" },
+  { id: "local-model-main", x: 362, y: 218, width: 300, height: 58, shape: "dashed", accent: "orange" },
+  { id: "website-dev-agent", x: 130, y: 318, width: 236, height: 68, shape: "solid", accent: "purple" },
+  { id: "agent-n", x: 642, y: 318, width: 236, height: 68, shape: "solid", accent: "purple" },
+  { id: "local-model-a", x: 130, y: 412, width: 236, height: 58, shape: "dashed", accent: "orange" },
+  { id: "local-model-n", x: 642, y: 412, width: 236, height: 58, shape: "dashed", accent: "orange" },
+  { id: "approval-gate", x: 362, y: 508, width: 300, height: 58, shape: "solid", accent: "green" },
+  { id: "git-deploy", x: 188, y: 668, width: 220, height: 58, shape: "solid", accent: "neutral" },
+  { id: "action-n", x: 642, y: 668, width: 180, height: 58, shape: "solid", accent: "neutral" },
+  { id: "path1-pull", x: -28, y: 328, width: 112, height: 76, shape: "dashed", accent: "green" },
+  { id: "path2-dataset", x: 922, y: 148, width: 118, height: 52, shape: "dashed", accent: "orange" },
+  { id: "path2-colab", x: 922, y: 218, width: 118, height: 68, shape: "dashed", accent: "orange" },
+  { id: "path2-ollama-create", x: 922, y: 304, width: 118, height: 68, shape: "dashed", accent: "orange" },
+];
+
+const DIAGRAM_CONNECTIONS = [
+  { id: "c-telegram-main", from: "telegram", to: "main-agent" },
+  { id: "c-main-brain", from: "main-agent", to: "local-model-main" },
+  { id: "c-main-website", from: "main-agent", to: "website-dev-agent", label: "delegate" },
+  { id: "c-main-agentn", from: "main-agent", to: "agent-n", label: "delegate", dashed: true },
+  { id: "c-website-modela", from: "website-dev-agent", to: "local-model-a" },
+  { id: "c-agentn-modeln", from: "agent-n", to: "local-model-n", dashed: true },
+  { id: "c-modela-approval", from: "local-model-a", to: "approval-gate" },
+  { id: "c-modeln-approval", from: "local-model-n", to: "approval-gate" },
+  { id: "c-approval-git", from: "approval-gate", to: "git-deploy", label: "on approval", labelOffset: -24 },
+  { id: "c-approval-email", from: "approval-gate", to: "action-n", label: "on approval", labelOffset: -24 },
+  { id: "c-path1-modela", from: "path1-pull", to: "local-model-a" },
+  { id: "c-path2-modeln", from: "path2-ollama-create", to: "local-model-n", dashed: true },
+  { id: "c-path2-chain-1", from: "path2-dataset", to: "path2-colab", dashed: true },
+  { id: "c-path2-chain-2", from: "path2-colab", to: "path2-ollama-create", dashed: true },
+];
+
+/* ==========================================================================
+   Junebug Architecture Explorer — app.js
+   Renders interactive SVG diagram + details panel from nodes.js data.
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  function highlightSyntax(lang, snippet) {
+    let s = esc(snippet);
+
+    if (lang === "bash") {
+      s = s.replace(/^(#.*)$/gm, '<span class="tok-cmt">$1</span>');
+      s = s.replace(/(&quot;[^&]*?&quot;|'[^']*?')/g, '<span class="tok-str">$1</span>');
+      return s;
+    }
+
+    if (lang === "yaml" || lang === "dockerfile") {
+      s = s.replace(/^(#.*)$/gm, '<span class="tok-cmt">$1</span>');
+      s = s.replace(/^(\s*)([A-Za-z0-9_.-]+)(:)/gm, '$1<span class="tok-key">$2</span>$3');
+      s = s.replace(/: ([^\n]+)/g, (match, val) => {
+        if (val.includes("tok-key")) return match;
+        return `: <span class="tok-val">${val}</span>`;
+      });
+      return s;
+    }
+
+    if (lang === "json") {
+      s = s.replace(/(&quot;[^&]*?&quot;)(\s*:)/g, '<span class="tok-key">$1</span>$2');
+      s = s.replace(/:\s*(&quot;[^&]*?&quot;)/g, ': <span class="tok-str">$1</span>');
+      s = s.replace(/:\s*(\d+)/g, ': <span class="tok-num">$1</span>');
+      return s;
+    }
+
+    if (lang === "typescript" || lang === "javascript") {
+      const kws =
+        /\b(async|await|const|function|return|if|else|import|export|from|new|typeof|interface|type)\b/g;
+      s = s.replace(/(\/\/.*$)/gm, '<span class="tok-cmt">$1</span>');
+      s = s.replace(kws, '<span class="tok-kw">$1</span>');
+      s = s.replace(/(&quot;[^&]*?&quot;|`[^`]*?`)/g, '<span class="tok-str">$1</span>');
+      s = s.replace(/\b([a-zA-Z_$][\w$]*)\s*(?=\()/g, '<span class="tok-fn">$1</span>');
+      return s;
+    }
+
+    return s;
+  }
+
+  function isDark() {
+    return document.body.classList.contains("theme-dark");
+  }
+
+  /** Minimal B&W palette — matches site light/dark theme */
+  function getPalette() {
+    if (isDark()) {
+      return {
+        nodeFill: "#1f1f1f",
+        nodeFillSelected: "#2a2a2a",
+        nodeStroke: "#f0f0f0",
+        nodeStrokeSelected: "#ffffff",
+        containerFill: "#161616",
+        containerStroke: "#f0f0f0",
+        text: "#f0f0f0",
+        textMuted: "#999",
+        stepNumber: "#ffffff",
+        conn: "#555",
+        connActive: "#e5e5e5",
+        grid: "rgba(255,255,255,0.06)",
+        bg: "#1a1a1a",
+      };
+    }
+    return {
+      nodeFill: "#ffffff",
+      nodeFillSelected: "#fafafa",
+      nodeStroke: "#111",
+      nodeStrokeSelected: "#000",
+      containerFill: "#fafafa",
+      containerStroke: "#111",
+      text: "#333",
+      textMuted: "#888",
+      stepNumber: "#111",
+      conn: "#ccc",
+      connActive: "#333",
+      grid: "rgba(0,0,0,0.05)",
+      bg: "#fff",
+    };
+  }
+
+  function getAccent(layout) {
+    const p = getPalette();
+    return {
+      fill: p.nodeFill,
+      stroke: p.nodeStroke,
+      selected: p.nodeFillSelected,
+      strokeSelected: p.nodeStrokeSelected,
+    };
+  }
+
+  let selectedId = null;
+
+  const svg = document.getElementById("diagram-svg");
+  const panelSheet = document.getElementById("panel-sheet");
+  const panelSheetContent = document.getElementById("panel-sheet-content");
+  const sheetBackdrop = document.getElementById("sheet-backdrop");
+  const buildOrderList = document.getElementById("build-order-list");
+
+  /* --------------------------------------------------------------------------
+     Theme
+     -------------------------------------------------------------------------- */
+  function initTheme() {
+    const toggle = document.getElementById("theme-toggle");
+    const favicon = document.getElementById("site-favicon");
+    const stored = localStorage.getItem("theme");
+
+    function setFavicon() {
+      if (!favicon) return;
+      favicon.setAttribute("href", "../assets/favicon.png");
+    }
+
+    function applyTheme(theme) {
+      const isDarkTheme = theme === "dark";
+      document.body.classList.toggle("theme-dark", isDarkTheme);
+      document.documentElement.classList.toggle("theme-dark", isDarkTheme);
+      setFavicon();
+      localStorage.setItem("theme", isDarkTheme ? "dark" : "light");
+      renderDiagram();
+      if (selectedId) renderPanel(selectedId);
+    }
+
+    if (stored === "dark") {
+      applyTheme("dark");
+    } else {
+      applyTheme("light");
+    }
+
+    toggle?.addEventListener("click", () => {
+      const next = document.body.classList.contains("theme-dark") ? "light" : "dark";
+      applyTheme(next);
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     Diagram helpers
+     -------------------------------------------------------------------------- */
+  const DIAGRAM_BOX_W_SCALE = 1.12;
+  const DIAGRAM_BOX_H_SCALE = 1.1;
+
+  function layoutById(id) {
+    const n = DIAGRAM_LAYOUT.find((node) => node.id === id);
+    if (!n) return null;
+    const dw = n.width * (DIAGRAM_BOX_W_SCALE - 1);
+    const dh = n.height * (DIAGRAM_BOX_H_SCALE - 1);
+    return {
+      ...n,
+      x: n.x - dw / 2,
+      y: n.y - dh / 2,
+      width: n.width * DIAGRAM_BOX_W_SCALE,
+      height: n.height * DIAGRAM_BOX_H_SCALE,
+    };
+  }
+
+  function nodeCenter(id) {
+    const n = layoutById(id);
+    if (!n) return null;
+    return { x: n.x + n.width / 2, y: n.y + n.height / 2 };
+  }
+
+  function connectionPath(from, to) {
+    const a = nodeCenter(from);
+    const b = nodeCenter(to);
+    if (!a || !b) return "";
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    if (Math.abs(dy) > Math.abs(dx)) {
+      const midY = a.y + dy * 0.5;
+      return `M ${a.x} ${a.y} L ${a.x} ${midY} L ${b.x} ${midY} L ${b.x} ${b.y}`;
+    }
+    const midX = a.x + dx * 0.5;
+    return `M ${a.x} ${a.y} L ${midX} ${a.y} L ${midX} ${b.y} L ${b.x} ${b.y}`;
+  }
+
+  function relatedIds(nodeId) {
+    const ids = new Set();
+    DIAGRAM_CONNECTIONS.forEach((c) => {
+      if (c.from === nodeId || c.to === nodeId) {
+        ids.add(c.from);
+        ids.add(c.to);
+      }
+    });
+    ids.delete(nodeId);
+    return ids;
+  }
+
+  function isConnectionActive(conn) {
+    if (!selectedId) return false;
+    const rel = relatedIds(selectedId);
+    return (
+      conn.from === selectedId ||
+      conn.to === selectedId ||
+      rel.has(conn.from) ||
+      rel.has(conn.to)
+    );
+  }
+
+  function isNodeDimmed(id) {
+    if (!selectedId || id === selectedId) return false;
+    return !relatedIds(selectedId).has(id);
+  }
+
+  function nodeLabel(id) {
+    const data = NODES[id];
+    if (!data) {
+      if (id === "junebug-runtime") return { title: "Junebug", sub: "OpenClaw runtime" };
+      return { title: id, sub: "" };
+    }
+    if (id === "path1-pull") return { title: "ollama pull", sub: "qwen2.5:3b" };
+    return {
+      title: data.title.length > 28 ? data.title.slice(0, 26) + "…" : data.title,
+      sub: data.subtitle.length > 34 ? data.subtitle.slice(0, 32) + "…" : data.subtitle,
+    };
+  }
+
+  /* --------------------------------------------------------------------------
+     SVG rendering
+     -------------------------------------------------------------------------- */
+  function renderDiagram() {
+    if (!svg) return;
+    svg.innerHTML = "";
+    const p = getPalette();
+    const ns = "http://www.w3.org/2000/svg";
+
+    svg.appendChild(defs(ns, p));
+
+    const bg = el(ns, "rect", {
+      x: DIAGRAM_VIEW.x,
+      y: DIAGRAM_VIEW.y,
+      width: DIAGRAM_VIEW.width,
+      height: DIAGRAM_VIEW.height,
+      fill: p.bg,
+    });
+    const grid = el(ns, "rect", {
+      x: DIAGRAM_VIEW.x,
+      y: DIAGRAM_VIEW.y,
+      width: DIAGRAM_VIEW.width,
+      height: DIAGRAM_VIEW.height,
+      fill: "url(#jb-dot-grid)",
+      opacity: "0.8",
+    });
+    svg.appendChild(bg);
+    svg.appendChild(grid);
+
+    svg.appendChild(renderContainer(ns));
+
+    // Connections
+    const connGroup = el(ns, "g", { id: "connections" });
+    DIAGRAM_CONNECTIONS.forEach((conn) => {
+      const path = connectionPath(conn.from, conn.to);
+      if (!path) return;
+        const active = isConnectionActive(conn);
+        const pathEl = el(ns, "path", {
+          d: path,
+          fill: "none",
+          stroke: active ? p.connActive : p.conn,
+          "stroke-width": active ? "2" : "1.5",
+          "stroke-dasharray": conn.dashed ? "6 4" : null,
+          class:
+            "diagram-conn" +
+            (active ? " diagram-conn--active" : "") +
+            (selectedId && !active ? " diagram-conn--dim" : ""),
+        });
+        connGroup.appendChild(pathEl);
+      if (conn.label) {
+        const parts = path.match(/[\d.]+/g).map(Number);
+        const lx = (parts[0] + parts[parts.length - 2]) / 2;
+        const ly = (parts[1] + parts[parts.length - 1]) / 2 + (conn.labelOffset ?? -6);
+        text(ns, conn.label, lx, ly, "diagram-conn-label", connGroup, p.textMuted);
+      }
+    });
+    svg.appendChild(connGroup);
+
+    // Interactive nodes (skip container — handled separately)
+    const nodeGroup = el(ns, "g", { id: "nodes" });
+    DIAGRAM_LAYOUT.filter((l) => l.id !== "junebug-runtime").forEach((l) => {
+      nodeGroup.appendChild(renderNode(ns, layoutById(l.id)));
+    });
+    svg.appendChild(nodeGroup);
+
+    renderPathLabels(ns, p);
+    svg.appendChild(renderClaudeDevArrow(ns));
+
+    // Clickable container overlay
+    svg.appendChild(renderContainerHit(ns));
+  }
+
+  function defs(ns, p) {
+    const d = el(ns, "defs");
+    d.innerHTML = `
+      <pattern id="jb-dot-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+        <circle cx="1" cy="1" r="0.75" fill="${isDark() ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"}"/>
+      </pattern>
+      <marker id="jb-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8" fill="${p.textMuted}"/>
+      </marker>
+    `;
+    return d;
+  }
+
+  function renderPathLabels(ns, p) {
+    const g = el(ns, "g", { class: "diagram-path-labels" });
+    const p1 = layoutById("path1-pull");
+    const p2 = layoutById("path2-dataset");
+    const cx1 = p1.x + p1.width / 2;
+    const cx2 = p2.x + p2.width / 2;
+    text(ns, "Path 1", cx1, p1.y - 22, "diagram-label", g, p.textMuted);
+    text(ns, "Pull base model", cx1, p1.y - 9, "diagram-sublabel", g, p.textMuted);
+    text(ns, "Path 2", cx2, p2.y - 22, "diagram-label", g, p.textMuted);
+    text(ns, "Train with data", cx2, p2.y - 9, "diagram-sublabel", g, p.textMuted);
+    svg.appendChild(g);
+  }
+
+  function renderClaudeDevArrow(ns) {
+    const claude = layoutById("claude-code");
+    const jb = layoutById("junebug-runtime");
+    const p = getPalette();
+    const x1 = claude.x + claude.width / 2;
+    const y1 = claude.y + claude.height + 4;
+    const x2 = jb.x + jb.width - 18;
+    const y2 = jb.y + 1;
+    const d = `M ${x1} ${y1} L ${x1} ${y2} L ${x2} ${y2}`;
+    const path = el(ns, "path", {
+      d,
+      fill: "none",
+      stroke: p.textMuted,
+      "stroke-width": 1.25,
+      "stroke-dasharray": "5 4",
+      "marker-end": "url(#jb-arrow)",
+      class: "diagram-conn diagram-conn--dev",
+    });
+    return path;
+  }
+
+  function renderContainer(ns) {
+    const l = layoutById("junebug-runtime");
+    const p = getPalette();
+    const g = el(ns, "g", { class: "diagram-container" });
+    const r = el(ns, "rect", {
+      x: l.x, y: l.y, width: l.width, height: l.height, rx: 18,
+      fill: p.containerFill, stroke: p.containerStroke, "stroke-width": 1.25,
+    });
+    g.appendChild(r);
+    if (NODES["junebug-runtime"]?.step) {
+      const step = NODES["junebug-runtime"].step;
+      const headerY = l.y + 28;
+      const labelX = l.x + 22;
+      const t1 = text(ns, "Junebug", labelX, headerY, "container-title", g, p.text);
+      t1.setAttribute("text-anchor", "start");
+      const t2 = text(ns, "Runs persistently · Built on OpenClaw", labelX, headerY + 18, "container-sub", g, p.textMuted);
+      t2.setAttribute("text-anchor", "start");
+      g.appendChild(stepNumber(ns, l.x + l.width - 28, headerY, step, "end"));
+    } else {
+      const labelX = l.x + 22;
+      const t1 = text(ns, "Junebug", labelX, l.y + 28, "container-title", g, p.text);
+      t1.setAttribute("text-anchor", "start");
+      const t2 = text(ns, "Runs persistently · Built on OpenClaw", labelX, l.y + 46, "container-sub", g, p.textMuted);
+      t2.setAttribute("text-anchor", "start");
+    }
+    return g;
+  }
+
+  function renderContainerHit(ns) {
+    const l = layoutById("junebug-runtime");
+    const p = getPalette();
+    const selected = selectedId === "junebug-runtime";
+    const g = el(ns, "g", {
+      class:
+        "diagram-node diagram-node--container" +
+        (selected ? " is-selected" : "") +
+        (isNodeDimmed("junebug-runtime") ? " is-dimmed" : ""),
+      "data-id": "junebug-runtime",
+      role: "button",
+      tabindex: "0",
+    });
+    const r = el(ns, "rect", {
+      x: l.x, y: l.y, width: l.width, height: l.height, rx: 18,
+      fill: "transparent",
+      stroke: selected ? p.nodeStrokeSelected : "transparent",
+      "stroke-width": 1.25,
+    });
+    g.appendChild(r);
+    bindNodeEvents(g, "junebug-runtime");
+    return g;
+  }
+
+  function renderNode(ns, layout) {
+    const data = NODES[layout.id];
+    const pal = getPalette();
+    const accent = getAccent(layout);
+    const selected = selectedId === layout.id;
+    const dimmed = isNodeDimmed(layout.id);
+    const dashed = layout.shape === "dashed";
+    const labels = nodeLabel(layout.id);
+
+    const g = el(ns, "g", {
+      class:
+        "diagram-node" +
+        (selected ? " is-selected" : "") +
+        (dimmed ? " is-dimmed" : "") +
+        (dashed ? " is-planned" : "") +
+        (layout.shape === "annotation" ? " is-annotation" : ""),
+      "data-id": layout.id,
+      role: "button",
+      tabindex: "0",
+      "aria-label": (data?.title || layout.id) + " — click for details",
+    });
+
+    if (layout.shape === "annotation") {
+      const r = el(ns, "rect", {
+        x: layout.x,
+        y: layout.y,
+        width: layout.width,
+        height: layout.height,
+        rx: 6,
+        fill: selected ? accent.selected : accent.fill,
+        stroke: pal.nodeStroke,
+        "stroke-width": 1.25,
+        "stroke-dasharray": "5 3",
+        class: "diagram-node-rect diagram-node-rect--annotation",
+      });
+      g.appendChild(r);
+      text(ns, "Claude Code", layout.x + layout.width / 2, layout.y + 15, "annotation-title", g, pal.text);
+      text(ns, "dev-time edits", layout.x + layout.width / 2, layout.y + 28, "annotation-sub", g, pal.textMuted);
+    } else {
+      const r = el(ns, "rect", {
+        x: layout.x, y: layout.y, width: layout.width, height: layout.height, rx: 10,
+        fill: selected ? accent.selected : accent.fill,
+        stroke: selected ? pal.nodeStrokeSelected : pal.nodeStroke,
+        "stroke-width": selected ? 1.75 : 1.25,
+        "stroke-dasharray": dashed ? "6 4" : null,
+        class: "diagram-node-rect",
+      });
+      g.appendChild(r);
+
+      if (data?.step) {
+        g.appendChild(stepNumber(ns, layout.x + 10, layout.y + 20, data.step));
+      }
+
+      text(ns, labels.title, layout.x + layout.width / 2, layout.y + layout.height / 2 - 6, "node-title", g, pal.text);
+      if (labels.sub) {
+        text(ns, labels.sub, layout.x + layout.width / 2, layout.y + layout.height / 2 + 12, "node-sub", g, pal.textMuted);
+      }
+    }
+
+    bindNodeEvents(g, layout.id);
+    return g;
+  }
+
+  function stepNumber(ns, x, y, step, anchor) {
+    const pal = getPalette();
+    const t = el(ns, "text", {
+      class: "step-number",
+      x,
+      y,
+      "text-anchor": anchor || "start",
+      fill: pal.stepNumber,
+    });
+    t.textContent = String(step);
+    return t;
+  }
+
+  function text(ns, content, x, y, className, parent, fill) {
+    const t = el(ns, "text", { x, y, class: className });
+    if (fill) t.setAttribute("fill", fill);
+    t.setAttribute("text-anchor", "middle");
+    t.textContent = content;
+    (parent || svg).appendChild(t);
+    return t;
+  }
+
+  function el(ns, tag, attrs) {
+    const e = document.createElementNS(ns, tag);
+    if (attrs) {
+      Object.entries(attrs).forEach(([k, v]) => {
+        if (v != null) e.setAttribute(k, String(v));
+      });
+    }
+    return e;
+  }
+
+  function bindNodeEvents(g, id) {
+    g.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selectNode(id);
+    });
+    g.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        selectNode(id);
+      }
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     Panel rendering
+     -------------------------------------------------------------------------- */
+  function selectNode(id) {
+    if (!NODES[id] && id !== "junebug-runtime") return;
+    selectedId = id;
+    renderDiagram();
+    renderPanel(id);
+    highlightBuildOrder(id);
+    openSheet();
+  }
+
+  function clearSelection() {
+    selectedId = null;
+    renderDiagram();
+    closeSheet();
+    highlightBuildOrder(null);
+  }
+
+  function renderPanel(id) {
+    const node = NODES[id];
+    if (!node || !panelSheetContent) return;
+
+    panelSheetContent.innerHTML = buildPanelHTML(node);
+    bindPanelActions(panelSheetContent);
+  }
+
+  function renderSetupSteps(setup) {
+    return setup
+      .map((item) => {
+        if (typeof item === "string") {
+          return `<li>${esc(item)}</li>`;
+        }
+        const { do: doText, cmd } = item;
+        let html = "<li>";
+        html += esc(doText);
+        if (cmd) {
+          html += `<pre class="step-cmd"><code>${esc(cmd)}</code></pre>`;
+        }
+        html += "</li>";
+        return html;
+      })
+      .join("");
+  }
+
+  function buildPanelHTML(node) {
+    let html = `
+      <header class="panel-header">
+        <h2 class="panel-title" id="sheet-title">${esc(node.title)}</h2>
+        <p class="panel-subtitle">${esc(node.subtitle)}</p>
+        <button type="button" class="panel-close" aria-label="Close">×</button>
+      </header>
+      <div class="panel-body">
+        <section class="panel-section">
+          <p>${esc(node.purpose)}</p>
+        </section>
+        <section class="panel-section">
+          <h3>Setup</h3>
+          <ol class="panel-steps">${renderSetupSteps(node.setup)}</ol>
+        </section>`;
+
+    if (node.commands?.length) {
+      html += `
+        <section class="panel-section">
+          <h3>Commands</h3>
+          ${codeBlock("bash", node.commands.join("\n"))}
+        </section>`;
+    }
+
+    if (node.code?.length) {
+      html += `<section class="panel-section"><h3>Example code</h3>`;
+      node.code.forEach((block) => {
+        html += codeBlock(block.language, block.snippet);
+      });
+      html += `</section>`;
+    }
+
+    if (node.prompts?.length) {
+      html += `
+        <section class="panel-section">
+          <h3>Example prompt</h3>
+          <pre class="panel-prompt">${esc(node.prompts[0])}</pre>
+        </section>`;
+    }
+
+    if (node.next && NODES[node.next]) {
+      html += `
+        <section class="panel-section panel-next">
+          <button type="button" class="next-btn" data-goto="${node.next}">
+            <span>Next: ${esc(NODES[node.next].title)}</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </section>`;
+    }
+
+    html += `</div>`;
+    return html;
+  }
+
+  function codeBlock(lang, snippet) {
+    const id = "cb-" + Math.random().toString(36).slice(2, 9);
+    return `
+      <div class="code-block">
+        <div class="code-block-header">
+          <span>${esc(lang)}</span>
+          <button type="button" class="copy-btn" data-copy-target="${id}">Copy</button>
+        </div>
+        <pre id="${id}"><code>${highlightSyntax(lang, snippet)}</code></pre>
+      </div>`;
+  }
+
+  function bindPanelActions(root) {
+    root.querySelectorAll("[data-goto]").forEach((btn) => {
+      btn.addEventListener("click", () => selectNode(btn.getAttribute("data-goto")));
+    });
+    root.querySelectorAll(".copy-btn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const target = document.getElementById(btn.getAttribute("data-copy-target"));
+        if (!target) return;
+        await navigator.clipboard.writeText(target.textContent || "");
+        btn.textContent = "Copied";
+        setTimeout(() => { btn.textContent = "Copy"; }, 2000);
+      });
+    });
+    root.querySelector(".panel-close")?.addEventListener("click", clearSelection);
+  }
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /* --------------------------------------------------------------------------
+     Build order sidebar
+     -------------------------------------------------------------------------- */
+  function renderBuildOrder() {
+    if (!buildOrderList) return;
+    buildOrderList.innerHTML = SETUP_ORDER.map((id) => {
+      const n = NODES[id];
+      if (!n) return "";
+      return `
+        <li>
+          <button type="button" class="build-order-btn" data-id="${id}">
+            <span class="build-order-step">${n.step}</span>
+            <span>${esc(n.title)}</span>
+          </button>
+        </li>`;
+    }).join("");
+
+    buildOrderList.querySelectorAll(".build-order-btn").forEach((btn) => {
+      btn.addEventListener("click", () => selectNode(btn.getAttribute("data-id")));
+    });
+  }
+
+  function highlightBuildOrder(id) {
+    buildOrderList?.querySelectorAll(".build-order-btn").forEach((btn) => {
+      btn.classList.toggle("is-active", btn.getAttribute("data-id") === id);
+    });
+  }
+
+  /* --------------------------------------------------------------------------
+     Modal
+     -------------------------------------------------------------------------- */
+  function openSheet() {
+    panelSheet?.classList.remove("hidden");
+    sheetBackdrop?.classList.remove("hidden");
+    panelSheet?.removeAttribute("hidden");
+    sheetBackdrop?.removeAttribute("hidden");
+    document.body.classList.add("sheet-open");
+  }
+
+  function closeSheet() {
+    panelSheet?.classList.add("hidden");
+    sheetBackdrop?.classList.add("hidden");
+    panelSheet?.setAttribute("hidden", "");
+    sheetBackdrop?.setAttribute("hidden", "");
+    document.body.classList.remove("sheet-open");
+  }
+
+  sheetBackdrop?.addEventListener("click", clearSelection);
+
+  /* --------------------------------------------------------------------------
+     Keyboard
+     -------------------------------------------------------------------------- */
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (!panelSheet?.classList.contains("hidden")) clearSelection();
+    }
+    if (!selectedId && e.key >= "1" && e.key <= "9") {
+      const id = SETUP_ORDER[parseInt(e.key, 10) - 1];
+      if (id) selectNode(id);
+    }
+  });
+
+  /* --------------------------------------------------------------------------
+     Init
+     -------------------------------------------------------------------------- */
+  initTheme();
+  renderBuildOrder();
+  renderDiagram();
+})();
+
+    </script>
+    <script src="../assets/post-interactions.js" defer></script>
+  </body>
+</html>

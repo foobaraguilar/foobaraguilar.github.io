@@ -1003,7 +1003,7 @@ body.theme-dark .about-me-photo-caption {
   position: relative;
 }
 
-/* Post + project detail pages (posts/*.html, projects/*.html) */
+/* Post + project detail pages (blogs/*.html, white-papers/*.html) */
 .post-detail .simple-header {
   /* Centered column, left-aligned copy (Substack-style) */
   text-align: left;
@@ -1484,7 +1484,7 @@ body.theme-dark .project-thumb-circle::before {
 /* Lessons / ego+exo research — same hero image as project page */
 .project-thumb-lessons-hero {
   background-color: #1a1a1a;
-  background-image: url('projects/images/lessons-egocentric-data-ops.png');
+  background-image: url('white-papers/images/lessons-egocentric-data-ops.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -1497,7 +1497,7 @@ body.theme-dark .project-thumb-circle::before {
 /* Coding and Coffee project card — same logo as project page hero */
 .project-thumb-cc-photo {
   background-color: #ffffff;
-  background-image: url('projects/images/coding-and-coffee/logo-final-light.png');
+  background-image: url('white-papers/images/coding-and-coffee/logo-final-light.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
@@ -1516,6 +1516,24 @@ body.theme-dark .project-thumb-lessons-hero {
   border-color: #444;
 }
 
+/* Junebug white paper — beetle icon */
+.project-thumb-junebug {
+  background-color: #ffffff;
+  background-image: url('white-papers/images/junebug/junebug-icon.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 42%;
+}
+
+.project-thumb-junebug::before {
+  display: none;
+}
+
+body.theme-dark .project-thumb-junebug {
+  background-color: #ffffff;
+  border-color: #444;
+}
+
 .project-body {
   display: flex;
   flex-direction: column;
@@ -1531,6 +1549,11 @@ body.theme-dark .project-thumb-lessons-hero {
   font-size: 13px;
   margin: 0;
   color: #555;
+}
+
+.project-excerpt-pad {
+  display: inline-block;
+  min-height: 1.35em;
 }
 
 .journal-layout {

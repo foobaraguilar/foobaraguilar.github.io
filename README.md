@@ -19,10 +19,10 @@ Single-page shell in `index.html` with a sidebar that swaps between four panels.
 ```
 index.html          Home — tabs, wall animation, loaders
 style.css           Everything visual (light/dark theme too)
-posts/              Blog detail pages
-projects/           White paper detail pages
+blogs/              Blog detail pages
+white-papers/       White paper detail pages
 resume/             Resume (embedded into the home page)
-about_me/images/    Wall photo pool
+wall/images/        Wall photo pool
 assets/             Shared favicon, icons, post-interactions.js
 ```
 
@@ -34,7 +34,7 @@ assets/             Shared favicon, icons, post-interactions.js
 
 **Resume** — `resume/resume.html` is fetched and inlined into the resume panel so one file works both embedded and standalone.
 
-**Detail pages** (`posts/*.html`, `projects/*.html`) — Copy an existing one. Shared layout: `body.post-detail`, header, article body, optional likes/comments footer. Styles live under `.post-detail` in `style.css`.
+**Detail pages** (`blogs/*.html`, `white-papers/*.html`) — Copy an existing one. Shared layout: `body.post-detail`, header, article body, optional likes/comments footer. Styles live under `.post-detail` in `style.css`.
 
 **Theme** — `#theme-toggle` flips `theme-dark` on `body`/`html`, saved to `localStorage`. Avatar swaps with the theme.
 
@@ -44,9 +44,9 @@ assets/             Shared favicon, icons, post-interactions.js
 
 ### Adding content
 
-- **New blog post:** copy a `posts/*.html`, edit it, add the path to `postFiles` in `index.html`.
-- **New white paper:** copy a `projects/*.html`, add a card in the projects panel in `index.html`.
-- **New wall photo:** drop it in `about_me/images/` and add an entry to the image array in the wall script.
+- **New blog post:** copy a `blogs/*.html`, edit it, add the path to `postFiles` in `index.html`.
+- **New white paper:** copy a `white-papers/*.html`, add a card in the projects panel in `index.html`.
+- **New wall photo:** drop it in `wall/images/` and add an entry to the image array in the wall script.
 
 ## Run locally
 
