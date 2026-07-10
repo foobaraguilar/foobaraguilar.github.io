@@ -46,7 +46,7 @@
   border: 1px solid #111;
   border-radius: 8px;
   background: #fff;
-  overflow: hidden;
+  overflow: visible;
 }
 
 body.theme-dark .diagram-card {
@@ -57,13 +57,14 @@ body.theme-dark .diagram-card {
 .diagram-scroll {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 12px 8px;
+  padding: 16px 24px 16px 12px;
 }
 
 #diagram-svg {
   display: block;
   width: 100%;
-  min-width: 640px;
+  max-width: 100%;
+  min-width: 0;
   height: auto;
   margin: 0 auto;
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -466,6 +467,24 @@ body.theme-dark .panel-prompt {
   color: #bbb;
 }
 
+.panel-note {
+  margin: 0;
+  padding: 10px 12px;
+  border-top: 1px dashed #ccc;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #666;
+}
+
+body.theme-dark .panel-note {
+  border-top-color: #555;
+  color: #aaa;
+}
+
+body.theme-dark .panel-note strong {
+  color: #e5e5e5;
+}
+
 /* Code blocks */
 .code-block {
   margin-bottom: 10px;
@@ -741,7 +760,7 @@ body.sheet-open {
             <div class="diagram-stage">
               <div class="diagram-card">
                 <div id="diagram-scroll" class="diagram-scroll">
-                  <svg id="diagram-svg" viewBox="-36 0 1084 750" role="img" aria-label="Junebug architecture diagram"></svg>
+                  <svg id="diagram-svg" viewBox="0 0 1080 750" role="img" aria-label="Junebug architecture diagram"></svg>
                 </div>
               </div>
               <p class="diagram-hint">Interactive Diagram: Click Nodes</p>
@@ -1226,16 +1245,41 @@ jobs:
 
   "claude-code": {
     title: "Claude Code",
-    subtitle: "Edits configs — dev-time only",
+    subtitle: "Dev-time editor for Junebug configs",
     step: null,
     status: "dev",
-    purpose: "Edit configs locally — not part of the live runtime.",
+    purpose: "Claude Code is how you build and change Junebug — outside the live runtime. Edit agent prompts, skills, and OpenClaw config on your Mac, then restart the gateway. Production traffic never depends on this IDE being open.",
     setup: [
-      { n: "—", do: "Keep Junebug config in a git-tracked directory." },
-      { n: "—", do: "Edit agents/ and skills/ with your editor." },
-      { n: "—", do: "Restart the gateway after changes (localhost:xxxx, default port 18789).", cmd: "openclaw gateway restart" },
+      { do: "Install Claude Code (macOS / Linux).", cmd: "curl -fsSL https://claude.ai/install.sh | bash" },
+      { do: "Or install with Homebrew.", cmd: "brew install --cask claude-code" },
+      { do: "Confirm it installed.", cmd: "claude --version" },
+      { do: "Optional health check.", cmd: "claude doctor" },
+      { do: "Start Claude Code and log in (Pro, Max, Team, Enterprise, or Console account).", cmd: "claude" },
+      { do: "Open your OpenClaw / Junebug workspace.", cmd: "cd ~/.openclaw" },
+      { do: "Add a CLAUDE.md so every session knows the layout: agents/, skills/, OpenClaw paths, what each agent owns, and that nothing pushes or sends without the approval gate." },
+      { do: "Edit configs in-session — e.g. agents/main-agent.prompt.md, agents/website-dev-agent.yaml, skills/." },
+      { do: "Keep the workspace in git so changes are tracked and reversible." },
+      { do: "Restart the gateway after edits so Junebug reloads them (localhost:xxxx, default port 18789).", cmd: "openclaw gateway restart" },
     ],
-    related: ["junebug-runtime", "main-agent", "website-dev-agent"],
+    note: "Optional — point Claude Code at a local Ollama model instead of Anthropic (see Local Model below). Set ANTHROPIC_BASE_URL to http://localhost:xxxx (Ollama default port 11434), ANTHROPIC_AUTH_TOKEN=ollama, clear ANTHROPIC_API_KEY, then run claude --model qwen2.5-coder:14b. Use a coding model with a large context window (~32k–64k+).",
+    related: ["claude-local-model", "junebug-runtime", "main-agent", "website-dev-agent"],
+    next: null,
+  },
+
+  "claude-local-model": {
+    title: "Local Model",
+    subtitle: "Optional Claude Code backend via Ollama",
+    step: null,
+    status: "dev",
+    purpose: "Run Claude Code against a local coding model on Ollama — same local-first stack as Junebug, no Anthropic API calls for edits.",
+    setup: [
+      { do: "Pull a coding model (needs enough RAM; 14B is a solid default).", cmd: "ollama pull qwen2.5-coder:14b" },
+      { do: "Confirm it is available.", cmd: "ollama list" },
+      { do: "Point Claude Code at Ollama (default port 11434).", cmd: 'export ANTHROPIC_BASE_URL="http://localhost:xxxx"\nexport ANTHROPIC_AUTH_TOKEN="ollama"\nexport ANTHROPIC_API_KEY=""' },
+      { do: "Launch Claude Code on that model.", cmd: "claude --model qwen2.5-coder:14b" },
+      { do: "Use a large context window (~32k–64k+) — small contexts break multi-file agentic edits." },
+    ],
+    related: ["claude-code", "path1-pull"],
     next: null,
   },
 
@@ -1357,26 +1401,101 @@ const SETUP_ORDER = [
   "git-deploy",
 ];
 
-const DIAGRAM_VIEW = { x: -36, y: 0, width: 1084, height: 750 };
+/* Layout is computed — sizes + relative structure only (no absolute x for side rails) */
+const DIAGRAM_LAYOUT_SPEC = {
+  padX: 28,
+  padY: 8,
+  gutter: 28,
+  leftRailWidth: 118,
+  rightRailWidth: 124,
+  junebug: { width: 700, height: 530, y: 88 },
+  nodes: {
+    telegram: { width: 240, height: 52, y: 4, shape: "solid", accent: "green", align: "center" },
+    "claude-code": { width: 124, height: 48, y: 100, shape: "solid", accent: "neutral", rail: "right" },
+    "claude-local-model": { width: 124, height: 48, y: 178, shape: "dashed", accent: "orange", rail: "right" },
+    "junebug-runtime": { shape: "solid", accent: "neutral", rail: "container" },
+    "main-agent": { width: 300, height: 68, y: 158, shape: "solid", accent: "purple", align: "center" },
+    "local-model-main": { width: 300, height: 58, y: 248, shape: "dashed", accent: "orange", align: "center" },
+    "website-dev-agent": { width: 220, height: 68, y: 348, shape: "solid", accent: "purple", col: "left" },
+    "agent-n": { width: 220, height: 68, y: 348, shape: "solid", accent: "purple", col: "right" },
+    "local-model-a": { width: 220, height: 58, y: 442, shape: "dashed", accent: "orange", col: "left" },
+    "local-model-n": { width: 220, height: 58, y: 442, shape: "dashed", accent: "orange", col: "right" },
+    "approval-gate": { width: 300, height: 58, y: 538, shape: "solid", accent: "green", align: "center" },
+    "git-deploy": { width: 220, height: 58, y: 698, shape: "solid", accent: "neutral", col: "left", outside: true },
+    "action-n": { width: 180, height: 58, y: 698, shape: "solid", accent: "neutral", col: "right", outside: true },
+    "path1-pull": { width: 118, height: 76, y: 442, shape: "dashed", accent: "green", rail: "left" },
+    "path2-dataset": { width: 124, height: 52, y: 300, shape: "dashed", accent: "orange", rail: "right" },
+    "path2-colab": { width: 124, height: 58, y: 368, shape: "dashed", accent: "orange", rail: "right" },
+    "path2-ollama-create": { width: 124, height: 58, y: 442, shape: "dashed", accent: "orange", rail: "right" },
+  },
+};
 
-const DIAGRAM_LAYOUT = [
-  { id: "telegram", x: 392, y: 4, width: 240, height: 52, shape: "solid", accent: "green" },
-  { id: "claude-code", x: 862, y: 2, width: 148, height: 38, shape: "annotation", accent: "neutral" },
-  { id: "junebug-runtime", x: 140, y: 88, width: 728, height: 500, shape: "solid", accent: "neutral" },
-  { id: "main-agent", x: 362, y: 128, width: 300, height: 68, shape: "solid", accent: "purple" },
-  { id: "local-model-main", x: 362, y: 218, width: 300, height: 58, shape: "dashed", accent: "orange" },
-  { id: "website-dev-agent", x: 130, y: 318, width: 236, height: 68, shape: "solid", accent: "purple" },
-  { id: "agent-n", x: 642, y: 318, width: 236, height: 68, shape: "solid", accent: "purple" },
-  { id: "local-model-a", x: 130, y: 412, width: 236, height: 58, shape: "dashed", accent: "orange" },
-  { id: "local-model-n", x: 642, y: 412, width: 236, height: 58, shape: "dashed", accent: "orange" },
-  { id: "approval-gate", x: 362, y: 508, width: 300, height: 58, shape: "solid", accent: "green" },
-  { id: "git-deploy", x: 188, y: 668, width: 220, height: 58, shape: "solid", accent: "neutral" },
-  { id: "action-n", x: 642, y: 668, width: 180, height: 58, shape: "solid", accent: "neutral" },
-  { id: "path1-pull", x: -28, y: 328, width: 112, height: 76, shape: "dashed", accent: "green" },
-  { id: "path2-dataset", x: 922, y: 148, width: 118, height: 52, shape: "dashed", accent: "orange" },
-  { id: "path2-colab", x: 922, y: 218, width: 118, height: 68, shape: "dashed", accent: "orange" },
-  { id: "path2-ollama-create", x: 922, y: 304, width: 118, height: 68, shape: "dashed", accent: "orange" },
-];
+/** Build absolute layout: left rail | gutter | Junebug | gutter | right rail */
+function buildDiagramLayout() {
+  const s = DIAGRAM_LAYOUT_SPEC;
+  const leftX = s.padX;
+  const jbX = leftX + s.leftRailWidth + s.gutter;
+  const jbW = s.junebug.width;
+  const jbY = s.junebug.y;
+  const rightX = jbX + jbW + s.gutter;
+  const innerPad = 20;
+  const innerLeft = jbX + innerPad;
+  const innerRight = jbX + jbW - innerPad;
+  const innerCenter = jbX + jbW / 2;
+
+  const layout = [];
+  Object.entries(s.nodes).forEach(([id, n]) => {
+    let x;
+    let width = n.width;
+    let height = n.height;
+    let y = n.y;
+
+    if (n.rail === "container") {
+      x = jbX;
+      y = jbY;
+      width = jbW;
+      height = s.junebug.height;
+    } else if (n.rail === "left") {
+      x = leftX + (s.leftRailWidth - n.width) / 2;
+    } else if (n.rail === "right") {
+      x = rightX + (s.rightRailWidth - n.width) / 2;
+    } else if (n.align === "center") {
+      x = innerCenter - n.width / 2;
+    } else if (n.col === "left") {
+      x = n.outside ? innerLeft + 20 : innerLeft;
+    } else if (n.col === "right") {
+      x = innerRight - n.width;
+    } else {
+      x = innerCenter - n.width / 2;
+    }
+
+    layout.push({
+      id,
+      x,
+      y,
+      width,
+      height,
+      shape: n.shape,
+      accent: n.accent,
+    });
+  });
+
+  const maxRight = Math.max(...layout.map((n) => n.x + n.width));
+  const minLeft = Math.min(...layout.map((n) => n.x));
+  const maxBottom = Math.max(...layout.map((n) => n.y + n.height));
+  const view = {
+    x: minLeft - s.padX,
+    y: 0,
+    width: maxRight - minLeft + s.padX * 2,
+    height: Math.max(750, maxBottom + 40),
+  };
+
+  return { layout, view, jbX, jbW, rightX, leftX };
+}
+
+const _diagramBuilt = buildDiagramLayout();
+let DIAGRAM_LAYOUT = _diagramBuilt.layout;
+let DIAGRAM_VIEW = _diagramBuilt.view;
 
 const DIAGRAM_CONNECTIONS = [
   { id: "c-telegram-main", from: "telegram", to: "main-agent" },
@@ -1387,12 +1506,13 @@ const DIAGRAM_CONNECTIONS = [
   { id: "c-agentn-modeln", from: "agent-n", to: "local-model-n", dashed: true },
   { id: "c-modela-approval", from: "local-model-a", to: "approval-gate" },
   { id: "c-modeln-approval", from: "local-model-n", to: "approval-gate" },
-  { id: "c-approval-git", from: "approval-gate", to: "git-deploy", label: "on approval", labelOffset: -24 },
-  { id: "c-approval-email", from: "approval-gate", to: "action-n", label: "on approval", labelOffset: -24 },
+  { id: "c-approval-git", from: "approval-gate", to: "git-deploy", label: "on approval" },
+  { id: "c-approval-email", from: "approval-gate", to: "action-n", label: "on approval" },
   { id: "c-path1-modela", from: "path1-pull", to: "local-model-a" },
   { id: "c-path2-modeln", from: "path2-ollama-create", to: "local-model-n", dashed: true },
   { id: "c-path2-chain-1", from: "path2-dataset", to: "path2-colab", dashed: true },
   { id: "c-path2-chain-2", from: "path2-colab", to: "path2-ollama-create", dashed: true },
+  { id: "c-claude-local", from: "claude-code", to: "claude-local-model", dashed: true },
 ];
 
 /* ==========================================================================
@@ -1538,21 +1658,33 @@ const DIAGRAM_CONNECTIONS = [
   /* --------------------------------------------------------------------------
      Diagram helpers
      -------------------------------------------------------------------------- */
-  const DIAGRAM_BOX_W_SCALE = 1.12;
-  const DIAGRAM_BOX_H_SCALE = 1.1;
-
   function layoutById(id) {
-    const n = DIAGRAM_LAYOUT.find((node) => node.id === id);
-    if (!n) return null;
-    const dw = n.width * (DIAGRAM_BOX_W_SCALE - 1);
-    const dh = n.height * (DIAGRAM_BOX_H_SCALE - 1);
-    return {
-      ...n,
-      x: n.x - dw / 2,
-      y: n.y - dh / 2,
-      width: n.width * DIAGRAM_BOX_W_SCALE,
-      height: n.height * DIAGRAM_BOX_H_SCALE,
-    };
+    return DIAGRAM_LAYOUT.find((node) => node.id === id) || null;
+  }
+
+  function assertSideClearance() {
+    const jb = layoutById("junebug-runtime");
+    if (!jb) return;
+    const leftIds = ["path1-pull"];
+    const rightIds = [
+      "claude-code",
+      "claude-local-model",
+      "path2-dataset",
+      "path2-colab",
+      "path2-ollama-create",
+    ];
+    leftIds.forEach((id) => {
+      const n = layoutById(id);
+      if (n && n.x + n.width > jb.x) {
+        console.warn(`[junebug diagram] left node "${id}" overlaps Junebug container`);
+      }
+    });
+    rightIds.forEach((id) => {
+      const n = layoutById(id);
+      if (n && n.x < jb.x + jb.width) {
+        console.warn(`[junebug diagram] right node "${id}" overlaps Junebug container`);
+      }
+    });
   }
 
   function nodeCenter(id) {
@@ -1573,6 +1705,33 @@ const DIAGRAM_CONNECTIONS = [
     }
     const midX = a.x + dx * 0.5;
     return `M ${a.x} ${a.y} L ${midX} ${a.y} L ${midX} ${b.y} L ${b.x} ${b.y}`;
+  }
+
+  /** Place a label on the visible mid-gap of a connector (not buried under a node). */
+  function connectionLabelPoint(conn) {
+    const a = layoutById(conn.from);
+    const b = layoutById(conn.to);
+    const ac = nodeCenter(conn.from);
+    const bc = nodeCenter(conn.to);
+    if (!a || !b || !ac || !bc) return null;
+
+    const dx = bc.x - ac.x;
+    const dy = bc.y - ac.y;
+    const yOffset = conn.labelOffset ?? 0;
+    const xOffset = conn.labelDx ?? 0;
+
+    // Midpoint of the clear gap between the two node boxes (along Y when stacked/offset).
+    const upperBottom = Math.min(a.y + a.height, b.y + b.height);
+    const lowerTop = Math.max(a.y, b.y);
+    const gapMidY = (upperBottom + lowerTop) / 2 + yOffset;
+
+    if (Math.abs(dy) > Math.abs(dx)) {
+      // Vertical-first elbow: label sits on the horizontal bridge between columns.
+      return { x: (ac.x + bc.x) / 2 + xOffset, y: gapMidY };
+    }
+    // Horizontal-first elbow: label sits on the vertical drop at midX.
+    const midX = ac.x + dx * 0.5;
+    return { x: midX + xOffset, y: gapMidY };
   }
 
   function relatedIds(nodeId) {
@@ -1610,6 +1769,11 @@ const DIAGRAM_CONNECTIONS = [
       return { title: id, sub: "" };
     }
     if (id === "path1-pull") return { title: "ollama pull", sub: "qwen2.5:3b" };
+    if (id === "claude-code") return { title: "Claude Code", sub: "dev-time edits" };
+    if (id === "claude-local-model") return { title: "Local Model", sub: "optional · Ollama" };
+    if (id === "path2-dataset") return { title: "Your Dataset", sub: "Path 2 — step 1" };
+    if (id === "path2-colab") return { title: "Colab / Kaggle", sub: "LoRA fine-tune" };
+    if (id === "path2-ollama-create") return { title: "ollama create", sub: "import adapter" };
     return {
       title: data.title.length > 28 ? data.title.slice(0, 26) + "…" : data.title,
       sub: data.subtitle.length > 34 ? data.subtitle.slice(0, 32) + "…" : data.subtitle,
@@ -1621,6 +1785,15 @@ const DIAGRAM_CONNECTIONS = [
      -------------------------------------------------------------------------- */
   function renderDiagram() {
     if (!svg) return;
+    const built = buildDiagramLayout();
+    DIAGRAM_LAYOUT = built.layout;
+    DIAGRAM_VIEW = built.view;
+    svg.setAttribute(
+      "viewBox",
+      `${DIAGRAM_VIEW.x} ${DIAGRAM_VIEW.y} ${DIAGRAM_VIEW.width} ${DIAGRAM_VIEW.height}`
+    );
+    assertSideClearance();
+
     svg.innerHTML = "";
     const p = getPalette();
     const ns = "http://www.w3.org/2000/svg";
@@ -1666,10 +1839,10 @@ const DIAGRAM_CONNECTIONS = [
         });
         connGroup.appendChild(pathEl);
       if (conn.label) {
-        const parts = path.match(/[\d.]+/g).map(Number);
-        const lx = (parts[0] + parts[parts.length - 2]) / 2;
-        const ly = (parts[1] + parts[parts.length - 1]) / 2 + (conn.labelOffset ?? -6);
-        text(ns, conn.label, lx, ly, "diagram-conn-label", connGroup, p.textMuted);
+        const pt = connectionLabelPoint(conn);
+        if (!pt) return;
+        const labelEl = text(ns, conn.label, pt.x, pt.y, "diagram-conn-label", connGroup, p.textMuted);
+        labelEl.setAttribute("dominant-baseline", "middle");
       }
     });
     svg.appendChild(connGroup);
@@ -1697,6 +1870,9 @@ const DIAGRAM_CONNECTIONS = [
       <marker id="jb-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
         <path d="M0,0 L8,4 L0,8" fill="${p.textMuted}"/>
       </marker>
+      <marker id="jb-arrow-into-junebug" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9" fill="${p.nodeStroke}"/>
+      </marker>
     `;
     return d;
   }
@@ -1718,21 +1894,29 @@ const DIAGRAM_CONNECTIONS = [
     const claude = layoutById("claude-code");
     const jb = layoutById("junebug-runtime");
     const p = getPalette();
-    const x1 = claude.x + claude.width / 2;
-    const y1 = claude.y + claude.height + 4;
-    const x2 = jb.x + jb.width - 18;
-    const y2 = jb.y + 1;
-    const d = `M ${x1} ${y1} L ${x1} ${y2} L ${x2} ${y2}`;
-    const path = el(ns, "path", {
-      d,
-      fill: "none",
-      stroke: p.textMuted,
-      "stroke-width": 1.25,
-      "stroke-dasharray": "5 4",
-      "marker-end": "url(#jb-arrow)",
-      class: "diagram-conn diagram-conn--dev",
-    });
-    return path;
+    const y = claude.y + claude.height / 2;
+    const xFrom = claude.x;
+    const xTo = jb.x + jb.width;
+    const g = el(ns, "g", { class: "diagram-conn diagram-conn--dev" });
+    // Solid line from Claude Code into Junebug (tip on Junebug border)
+    g.appendChild(
+      el(ns, "line", {
+        x1: xFrom,
+        y1: y,
+        x2: xTo + 9,
+        y2: y,
+        stroke: p.nodeStroke,
+        "stroke-width": "1.5",
+        fill: "none",
+      })
+    );
+    g.appendChild(
+      el(ns, "polygon", {
+        points: `${xTo},${y} ${xTo + 9},${y - 4.5} ${xTo + 9},${y + 4.5}`,
+        fill: p.nodeStroke,
+      })
+    );
+    return g;
   }
 
   function renderContainer(ns) {
@@ -1746,19 +1930,23 @@ const DIAGRAM_CONNECTIONS = [
     g.appendChild(r);
     if (NODES["junebug-runtime"]?.step) {
       const step = NODES["junebug-runtime"].step;
-      const headerY = l.y + 28;
+      const headerY = l.y + 26;
       const labelX = l.x + 22;
       const t1 = text(ns, "Junebug", labelX, headerY, "container-title", g, p.text);
       t1.setAttribute("text-anchor", "start");
-      const t2 = text(ns, "Runs persistently · Built on OpenClaw", labelX, headerY + 18, "container-sub", g, p.textMuted);
+      const t2 = text(ns, "Runs persistently", labelX, headerY + 18, "container-sub", g, p.textMuted);
       t2.setAttribute("text-anchor", "start");
+      const t3 = text(ns, "Built on OpenClaw", labelX, headerY + 34, "container-sub", g, p.textMuted);
+      t3.setAttribute("text-anchor", "start");
       g.appendChild(stepNumber(ns, l.x + l.width - 28, headerY, step, "end"));
     } else {
       const labelX = l.x + 22;
-      const t1 = text(ns, "Junebug", labelX, l.y + 28, "container-title", g, p.text);
+      const t1 = text(ns, "Junebug", labelX, l.y + 26, "container-title", g, p.text);
       t1.setAttribute("text-anchor", "start");
-      const t2 = text(ns, "Runs persistently · Built on OpenClaw", labelX, l.y + 46, "container-sub", g, p.textMuted);
+      const t2 = text(ns, "Runs persistently", labelX, l.y + 44, "container-sub", g, p.textMuted);
       t2.setAttribute("text-anchor", "start");
+      const t3 = text(ns, "Built on OpenClaw", labelX, l.y + 60, "container-sub", g, p.textMuted);
+      t3.setAttribute("text-anchor", "start");
     }
     return g;
   }
@@ -1977,6 +2165,13 @@ const DIAGRAM_CONNECTIONS = [
         <section class="panel-section">
           <h3>Example prompt</h3>
           <pre class="panel-prompt">${esc(node.prompts[0])}</pre>
+        </section>`;
+    }
+
+    if (node.note) {
+      html += `
+        <section class="panel-section">
+          <p class="panel-note"><strong>Note.</strong> ${esc(node.note)}</p>
         </section>`;
     }
 
