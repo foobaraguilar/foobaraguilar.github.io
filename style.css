@@ -2207,5 +2207,5 @@ body.theme-dark .strategy-article td {
 }
 
 @media (max-width: 800px) {
-  #caps-lock { transform: translateY(calc(-50% - 1px)); }
+  #caps-lock > span { position: relative; top: -1px; }
 }
