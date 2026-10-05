@@ -2189,10 +2189,3 @@ body.theme-dark .strategy-article th,
 body.theme-dark .strategy-article td {
   border-color: #444;
 }
-
-@media (max-width: 480px) {
-  .post-password-gate {
-    width: min(336px, calc(100vw - 32px));
-    padding: 30px 22px 26px;
-  }
-}
