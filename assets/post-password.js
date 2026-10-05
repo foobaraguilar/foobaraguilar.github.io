@@ -4,13 +4,6 @@
   var status = document.getElementById('post-password-status');
   var input = document.getElementById('post-password');
   var button = form.querySelector('button');
-  var capsIndicator = document.getElementById('post-caps-indicator');
-  function updateCapsIndicator(event) {
-    capsIndicator.hidden = !event.getModifierState('CapsLock');
-  }
-  input.addEventListener('keydown', updateCapsIndicator);
-  input.addEventListener('keyup', updateCapsIndicator);
-  input.addEventListener('mousedown', updateCapsIndicator);
   var payload = JSON.parse(document.getElementById('post-encrypted-content').textContent);
 
   var dialog = document.querySelector('.post-password-gate');

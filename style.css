@@ -2190,21 +2190,4 @@ body.theme-dark .strategy-article td {
   border-color: #444;
 }
 
-.post-password-input-wrap { position: relative; flex: 1; min-width: 0; }
-.post-password-input-wrap input { padding-right: 30px; }
-#post-caps-indicator {
-  position: absolute;
-  right: 9px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 17px;
-  height: 15px;
-  border-radius: 2px;
-  background: #000;
-  color: #fff;
-  font: 13px/15px sans-serif;
-  text-align: center;
-  pointer-events: none;
-}
-#post-caps-indicator[hidden] { display: none; }
-#post-password::-webkit-caps-lock-indicator { display: none; }
+#post-password::-webkit-caps-lock-indicator { background-color: #000; color: #fff; }
