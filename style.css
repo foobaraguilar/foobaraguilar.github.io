@@ -2130,7 +2130,7 @@ body.theme-dark .post-password-gate { background: #111; border-color: #444; }
   font: inherit;
   font-size: 16px;
 }
-body.theme-dark .post-password-form input { border-color: #444; }
+body.theme-dark .post-password-form input { border-color: #444; color-scheme: dark; }
 .post-password-form input:focus-visible { outline: 1px solid #888; outline-offset: 2px; }
 .post-password-form button {
   flex-shrink: 0;
