@@ -44,20 +44,6 @@
       var interactions = document.createElement('script');
       interactions.src = '../assets/post-interactions.js';
       document.body.appendChild(interactions);
-      var heading = document.querySelector('.strategy-title');
-      heading.classList.add('post-unlock-highlight');
-      function dismissHighlight() {
-        heading.classList.remove('post-unlock-highlight');
-        ['pointerdown', 'touchstart', 'click'].forEach(function (event) {
-          document.removeEventListener(event, dismissHighlight, true);
-        });
-      }
-      // Wait until the password submission click finishes before listening.
-      window.setTimeout(function () {
-        ['pointerdown', 'touchstart', 'click'].forEach(function (event) {
-          document.addEventListener(event, dismissHighlight, {capture: true, passive: true});
-        });
-      }, 0);
     } catch (error) {
       status.textContent = 'Incorrect password. Please try again.';
       input.focus();
