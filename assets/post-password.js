@@ -24,7 +24,7 @@
       return;
     }
     button.disabled = true;
-    status.textContent = 'Unlocking…';
+    status.textContent = '';
     try {
       var material = await crypto.subtle.importKey(
         'raw', new TextEncoder().encode(input.value), 'PBKDF2', false, ['deriveKey']
