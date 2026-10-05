@@ -2085,6 +2085,12 @@ body.theme-dark .journal-post {
   margin-bottom: 0.65em;
 }
 
+.strategy-article .post-unlock-highlight {
+  outline: 1px solid rgba(128, 128, 128, 0.45);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 .strategy-article .strategy-title + h3 {
   margin-top: 0;
 }
