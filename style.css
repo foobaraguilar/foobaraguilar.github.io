@@ -2195,3 +2195,5 @@ body.theme-dark .strategy-article th,
 body.theme-dark .strategy-article td {
   border-color: #444;
 }
+
+#post-password::-webkit-caps-lock-indicator { display: none; }
