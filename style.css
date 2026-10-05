@@ -2191,9 +2191,8 @@ body.theme-dark .strategy-article td {
 }
 
 #post-password::-webkit-caps-lock-indicator {
-  -webkit-appearance: none;
-  display: none;
-  visibility: hidden;
-  width: 0;
-  height: 0;
+  color: #000;
+  width: 14px;
+  height: 14px;
+  align-self: center;
 }
