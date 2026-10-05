@@ -2130,7 +2130,7 @@ body.theme-dark .post-password-gate { background: #111; border-color: #444; }
   font: inherit;
   font-size: 16px;
 }
-body.theme-dark .post-password-form input { border-color: #444; color-scheme: dark; }
+body.theme-dark .post-password-form input { border-color: #444; }
 .post-password-form input:focus-visible { outline: 1px solid #888; outline-offset: 2px; }
 .post-password-form button {
   flex-shrink: 0;
@@ -2188,11 +2188,4 @@ body.theme-dark .post-password-form button { color: #aaa; border-color: #444; }
 body.theme-dark .strategy-article th,
 body.theme-dark .strategy-article td {
   border-color: #444;
-}
-
-@media (max-width: 800px) {
-  #post-password::-webkit-caps-lock-indicator {
-    transform: scale(1.08, 0.9);
-    transform-origin: center;
-  }
 }
