@@ -2190,4 +2190,7 @@ body.theme-dark .strategy-article td {
   border-color: #444;
 }
 
-
+.post-password-input-wrap { position: relative; flex: 1; min-width: 0; }
+.post-password-input-wrap input { padding-right: 28px; }
+#post-caps-indicator { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); color: #000; background: #eee; border-radius: 2px; font-size: 13px; line-height: 1; padding: 2px; pointer-events: none; }
+#post-password::-webkit-caps-lock-indicator { display: none; }
