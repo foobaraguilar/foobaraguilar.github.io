@@ -2189,3 +2189,10 @@ body.theme-dark .strategy-article th,
 body.theme-dark .strategy-article td {
   border-color: #444;
 }
+
+@media (max-width: 800px) {
+  #post-password::-webkit-caps-lock-indicator {
+    transform: scale(1.08, 0.9);
+    transform-origin: center;
+  }
+}
