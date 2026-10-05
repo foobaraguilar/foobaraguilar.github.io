@@ -2190,9 +2190,4 @@ body.theme-dark .strategy-article td {
   border-color: #444;
 }
 
-#post-password::-webkit-caps-lock-indicator {
-  color: #000;
-  width: 14px;
-  height: 14px;
-  align-self: center;
-}
+
