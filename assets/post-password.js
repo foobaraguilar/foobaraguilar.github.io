@@ -5,13 +5,22 @@
   var input = document.getElementById('post-password');
   var button = form.querySelector('button');
   var caps = document.getElementById('caps-lock');
+  var capsLocked = false;
   function updateCaps(e) {
     if (e.key === 'Enter' || e.key === 'Tab') return;
-    if (e.type === 'keyup' && e.key !== 'CapsLock') return;
-    caps.hidden = !e.getModifierState('CapsLock');
+    if (e.type === 'keyup' && e.key !== 'CapsLock' && e.key !== 'Shift') return;
+    capsLocked = e.getModifierState('CapsLock');
+    caps.hidden = !(capsLocked || e.shiftKey);
   }
   input.addEventListener('keydown', updateCaps);
   input.addEventListener('keyup', updateCaps);
+  input.addEventListener('input', function (e) {
+    // Mobile keyboards often report inserted text instead of modifier keys.
+    var letter = e.data && Array.from(e.data).pop();
+    if (letter && letter.toLowerCase() !== letter.toUpperCase()) {
+      caps.hidden = !(capsLocked || letter === letter.toUpperCase());
+    }
+  });
   var payload = JSON.parse(document.getElementById('post-encrypted-content').textContent);
 
   var dialog = document.querySelector('.post-password-gate');
