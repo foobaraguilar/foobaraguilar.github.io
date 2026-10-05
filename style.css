@@ -2086,7 +2086,7 @@ body.theme-dark .journal-post {
 }
 
 .strategy-article .strategy-title:focus {
-  outline: 1px solid rgba(128, 128, 128, 0.25);
+  outline: 1px solid rgba(128, 128, 128, 0.45);
   outline-offset: 4px;
   border-radius: 2px;
 }
