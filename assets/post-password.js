@@ -7,7 +7,8 @@
   var payload = JSON.parse(document.getElementById('post-encrypted-content').textContent);
 
   var dialog = document.querySelector('.post-password-gate');
-  dialog.showModal();
+  document.body.classList.add('post-password-locked');
+  dialog.show();
   dialog.addEventListener('cancel', function (event) {
     event.preventDefault();
   });
@@ -37,6 +38,7 @@
       );
       document.getElementById('post-unlocked-content').innerHTML = new TextDecoder().decode(plaintext);
       input.value = '';
+      document.body.classList.remove('post-password-locked');
       dialog.close();
       dialog.remove();
       var interactions = document.createElement('script');
