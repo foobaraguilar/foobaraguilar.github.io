@@ -47,9 +47,9 @@
       var heading = document.querySelector('.strategy-title');
       heading.setAttribute('tabindex', '-1');
       heading.focus({preventScroll: true});
-      document.addEventListener('pointerdown', function () {
-        heading.blur();
-      }, {once: true, capture: true});
+      function clearHeadingFocus() { heading.blur(); }
+      document.addEventListener('pointerdown', clearHeadingFocus, {once: true, capture: true});
+      document.addEventListener('touchstart', clearHeadingFocus, {once: true, capture: true, passive: true});
     } catch (error) {
       status.textContent = 'Incorrect password. Please try again.';
       input.focus();

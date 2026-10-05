@@ -2196,4 +2196,10 @@ body.theme-dark .strategy-article td {
   border-color: #444;
 }
 
-#post-password::-webkit-caps-lock-indicator { display: none; }
+#post-password::-webkit-caps-lock-indicator {
+  -webkit-appearance: none;
+  display: none;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
