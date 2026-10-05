@@ -47,6 +47,9 @@
       var heading = document.querySelector('.strategy-title');
       heading.setAttribute('tabindex', '-1');
       heading.focus({preventScroll: true});
+      document.addEventListener('pointerdown', function () {
+        heading.blur();
+      }, {once: true, capture: true});
     } catch (error) {
       status.textContent = 'Incorrect password. Please try again.';
       input.focus();
