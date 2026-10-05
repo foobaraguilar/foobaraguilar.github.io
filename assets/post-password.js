@@ -44,6 +44,9 @@
       var interactions = document.createElement('script');
       interactions.src = '../assets/post-interactions.js';
       document.body.appendChild(interactions);
+      var heading = document.querySelector('.strategy-title');
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({preventScroll: true});
     } catch (error) {
       status.textContent = 'Incorrect password. Please try again.';
       input.focus();
