@@ -10,7 +10,6 @@
   dialog.showModal();
   dialog.addEventListener('cancel', function (event) {
     event.preventDefault();
-    window.location.href = '../index.html#posts';
   });
 
   function decode(value) {

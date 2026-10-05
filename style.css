@@ -2102,9 +2102,7 @@ body.theme-dark .journal-post {
 }
 .post-password-gate::backdrop { background: rgba(0, 0, 0, 0.45); }
 body.theme-dark .post-password-gate { background: #111; border-color: #444; }
-.post-password-close { position: absolute; top: 8px; right: 12px; color: #888; font-size: 20px; }
 .post-password-gate h2 { margin: 0 0 20px; font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: 0.03em; }
-.post-password-prompt { display: block; margin-bottom: 10px; font-size: 13px; color: #888; }
 .post-password-form { display: flex; align-items: center; gap: 14px; }
 .post-password-form input {
   width: 100%;
