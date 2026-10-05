@@ -2060,3 +2060,118 @@ body.theme-dark .journal-post {
   }
 }
 
+
+/* Structured strategy articles use the existing longform reading column. */
+.strategy-article .strategy-source-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  font-weight: inherit;
+}
+
+.strategy-article h2 {
+  font-size: 1.5em;
+  line-height: 1.25;
+  margin: 0 0 1em;
+}
+
+.strategy-article h3 {
+  font-size: 1.2em;
+  line-height: 1.35;
+  margin: 1.8em 0 0.75em;
+}
+
+.strategy-article .strategy-title {
+  margin-bottom: 0.35em;
+}
+
+.strategy-article .strategy-title + h3 {
+  margin-top: 0;
+}
+
+/* Password popup shares the blog's typography and monochrome palette. */
+.post-password-gate {
+  width: min(320px, calc(100vw - 40px));
+  margin: auto;
+  padding: 26px 22px 22px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+.post-password-gate::backdrop { background: rgba(0, 0, 0, 0.45); }
+body.theme-dark .post-password-gate { background: #111; border-color: #444; }
+.post-password-close { position: absolute; top: 8px; right: 12px; color: #888; font-size: 20px; }
+.post-password-gate h2 { margin: 0 0 20px; font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: 0.03em; }
+.post-password-form { display: flex; align-items: center; gap: 14px; }
+.post-password-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 16px;
+}
+body.theme-dark .post-password-form input { border-color: #444; }
+.post-password-form input:focus-visible { outline: 1px solid #888; outline-offset: 2px; }
+.post-password-form button {
+  flex-shrink: 0;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid #aaa;
+  background: transparent;
+  color: #777;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+}
+body.theme-dark .post-password-form button { color: #aaa; border-color: #444; }
+.post-password-form button:disabled { opacity: 0.5; cursor: wait; }
+#post-password-status { margin: 12px 0 0; font-size: 13px; color: #888; }
+#post-password-status:empty { display: none; }
+
+.strategy-article ul,
+.strategy-article ol {
+  padding-left: 1.4em;
+  margin: 0 0 1.05em;
+}
+
+.strategy-article li {
+  margin-bottom: 0.5em;
+}
+
+.strategy-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0 0 1.5em;
+}
+
+.strategy-article table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  font-size: 0.85em;
+  line-height: 1.5;
+}
+
+.strategy-article th,
+.strategy-article td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: top;
+}
+
+.strategy-article th {
+  font-weight: 700;
+}
+
+body.theme-dark .strategy-article th,
+body.theme-dark .strategy-article td {
+  border-color: #444;
+}
