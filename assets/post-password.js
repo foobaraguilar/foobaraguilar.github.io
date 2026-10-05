@@ -7,8 +7,8 @@
   var caps = document.getElementById('caps-lock');
   var capsLocked = false;
   function updateCaps(e) {
-    if (e.key === 'Enter' || e.key === 'Tab') return;
-    if (e.type === 'keyup' && e.key !== 'CapsLock' && e.key !== 'Shift') return;
+    // Letter and editing events must not reset mobile keyboard state.
+    if (e.key !== 'CapsLock' && e.key !== 'Shift') return;
     capsLocked = e.getModifierState('CapsLock');
     caps.hidden = !(capsLocked || e.shiftKey);
   }
