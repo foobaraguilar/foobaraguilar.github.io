@@ -2190,4 +2190,8 @@ body.theme-dark .strategy-article td {
   border-color: #444;
 }
 
-#post-password::-webkit-caps-lock-indicator { background-color: #000; color: #fff; }
+#post-password::-webkit-caps-lock-indicator { display: none; }
+.password-input-wrap { position: relative; flex: 1; min-width: 0; }
+.password-input-wrap input { padding-right: 30px; }
+#caps-lock { position: absolute; right: 9px; top: 50%; transform: translateY(-50%); width: 18px; height: 15px; background: #000; color: #fff; border-radius: 2px; font: 13px/15px sans-serif; text-align: center; pointer-events: none; }
+#caps-lock[hidden] { display: none; }
