@@ -654,6 +654,20 @@ body.post-detail.post-detail--longform {
   text-indent: 0;
 }
 
+.post-detail-body--uses .uses-list {
+  margin: 0 0 1.5em;
+  padding-left: 1.25em;
+}
+
+.post-detail-body--uses .uses-list li + li {
+  margin-top: 0.65em;
+}
+
+.post-detail-body--uses a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .post-detail--longform .post-detail-body--longform .post-series-next,
 .post-detail--longform .post-detail-body--longform .post-series-prev {
   margin: 1.25em 0 0.5em;

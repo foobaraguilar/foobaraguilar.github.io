@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="post-label" content="AI/TOOLS" />
+    <meta name="description" content="The hardware and tools I use, how I think about token consumption, and Tyler, my Raspberry Pi personal assistant." />
+    <title>My Arsenal</title>
+    <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="../style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="My Arsenal" />
+    <meta property="og:description" content="My hardware, software, and little black notebook, followed by Tyler, my personal assistant running on a Raspberry Pi." />
+    <meta property="og:url" content="https://foobaraguilar.github.io/blogs/ai-tools-and-tyler.html" />
+    <meta property="og:image" content="https://foobaraguilar.github.io/blogs/images/my-arsenal.jpg" />
+    <meta property="og:image:alt" content="A painting of three men around a small table beside a large gray creature." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="My Arsenal" />
+    <meta name="twitter:description" content="My hardware, software, and little black notebook, followed by Tyler, my personal assistant running on a Raspberry Pi." />
+    <meta name="twitter:image" content="https://foobaraguilar.github.io/blogs/images/my-arsenal.jpg" />
+    <meta name="twitter:image:alt" content="A painting of three men around a small table beside a large gray creature." />
+  </head>
+  <body class="post-detail post-detail--longform">
+    <div class="page">
+      <div class="post-detail-chrome-row">
+        <div class="post-detail-breadcrumb-row">
+          <a href="../index.html" class="breadcrumb-link">← Back to Home</a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+          <span class="theme-toggle-icon" aria-hidden="true"></span>
+        </button>
+      </div>
+      <header class="simple-header">
+        <div class="post-detail-header-inner">
+          <p class="post-detail-kicker">AI/Tools</p>
+          <h1 class="intro-greeting">My Arsenal</h1>
+          <p class="intro-subtext">hardware, software, and a little black notebook</p>
+          <time class="post-detail-date" datetime="2026-10-16">October 16, 2026</time>
+        </div>
+      </header>
+
+      <main class="post-detail-main fade-in">
+        <div class="post-detail-hero">
+          <img
+            class="post-detail-hero-img"
+            src="images/my-arsenal.jpg"
+            alt="A painting of three men around a small table beside a large gray creature."
+            width="986"
+            height="725"
+          />
+        </div>
+        <article class="post-detail-body post-detail-body--longform post-detail-body--uses">
+          <p>
+            <em>“Why don't you just use Granola like a regular person?”</em> — Hans, my roommate, circa 2026.
+          </p>
+
+          <h2>Hardware</h2>
+          <ul class="uses-list">
+            <li>
+              <strong><a href="https://www.apple.com/macbook-pro/">MacBook Pro 14-inch (M5)</a></strong> — I love this thing. It's perfect for me: light, and easy to carry everywhere.
+            </li>
+            <li>
+              <strong><a href="https://www.apple.com/airpods/">AirPods</a></strong> — I love my AirPods.
+            </li>
+            <li>
+              <strong><a href="https://electronics.sony.com/audio/headphones/headband/p/wh1000xm5-b">Sony XM5 headphones</a></strong> — Love these too.
+            </li>
+            <li>
+              <strong><a href="https://www.apple.com/shop/mac/accessories/mice-keyboards">Apple keyboard + mouse</a></strong> — Ride or die for the simple Apple keyboard. I love jumping between the keyboard and mouse.
+            </li>
+            <li>
+              <strong><a href="https://www.logitech.com/en-us/shop/p/mx-master-3s">MX Master 3S</a></strong> — My other ride or die.
+            </li>
+          </ul>
+
+          <h2>Tools</h2>
+          <ul class="uses-list">
+            <li>
+              <strong><a href="https://www.diabrowser.com/">Dia</a> + <a href="https://ghostty.org/">Ghostty</a> + Herdr</strong> — My prized children.
+            </li>
+            <li>
+              <strong><a href="https://openai.com/codex/">Codex</a></strong> — For working on this website and turning rough notes into blog drafts.
+            </li>
+            <li>
+              <strong><a href="https://claude.ai/">Claude</a></strong> — I've used it for race preparation, including training and fueling plans.
+            </li>
+            <li>
+              <strong><a href="https://wisprflow.ai/">Wispr Flow</a></strong> — For voice dictation.
+            </li>
+            <li>
+              <strong><a href="https://openclaw.ai/">OpenClaw</a></strong> — The gateway behind Tyler. More on him below.
+            </li>
+            <li>
+              <strong><a href="https://docs.arcade.dev/en/get-started/mcp-clients">Arcade MCP connector</a></strong> — Another tool I love having in the setup.
+            </li>
+            <li>
+              <strong>A little black notebook</strong> — I handwrite my critical notes in it. I love that notebook.
+            </li>
+          </ul>
+
+          <h2>At a startup</h2>
+          <p>
+            When I'm at a startup, I like <a href="https://slack.com/">Slack</a> and <a href="https://linear.app/">Linear</a>. I hate Notion. I've tried to get on board with it, but it never sticks. I end up defaulting to <a href="https://drive.google.com/">Google Drive</a>. Some sort of self-driving agent is still a must.
+          </p>
+
+          <h2>What I look for</h2>
+          <p>
+            I want to understand what keeps token consumption and repeated reasoning down. My job hunt engine is a good example of how I think about this. Reusable code handles known form fields, while the model handles job fit, résumé tailoring, and unfamiliar questions.
+          </p>
+          <p>
+            The managers read the relevant skill and current checkpoint, reuse saved answers and reviewed résumés, and batch known field updates into one call. Those are the kinds of choices I pay attention to: how much context the model needs, what it has to figure out again, and what code can already handle. I still need comparable live measurements to put a number on the savings.
+          </p>
+
+          <h2>Tyler</h2>
+          <p>
+            Then there's Tyler, my personal assistant. Right now, he just takes notes. Tyler runs on a Raspberry Pi as an OpenClaw gateway. A second Pi, a Raspberry Pi 3, runs the Brio webcam note-taker.
+          </p>
+          <p>
+            I query the OpenClaw gateway to access stored conversation notes from my room or Google Meet calls. That's what I use Tyler for today: getting back to what was discussed.
+          </p>
+          <p>
+            The reason I use a Brio is that, theoretically, I can use it for multimodal capture beyond notes. Having a camera gives me the possibility of working with visual context as well. That's part of what I want to explore with this setup.
+          </p>
+          <p>
+            Over time, I want him to track my habits. With open-source annotation tools, that feels easier to build and support. It's something I want to add as I develop Tyler further.
+          </p>
+          <p>
+            I also want to add full-duplex conversation, so Tyler can listen and respond at the same time, along with support for conversations involving multiple people. Those are still plans. Right now, I'm constrained by the Raspberry Pi 3 running the webcam note-taker.
+          </p>
+          <!-- Editorial note: Confirm what Ruben means by "jev" before naming it
+               in the paragraph about habit tracking and annotation tools. -->
+        </article>
+        <footer class="post-detail-engagement" aria-label="Reactions and comments">
+          <div class="post-detail-likes">
+            <button
+              type="button"
+              class="post-detail-like-btn"
+              id="post-like-btn"
+              aria-label="Like this post"
+              aria-pressed="false"
+            >
+              <span class="post-detail-likes-icon" aria-hidden="true">♥</span>
+              <span class="post-detail-likes-count" id="post-likes-count">0</span>
+            </button>
+            <span class="post-detail-likes-note">likes</span>
+          </div>
+          <section class="post-detail-comments">
+            <h2 class="post-detail-comments-heading">Comments</h2>
+            <form class="post-detail-comment-form" id="post-comment-form">
+              <label for="post-comment-input" class="visually-hidden">Add a comment</label>
+              <textarea
+                id="post-comment-input"
+                name="comment"
+                rows="3"
+                maxlength="2000"
+                placeholder="Write a comment…"
+                required
+              ></textarea>
+              <button type="submit">Post comment</button>
+            </form>
+            <ul class="post-detail-comment-list" id="post-comment-list" aria-live="polite"></ul>
+            <p class="post-detail-comments-empty" id="post-comment-empty">No comments yet.</p>
+          </section>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      (function () {
+        var body = document.body;
+        var toggle = document.getElementById('theme-toggle');
+        if (!toggle) return;
+
+        var favicon = document.getElementById('site-favicon');
+
+        function setFavicon() {
+          if (!favicon) return;
+          favicon.setAttribute('href', '../assets/favicon.png');
+        }
+
+        function applyTheme(theme) {
+          var isDark = theme === 'dark';
+          body.classList.toggle('theme-dark', isDark);
+          var root = document.documentElement;
+          root.classList.toggle('theme-dark', isDark);
+          setFavicon();
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        var stored = localStorage.getItem('theme');
+        if (stored === 'dark') {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
+        }
+
+        toggle.addEventListener('click', function () {
+          var next = body.classList.contains('theme-dark') ? 'light' : 'dark';
+          applyTheme(next);
+        });
+      })();
+    </script>
+    <script src="../assets/post-interactions.js" defer></script>
+  </body>
+</html>

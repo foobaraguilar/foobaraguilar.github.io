@@ -1,0 +1,99 @@
+/* Charts and tables from the standalone article, scoped to its unlocked content. */
+.job-engine-content {
+  --ink: #333;
+  --muted: #888;
+  --line: #e6e6e6;
+  --bg: #fff;
+  margin-top: 24px;
+}
+
+body.theme-dark .job-engine-content {
+  --ink: #eee;
+  --muted: #aaa;
+  --line: #444;
+  --bg: #111;
+}
+
+.job-engine-content .graph { overflow-x: auto; margin: 32px 0; }
+.job-engine-content svg { display: block; width: 100%; min-width: 780px; height: auto; }
+.job-engine-content svg text { fill: var(--ink); font-size: 18px; }
+.job-engine-content svg .value { font-size: 25px; }
+.job-engine-content svg .inactive { fill: var(--muted); }
+.job-engine-content .flow { fill: none; stroke-opacity: .38; transition: stroke-opacity .15s; }
+.job-engine-content .flow:hover { stroke-opacity: .65; }
+.job-engine-content .zero { fill: none; stroke: #b9c5c0; stroke-width: 1.5; stroke-dasharray: 4 6; opacity: .65; }
+.job-engine-content .opening { margin-bottom: 32px; }
+.job-engine-content article h2 { font-size: 1.2em; line-height: 1.35; margin: 1.2em 0 .35em; color: var(--ink); }
+.job-engine-content article a { text-decoration: underline; text-underline-offset: .15em; }
+.job-engine-content details { border-top: 1px solid var(--line); margin-top: 32px; padding-top: 18px; color: var(--muted); font-size: 14px; }
+.job-engine-content summary { cursor: pointer; width: fit-content; }
+.job-engine-content pre { font-size: 12px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); }
+.job-engine-content article code { font-size: .82em; background: #8888880b; padding: 1px 4px; border-radius: 3px; }
+
+.job-engine-content .architecture { max-width: 42rem; margin: 30px auto 40px; }
+.job-engine-content .opening + .architecture { margin-top: 0; }
+.job-engine-content .architecture h2 { font-size: 22px; letter-spacing: -.3px; margin: 0 0 16px; }
+.job-engine-content .architecture-scroll { overflow-x: auto; }
+.job-engine-content .architecture-svg { min-width: 620px; color: var(--muted); }
+.job-engine-content .architecture-svg .connector { fill: none; stroke: currentColor; stroke-width: 1.3; }
+.job-engine-content .architecture-svg .planned { stroke-dasharray: 5 5; }
+.job-engine-content .arch-box rect { fill: var(--bg); stroke: var(--line); stroke-width: 1.3; }
+.job-engine-content .planned-box rect { stroke-dasharray: 5 4; }
+.job-engine-content .architecture-svg .arch-title { font-size: 15px; font-weight: 600; fill: var(--ink); }
+.job-engine-content .architecture-svg .arch-copy { font-size: 12px; fill: var(--muted); }
+.job-engine-content .architecture-note { font-size: 11px; line-height: 1.6; color: var(--muted); margin: 10px 0 0; }
+.job-engine-content .manager-map .manager-one rect { fill: #648cad0c; stroke: #648cad80; }
+.job-engine-content .manager-map .manager-two rect { fill: #8e82ac0c; stroke: #8e82ac80; }
+.job-engine-content .manager-map .workflow-box rect,
+.job-engine-content .manager-map .review-box rect { fill: #88888805; }
+.job-engine-content .manager-map .step-name { font-size: 14px; font-weight: 600; fill: var(--ink); }
+.job-engine-content .manager-map .step-skill { font-size: 12px; fill: var(--muted); font-family: ui-monospace, monospace; }
+.job-engine-content .manager-map .step-arrow { font-size: 20px; fill: var(--muted); }
+
+.job-engine-content .engineering-notes h3 { font-size: 1rem; margin: 1.4rem 0 .5rem; }
+.job-engine-content .engineering-notes pre { max-width: 100%; overflow-x: auto; padding: 1rem; border: 1px solid var(--line); border-radius: 4px; font-size: .78rem; line-height: 1.55; }
+.job-engine-content .engineering-notes pre code { background: transparent; padding: 0; }
+.job-engine-content .execution-flow { max-width: 25rem; margin: 1.5rem auto; text-align: center; }
+.job-engine-content .execution-flow .flow-box { border: 1px solid #b9c5ce; border-radius: 5px; padding: .7rem 1rem; }
+.job-engine-content .execution-flow strong { display: block; font-size: .9rem; }
+.job-engine-content .execution-flow span,
+.job-engine-content .execution-flow figcaption { display: block; font-size: .78rem; line-height: 1.5; }
+.job-engine-content .execution-flow .flow-arrow { font-size: 1.1rem; line-height: 1.6; color: #788894; }
+.job-engine-content .execution-flow figcaption { margin-top: .6rem; }
+body.theme-dark .job-engine-content .execution-flow .flow-box { border-color: #52606b; }
+
+.job-engine-content .pipeline-table { max-width: 42rem; margin: 40px auto 0; }
+.job-engine-content .pipeline-table h2 { font-size: 22px; font-weight: 600; letter-spacing: -.6px; margin: 0 0 5px; }
+.job-engine-content .scope-note { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0 0 14px; }
+.job-engine-content .table-scroll { overflow-x: auto; }
+.job-engine-content table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; line-height: 1.4; table-layout: fixed; }
+.job-engine-content th,
+.job-engine-content td { padding: 11px 9px; vertical-align: top; border: 1px solid var(--line); }
+.job-engine-content th { font-size: 9px; text-transform: uppercase; letter-spacing: .65px; color: var(--muted); font-weight: 600; }
+.job-engine-content th:first-child { width: 28%; }
+.job-engine-content th:nth-child(2) { width: 11%; }
+.job-engine-content th:nth-child(3) { width: 45%; }
+.job-engine-content th:last-child { width: 16%; }
+.job-engine-content .company { display: block; font-weight: 600; font-size: 13px; letter-spacing: -.2px; }
+.job-engine-content .role { display: block; color: var(--muted); font-size: 11px; margin: 4px 0 0; line-height: 1.45; }
+.job-engine-content .stage { display: block; font-size: 12px; font-weight: 500; }
+.job-engine-content .next { display: block; margin-top: 5px; font-size: 11px; color: var(--muted); line-height: 1.5; }
+.job-engine-content .evidence { font-size: 11px; color: var(--muted); white-space: nowrap; text-decoration: underline; }
+.job-engine-content .evidence:hover { color: var(--ink); }
+.job-engine-content td:nth-child(2) { font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+.job-engine-content .article-table { max-width: 100%; overflow-x: auto; margin: 14px 0 22px; }
+.job-engine-content .article-table table { table-layout: auto; line-height: 1.5; }
+.job-engine-content .article-table th,
+.job-engine-content .article-table td { width: auto; padding: 10px; font-size: 12px; white-space: normal; overflow-wrap: anywhere; }
+.job-engine-content .article-table th { text-transform: none; letter-spacing: 0; color: var(--ink); }
+.job-engine-content .article-table td:first-child { color: var(--ink); }
+.job-engine-content .article-table code { overflow-wrap: anywhere; }
+
+@media (max-width: 700px) {
+  .job-engine-content .table-scroll table { min-width: 600px; }
+}
+
+@media (max-width: 600px) {
+  .job-engine-content .article-table th,
+  .job-engine-content .article-table td { padding: 8px; font-size: 11px; }
+}

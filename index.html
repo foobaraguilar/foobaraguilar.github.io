@@ -638,8 +638,11 @@
 
       // Load and filter posts
       (function () {
-        /* Order here = order on the page. Thumbnail URL is read from each post’s hero image src when present. */
+        /* Order here = order on the page. Posts can specify a list-only image or use their hero image. */
         var postFiles = [
+          'blogs/job-application-engine.html',
+          'blogs/ai-tools-and-tyler.html',
+          'blogs/finding-human-touch.html',
           // 'blogs/work-trial.html',
           'blogs/ai-manifesto.html',
           'blogs/2x50x50-part2.html',
@@ -660,6 +663,13 @@
           var list = document.getElementById('posts-list');
           if (!list) return;
           list.innerHTML = allPosts.map(function(p, idx) {
+            var thumbnail = p.image
+              ? '<div class="post-image">' +
+                '<a href="' + p.url + '" class="post-image-link">' +
+                '<img class="post-image-placeholder" src="' + escapeHtml(p.image) + '" alt="' + escapeHtml(p.imageAlt) + '" />' +
+                '</a>' +
+                '</div>'
+              : '';
             var thumbFooter =
               p.heroCaption &&
               '<p class="post-thumb-footer">' + escapeHtml(p.heroCaption) + '</p>';
@@ -672,11 +682,7 @@
               '</time>';
             return (
               '<article class="post' + (idx > 0 ? ' post-compact' : '') + '">' +
-              '<div class="post-image">' +
-              '<a href="' + p.url + '" class="post-image-link">' +
-              '<img class="post-image-placeholder" src="' + p.image + '" alt="" />' +
-              '</a>' +
-              '</div>' +
+              thumbnail +
               '<div class="post-body">' +
               '<div class="post-meta">' +
               '<span class="post-tag">' + escapeHtml(p.label) + '</span>' +
@@ -691,7 +697,7 @@
           }).join('');
         }
 
-        Promise.all(postFiles.map(function(url, postIndex) {
+        Promise.all(postFiles.map(function(url) {
           return fetch(url)
             .then(function(res) { return res.text(); })
             .then(function(html) {
@@ -700,9 +706,11 @@
               var label = labelMeta ? labelMeta.getAttribute('content') : 'POST';
               var title = doc.querySelector('h1') ? doc.querySelector('h1').textContent.trim() : '';
               var baseDir = url.replace(/[^/]+$/, '');
-              var imgSrc = 'blogs/images/' + (postIndex + 1) + '.jpg';
+              var imgSrc = '';
+              var imageMeta = doc.querySelector('meta[name="post-image"]');
+              var imageAltMeta = doc.querySelector('meta[name="post-image-alt"]');
               var heroImgEl = doc.querySelector('.post-detail-hero-img');
-              var heroSrc = heroImgEl && heroImgEl.getAttribute('src');
+              var heroSrc = (imageMeta && imageMeta.getAttribute('content')) || (heroImgEl && heroImgEl.getAttribute('src'));
               if (heroSrc) {
                 heroSrc = heroSrc.trim();
                 imgSrc =
@@ -720,6 +728,7 @@
                 label: label,
                 title: title,
                 image: imgSrc,
+                imageAlt: (imageAltMeta && imageAltMeta.getAttribute('content')) || (heroImgEl && heroImgEl.getAttribute('alt')) || '',
                 heroCaption: heroCaption,
                 dateText: dateText,
                 dateTime: dateTime,
