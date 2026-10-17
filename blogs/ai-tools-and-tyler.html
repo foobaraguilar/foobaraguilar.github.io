@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="post-label" content="AI/TOOLS" />
-    <meta name="description" content="The hardware and tools I use, how I think about token consumption, and Tyler, my Raspberry Pi personal assistant." />
+    <meta name="description" content="The software, hardware, and context layers in my setup, and Tyler, my Raspberry Pi personal assistant." />
     <title>My Arsenal</title>
     <link rel="icon" id="site-favicon" href="../assets/favicon.png" type="image/png" />
     <link rel="stylesheet" href="../style.css" />
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <meta property="og:type" content="article" />
     <meta property="og:title" content="My Arsenal" />
-    <meta property="og:description" content="My hardware, software, and little black notebook, followed by Tyler, my personal assistant running on a Raspberry Pi." />
+    <meta property="og:description" content="The software, hardware, and context layers in my setup, and Tyler, my Raspberry Pi personal assistant." />
     <meta property="og:url" content="https://foobaraguilar.github.io/blogs/ai-tools-and-tyler.html" />
     <meta property="og:image" content="https://foobaraguilar.github.io/blogs/images/my-arsenal.jpg" />
     <meta property="og:image:alt" content="A painting of three men around a small table beside a large gray creature." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="My Arsenal" />
-    <meta name="twitter:description" content="My hardware, software, and little black notebook, followed by Tyler, my personal assistant running on a Raspberry Pi." />
+    <meta name="twitter:description" content="The software, hardware, and context layers in my setup, and Tyler, my Raspberry Pi personal assistant." />
     <meta name="twitter:image" content="https://foobaraguilar.github.io/blogs/images/my-arsenal.jpg" />
     <meta name="twitter:image:alt" content="A painting of three men around a small table beside a large gray creature." />
   </head>
@@ -35,7 +35,7 @@
         <div class="post-detail-header-inner">
           <p class="post-detail-kicker">AI/Tools</p>
           <h1 class="intro-greeting">My Arsenal</h1>
-          <p class="intro-subtext">hardware, software, and a little black notebook</p>
+          <p class="intro-subtext">Software, hardware, and context layers</p>
           <time class="post-detail-date" datetime="2026-10-16">October 16, 2026</time>
         </div>
       </header>
@@ -52,76 +52,105 @@
         </div>
         <article class="post-detail-body post-detail-body--longform post-detail-body--uses">
           <p>
-            <em>“Why don't you just use Granola like a regular person?”</em> — Hans, my roommate, circa 2026.
+            I think about my setup in three layers: the software I use to do the work, the hardware I interact with, and the context that helps me understand what matters.
           </p>
+
+          <h2>Software</h2>
+          <p>The tools I use to think, build, communicate, and run agents.</p>
+          <ul class="uses-list">
+            <li>
+              <strong>Dia + Ghostty + Herdr</strong> — My prized children. They’re central to how I browse, work in the terminal, and manage my agents.
+            </li>
+            <li>
+              <strong>ChatGPT</strong> — My go-to for polishing and cleaning up my writing.
+            </li>
+            <li>
+              <strong>Codex</strong> — For building automations and pushing PRs.
+            </li>
+            <li>
+              <strong>Claude</strong> — I like using different models to review my work and get another perspective.
+            </li>
+            <li>
+              <strong>Wispr Flow</strong> — I mainly use it for long utterances, and over time I think it reduces the time I spend typing. I also think typing out clear, carefully structured prompts can lead to more accurate results. I’m constantly working on that balance between speaking freely and writing precisely.
+            </li>
+            <li>
+              <strong>Granola</strong> — For capturing meetings and keeping the discussion useful afterward.
+            </li>
+            <li>
+              <strong>Google Gemini</strong> — Its meeting notes give Tyler a relative benchmark for comparing his own notes.
+            </li>
+            <li>
+              <strong>OpenClaw</strong> — For agent workflows, including the gateway behind Tyler.
+            </li>
+          </ul>
 
           <h2>Hardware</h2>
+          <p>The physical setup I spend my day with.</p>
           <ul class="uses-list">
             <li>
-              <strong><a href="https://www.apple.com/macbook-pro/">MacBook Pro 14-inch (M5)</a></strong> — I love this thing. It's perfect for me: light, and easy to carry everywhere.
+              <strong>MacBook Pro 14-inch (M5)</strong> — I love this thing. It’s light, easy to carry, and works well for how I move around.
             </li>
             <li>
-              <strong><a href="https://www.apple.com/airpods/">AirPods</a></strong> — I love my AirPods.
+              <strong>AirPods + Sony XM5 headphones</strong> — I love my AirPods. In the evenings, when the insides of my ears need a break, I switch to my Sony headphones.
             </li>
             <li>
-              <strong><a href="https://electronics.sony.com/audio/headphones/headband/p/wh1000xm5-b">Sony XM5 headphones</a></strong> — Love these too.
+              <strong>Apple keyboard + trackpad</strong> — Ride or die for the simple Apple keyboard. I like moving between the keyboard and trackpad.
             </li>
             <li>
-              <strong><a href="https://www.apple.com/shop/mac/accessories/mice-keyboards">Apple keyboard + mouse</a></strong> — Ride or die for the simple Apple keyboard. I love jumping between the keyboard and mouse.
+              <strong>MX Master 3S</strong> — My other ride or die.
             </li>
             <li>
-              <strong><a href="https://www.logitech.com/en-us/shop/p/mx-master-3s">MX Master 3S</a></strong> — My other ride or die.
+              <strong>Raspberry Pi 4 + Raspberry Pi 3</strong> — The Pi 4 runs Tyler’s OpenClaw gateway. The Pi 3 runs the Brio webcam note-taker.
+            </li>
+            <li>
+              <strong>Logitech Brio webcam and microphone</strong> — The input for Tyler’s note-taking setup. Having a camera also gives me room to explore visual context later.
             </li>
           </ul>
 
-          <h2>Tools</h2>
-          <ul class="uses-list">
-            <li>
-              <strong><a href="https://www.diabrowser.com/">Dia</a> + <a href="https://ghostty.org/">Ghostty</a> + Herdr</strong> — My prized children.
-            </li>
-            <li>
-              <strong><a href="https://openai.com/codex/">Codex</a></strong> — For working on this website and turning rough notes into blog drafts.
-            </li>
-            <li>
-              <strong><a href="https://claude.ai/">Claude</a></strong> — I've used it for race preparation, including training and fueling plans.
-            </li>
-            <li>
-              <strong><a href="https://wisprflow.ai/">Wispr Flow</a></strong> — For voice dictation.
-            </li>
-            <li>
-              <strong><a href="https://openclaw.ai/">OpenClaw</a></strong> — The gateway behind Tyler. More on him below.
-            </li>
-            <li>
-              <strong><a href="https://docs.arcade.dev/en/get-started/mcp-clients">Arcade MCP connector</a></strong> — Another tool I love having in the setup.
-            </li>
-            <li>
-              <strong>A little black notebook</strong> — I handwrite my critical notes in it. I love that notebook.
-            </li>
-          </ul>
-
-          <h2>At a startup</h2>
+          <h2>Context layers</h2>
           <p>
-            When I'm at a startup, I like <a href="https://slack.com/">Slack</a> and <a href="https://linear.app/">Linear</a>. I've tried to get on board with Notion, but it never sticks. I end up defaulting to <a href="https://drive.google.com/">Google Drive</a>. Some sort of self-driving agent is still a must.
+            The information around the tools matters to me: conversations, product behavior, business definitions, project history, and the things I’ve decided are worth remembering.
           </p>
+          <ul class="uses-list">
+            <li>
+              <strong>PostHog</strong> — Product context. I use it to understand what people do, where they drop off, and what brings them back. Its events, funnels, and retention data help ground that work in actual behavior.
+            </li>
+            <li>
+              <strong>Kaelio</strong> — Business and data context. I like tools that help agents understand what the data means, including the definitions, relationships, and logic behind a question.
+            </li>
+            <li>
+              <strong>Slack + Linear</strong> — When I’m at a startup, these are a big part of my working context: discussions, decisions, issues, and what needs attention.
+            </li>
+            <li>
+              <strong>Google Drive</strong> — Where I tend to return for documents and shared knowledge. I’ve tried to get on board with Notion, but Drive is what sticks.
+            </li>
+            <li>
+              <strong>Meeting and conversation notes</strong> — Granola notes and the conversations I capture through Tyler help me return to what was discussed.
+            </li>
+            <li>
+              <strong>A little black notebook</strong> — I handwrite my critical notes in it. I love that notebook. The physical notebook is part of my setup; what I write in it is part of my context.
+            </li>
+          </ul>
 
           <h2>Tyler</h2>
           <p>
-            Then there's Tyler, my personal assistant. Right now, he just takes notes. Tyler runs on a Raspberry Pi as an OpenClaw gateway. A second Pi, a Raspberry Pi 3, runs the Brio webcam note-taker.
+            “Why don’t you just use Granola like a regular person?” — Hans, my roommate, circa 2026.
           </p>
           <p>
-            I query the OpenClaw gateway to access stored conversation notes from my room or Google Meet calls. That's what I use Tyler for today: getting back to what was discussed.
+            Tyler is my personal assistant and an experiment in bringing these layers together.
           </p>
           <p>
-            The reason I use a Brio is that, theoretically, I can use it for multimodal capture beyond notes. Having a camera gives me the possibility of working with visual context as well. That's part of what I want to explore with this setup.
+            Right now, he makes meeting notes and compares them with Google Gemini’s notes as a relative benchmark. That comparison gives me a reference point for reviewing what he captures and where his notes could improve.
           </p>
           <p>
-            Over time, I want him to track my habits. With open-source annotation tools, that feels easier to build and support. It's something I want to add as I develop Tyler further.
+            I query his OpenClaw gateway to retrieve stored conversations from my room or Google Meet calls. That’s what I use him for today: getting back to what was discussed.
           </p>
           <p>
-            I also want to add full-duplex conversation, so Tyler can listen and respond at the same time, along with support for conversations involving multiple people. Those are still plans. Right now, I'm constrained by the Raspberry Pi 3 running the webcam note-taker.
+            I think of my room as a context layer. I want to be able to speak ideas aloud without worrying about losing them, and return to the conversation when it becomes useful again.
           </p>
-          <!-- Editorial note: Confirm what Ruben means by "jev" before naming it
-               in the paragraph about habit tracking and annotation tools. -->
+          <p>
+            The Brio gives me the possibility of exploring visual context. Over time, I’d also like Tyler to help track habits, support conversations with multiple people, and listen and respond at the same time. Those are things I want to build toward; the current focus is capturing, comparing, and retrieving notes.
+          </p>
         </article>
         <footer class="post-detail-engagement" aria-label="Reactions and comments">
           <div class="post-detail-likes">
