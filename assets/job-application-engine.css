@@ -1,4 +1,4 @@
-/* Charts and tables from the standalone article, scoped to its unlocked content. */
+/* Charts and tables from the standalone article, scoped to the white paper. */
 .job-engine-content {
   --ink: #333;
   --muted: #888;
@@ -13,6 +13,30 @@ body.theme-dark .job-engine-content {
   --line: #444;
   --bg: #111;
 }
+
+.job-engine-protected { position: relative; }
+.job-engine-protected.is-locked { min-height: 320px; margin: 32px 0; }
+.job-engine-protected--chart.is-locked { min-height: clamp(320px, 44vw, 500px); }
+.job-engine-protected--interviews.is-locked { max-width: 42rem; min-height: 380px; margin: 40px auto 0; }
+.job-engine-protected-preview {
+  position: absolute;
+  inset: 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: repeating-linear-gradient(0deg, var(--line) 0 1px, transparent 1px 46px);
+  filter: blur(2px);
+  opacity: .6;
+}
+.job-engine-protected .post-password-gate {
+  position: absolute;
+  z-index: 1;
+  box-sizing: border-box;
+  width: min(320px, calc(100% - 32px));
+  box-shadow: 0 4px 20px #00000012;
+}
+.job-engine-password-note { margin: 12px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.job-engine-password-status { margin: 12px 0 0; font-size: 13px; color: var(--ink); }
+.job-engine-password-status:empty { display: none; }
 
 .job-engine-content .graph { overflow-x: auto; margin: 32px 0; }
 .job-engine-content svg { display: block; width: 100%; min-width: 780px; height: auto; }
