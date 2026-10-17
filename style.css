@@ -1495,6 +1495,13 @@ body.theme-dark .project-thumb-circle::before {
   border-color: #e5e5e5;
 }
 
+/* Job engine card — preserve the full illustration. */
+.project-thumb-job-engine,
+body.theme-dark .project-thumb-job-engine {
+  object-fit: contain;
+  background-color: #fff;
+}
+
 /* Lessons / ego+exo research — same hero image as project page */
 .project-thumb-lessons-hero {
   background-color: #1a1a1a;
