@@ -106,22 +106,22 @@
         <section class="sidebar">
           <h2 class="sidebar-title">directory</h2>
           <nav class="sidebar-nav">
-            <button type="button" class="nav-item nav-item-active" data-tab="about">
+            <a href="#wall" class="nav-item nav-item-active" data-tab="about" aria-current="location">
               <span class="nav-icon nav-icon-about" aria-hidden="true"></span>
               <span class="nav-label">wall</span>
-            </button>
-            <button type="button" class="nav-item" data-tab="posts">
+            </a>
+            <a href="#blogs" class="nav-item" data-tab="posts">
               <span class="nav-icon nav-icon-journal" aria-hidden="true"></span>
               <span class="nav-label">blogs</span>
-            </button>
-            <button type="button" class="nav-item" data-tab="projects">
+            </a>
+            <a href="#white-paper" class="nav-item" data-tab="projects">
               <span class="nav-icon nav-icon-projects" aria-hidden="true"></span>
-              <span class="nav-label">white papers</span>
-            </button>
-            <button type="button" class="nav-item" data-tab="resume">
+              <span class="nav-label">white paper</span>
+            </a>
+            <a href="#resume" class="nav-item" data-tab="resume">
               <span class="nav-icon nav-icon-resume" aria-hidden="true"></span>
               <span class="nav-label">resume</span>
-            </button>
+            </a>
           </nav>
         </section>
 
@@ -132,7 +132,7 @@
 
           <section class="content-panels">
             <!-- ABOUT ME panel -->
-            <div class="content-panel active" data-panel="about">
+            <div class="content-panel active" data-panel="about" id="wall">
               <div id="about-floating-wall" class="floating-container"></div>
             </div>
 
@@ -540,12 +540,9 @@
         setupImages(items);
         startLoop();
 
-        document.querySelectorAll('.sidebar .nav-item[data-tab]').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var key = btn.getAttribute('data-tab');
-            if (key === 'about') startLoop();
-            else stopLoop();
-          });
+        window.addEventListener('hashchange', function () {
+          if (aboutPanel && aboutPanel.classList.contains('active')) startLoop();
+          else stopLoop();
         });
         document.addEventListener('visibilitychange', function () {
           if (document.hidden) stopLoop();
@@ -559,7 +556,7 @@
             </script>
 
             <!-- PROJECTS panel -->
-            <div class="content-panel" data-panel="projects">
+            <div class="content-panel" data-panel="projects" id="white-paper">
               <div class="projects-grid">
                 <a class="project-card" href="white-papers/job-application-engine.html">
                   <img
@@ -642,7 +639,7 @@
 
             </script>
             <!-- POSTS panel -->
-            <div class="content-panel" data-panel="posts">
+            <div class="content-panel" data-panel="posts" id="blogs">
               <section class="posts" id="posts-list"></section>
             </div>
 
@@ -757,7 +754,7 @@
 
             </script>
             <!-- RESUME panel -->
-            <div class="content-panel" data-panel="resume">
+            <div class="content-panel" data-panel="resume" id="resume">
               <div id="resume-content"></div>
             </div>
 
@@ -804,12 +801,22 @@
 
         var titles = {
           about: 'wall',
-          projects: 'white papers',
+          projects: 'white paper',
           posts: 'blogs',
           resume: 'resume',
         };
 
         var validTabs = ['about', 'posts', 'projects', 'resume'];
+        var tabsByHash = {
+          '#wall': 'about',
+          '#blogs': 'posts',
+          '#white-paper': 'projects',
+          '#resume': 'resume',
+        };
+
+        var savedTab;
+        try { savedTab = localStorage.getItem('activeTab'); } catch (_) {}
+        var initialTab = validTabs.indexOf(savedTab) !== -1 ? savedTab : 'about';
 
         var contentSection = title && title.parentElement && title.parentElement.parentElement;
 
@@ -826,8 +833,11 @@
             panel.classList.toggle('active', match);
           });
 
-          triggers.forEach(function (btn) {
-            btn.classList.toggle('nav-item-active', btn.getAttribute('data-tab') === key);
+          triggers.forEach(function (link) {
+            var match = link.getAttribute('data-tab') === key;
+            link.classList.toggle('nav-item-active', match);
+            if (match) link.setAttribute('aria-current', 'location');
+            else link.removeAttribute('aria-current');
           });
 
           if (title) {
@@ -838,15 +848,21 @@
           }
 
           if (validTabs.indexOf(key) !== -1) {
-            localStorage.setItem('activeTab', key);
+            try { localStorage.setItem('activeTab', key); } catch (_) {}
           }
         }
 
-        triggers.forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            var key = btn.getAttribute('data-tab');
-            if (!key) return;
-            showPanel(key);
+        function showPanelFromUrl() {
+          var key = tabsByHash[window.location.hash];
+          var fallback = window.location.hash ? 'about' : initialTab;
+          showPanel(validTabs.indexOf(key) !== -1 ? key : fallback);
+        }
+
+        triggers.forEach(function (link) {
+          link.addEventListener('click', function (event) {
+            if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            // Reveal the target before the browser scrolls to its fragment.
+            showPanel(link.getAttribute('data-tab'));
 
             if (body.classList.contains('nav-open')) {
               body.classList.remove('nav-open');
@@ -857,8 +873,8 @@
           });
         });
 
-        var savedTab = localStorage.getItem('activeTab');
-        showPanel(validTabs.indexOf(savedTab) !== -1 ? savedTab : 'about');
+        window.addEventListener('hashchange', showPanelFromUrl);
+        showPanelFromUrl();
 
         if (window.__initAboutFloatingWall) window.__initAboutFloatingWall();
       })();
