@@ -132,7 +132,7 @@
 
           <section class="content-panels">
             <!-- ABOUT ME panel -->
-            <div class="content-panel active" data-panel="about" id="wall">
+            <div class="content-panel active" data-panel="about">
               <div id="about-floating-wall" class="floating-container"></div>
             </div>
 
@@ -556,7 +556,7 @@
             </script>
 
             <!-- PROJECTS panel -->
-            <div class="content-panel" data-panel="projects" id="whitepapers">
+            <div class="content-panel" data-panel="projects">
               <div class="projects-grid">
                 <!--
                 <a class="project-card" href="white-papers/job-application-engine.html">
@@ -641,7 +641,7 @@
 
             </script>
             <!-- POSTS panel -->
-            <div class="content-panel" data-panel="posts" id="blogs">
+            <div class="content-panel" data-panel="posts">
               <section class="posts" id="posts-list"></section>
             </div>
 
@@ -756,7 +756,7 @@
 
             </script>
             <!-- RESUME panel -->
-            <div class="content-panel" data-panel="resume" id="resume">
+            <div class="content-panel" data-panel="resume">
               <div id="resume-content"></div>
             </div>
 
@@ -809,6 +809,7 @@
         };
 
         var validTabs = ['about', 'posts', 'projects', 'resume'];
+        // Section hashes select panels without fragment targets that scroll past the header.
         var tabsByHash = {
           '#wall': 'about',
           '#blogs': 'posts',
@@ -819,6 +820,10 @@
         var savedTab;
         try { savedTab = localStorage.getItem('activeTab'); } catch (_) {}
         var initialTab = validTabs.indexOf(savedTab) !== -1 ? savedTab : 'about';
+
+        if ('scrollRestoration' in window.history) {
+          window.history.scrollRestoration = 'manual';
+        }
 
         var contentSection = title && title.parentElement && title.parentElement.parentElement;
 
@@ -852,6 +857,7 @@
           if (validTabs.indexOf(key) !== -1) {
             try { localStorage.setItem('activeTab', key); } catch (_) {}
           }
+          window.scrollTo(0, 0);
         }
 
         function showPanelFromUrl() {
@@ -863,7 +869,6 @@
         triggers.forEach(function (link) {
           link.addEventListener('click', function (event) {
             if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-            // Reveal the target before the browser scrolls to its fragment.
             showPanel(link.getAttribute('data-tab'));
 
             if (body.classList.contains('nav-open')) {
