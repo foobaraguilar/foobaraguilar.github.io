@@ -835,6 +835,9 @@
         }
 
         function showPanel(key) {
+          var scrollX = window.scrollX;
+          var scrollY = window.scrollY;
+
           panels.forEach(function (panel) {
             var match = panel.getAttribute('data-panel') === key;
             panel.classList.toggle('active', match);
@@ -857,7 +860,7 @@
           if (validTabs.indexOf(key) !== -1) {
             try { localStorage.setItem('activeTab', key); } catch (_) {}
           }
-          window.scrollTo(0, 0);
+          window.scrollTo(scrollX, scrollY);
         }
 
         function showPanelFromUrl() {
