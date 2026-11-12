@@ -2,6 +2,8 @@
 
 If you like the setup, feel free to fork it and make it yours. No license gymnastics — just swap the copy, photos, and content.
 
+Instructions for agents working on this repo are in [AGENTS.md](AGENTS.md).
+
 ## What's on the site
 
 **Wall** — A waterfall of floating photos from my travels (sailing, running, rafting, backpacking, etc.). Hover for captions.
